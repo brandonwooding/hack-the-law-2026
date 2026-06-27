@@ -9,7 +9,7 @@ import { fetchRegimes } from "@/lib/api";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Regime — Cross-Jurisdiction Legal Research" },
+      { title: "DORA — Cross-Jurisdiction Legal Research" },
       {
         name: "description",
         content:
@@ -25,14 +25,14 @@ type RegimeLoadState = "idle" | "loading" | "ready" | "error";
 
 function Index() {
   const [view, setView] = useState<View>("setup");
-  const [jurisdiction, setJurisdiction] = useState("");
+  const [jurisdictions, setJurisdictions] = useState<string[]>([]);
   const [topic, setTopic] = useState("");
   const [regimes, setRegimes] = useState<Regime[]>(seedRegimes);
   const [regimeLoadState, setRegimeLoadState] = useState<RegimeLoadState>("idle");
   const [note, setNote] = useState("");
 
-  async function handleStart(j: string, t: string) {
-    setJurisdiction(j);
+  async function handleStart(j: string[], t: string) {
+    setJurisdictions(j);
     setTopic(t);
     setNote("");
     setRegimes([]);
@@ -91,7 +91,7 @@ function Index() {
 
   function handleNewSession() {
     setView("setup");
-    setJurisdiction("");
+    setJurisdictions([]);
     setTopic("");
     setRegimeLoadState("idle");
   }
@@ -105,9 +105,9 @@ function Index() {
   }
 
   return (
-    <SidebarLayout>
+    <SidebarLayout onHome={handleNewSession}>
       <WorkspaceScreen
-        jurisdiction={jurisdiction}
+        jurisdictions={jurisdictions}
         topic={topic}
         regimes={regimes}
         regimeLoadState={regimeLoadState}

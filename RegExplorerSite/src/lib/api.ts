@@ -8,10 +8,15 @@ export interface RegimeCard {
   source_url?: string;
 }
 
-export async function fetchRegimes(topic: string, jurisdiction: string): Promise<RegimeCard[]> {
+export async function fetchRegimes(
+  topic: string,
+  jurisdictions: string[],
+): Promise<RegimeCard[]> {
   const u = new URL(`${BASE}/regimes`);
   u.searchParams.set("topic", topic);
-  if (jurisdiction) u.searchParams.set("jurisdiction", jurisdiction);
+  for (const j of jurisdictions) {
+    if (j) u.searchParams.append("jurisdiction", j);
+  }
   const r = await fetch(u);
   if (!r.ok) throw new Error(`regimes ${r.status}`);
   return (await r.json()).regimes;
@@ -30,7 +35,11 @@ export async function sendChat(query: string, regimeIds: string[]) {
     body: JSON.stringify({ query, regime_ids: regimeIds }),
   });
   if (!r.ok) throw new Error(`chat ${r.status}`);
-  return (await r.json()) as { answer: string; citations: unknown[] };
+  return (await r.json()) as {
+    answer: string;
+    suggestions?: string[];
+    citations: unknown[];
+  };
 }
 
 export async function fetchRegime(id: string) {

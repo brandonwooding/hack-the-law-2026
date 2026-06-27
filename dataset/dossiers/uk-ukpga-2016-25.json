@@ -1,0 +1,70 @@
+{
+  "regime_id": "uk-ukpga-2016-25",
+  "name": "Investigatory Powers Act 2016",
+  "regulatory_guidance": [],
+  "regulatory_guidance_updated_at": null,
+  "summary": "- The Investigatory Powers Act 2016 governs how public authorities may lawfully intercept communications, acquire and retain communications data, conduct equipment interference, and use bulk powers and bulk personal datasets.\n- It establishes general privacy protections and a framework of warrants, authorisations and notices alongside independent oversight.\n- Statutory codes of practice supplement the Act for each main power, from communications data to bulk personal datasets and the notices regime.\n- Oversight arrangements and judicial scrutiny ensure powers are exercised lawfully, necessarily and proportionately.",
+  "scope": "The regime applies to the exercise of investigatory powers by public authorities, including intelligence services, law enforcement and other bodies authorised under the Act. It covers lawful interception of communications (Part 2), obtaining communications data (Part 3), retention of communications data (Part 4), equipment interference (Part 5), bulk warrants (Part 6), and bulk personal datasets through warrants, authorisations and third party arrangements (Parts 7, 7A and 7B). Part 1 sets overarching general privacy protections, and Part 8 establishes oversight arrangements. Sector-specific guidance exists, for example the HMPPS Investigatory Powers Policy Framework and investigatory powers guidance for the Renters' Rights Act 2025.",
+  "process": "Powers are regulated through a system of warrants, authorisations and notices governed by the relevant Parts of the Act and elaborated in statutory codes of practice. Interception (Part 2), equipment interference (Part 5) and the various bulk powers (Parts 6, 7, 7A and 7B) operate through warrants and authorisations subject to tests of necessity and proportionality. Communications data is obtained under authorisations (Part 3) and retained under notices (Part 4). Independent oversight is provided under Part 8 (Oversight arrangements). Judicial scrutiny is illustrated by The Secretary of State for the Home Department v Huda Ammori, R (on the application of). Codes of practice \u2014 including the Communications data, Equipment interference, Notices regime, and bulk-related codes \u2014 guide practical compliance.",
+  "consequence": "The material provided does not set out specific penalty provisions. Enforcement operates principally through the oversight arrangements in Part 8 and through judicial review and challenge in the courts, as reflected in The Secretary of State for the Home Department v Huda Ammori, R (on the application of). Authorities exercising powers unlawfully or without satisfying the Act's safeguards and the general privacy protections in Part 1 risk their conduct being found unlawful.",
+  "obligations": [
+    {
+      "text": "Observe the general privacy protections that frame all exercise of investigatory powers under the Act.",
+      "reference": "Investigatory Powers Act 2016, Part 1",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/1"
+    },
+    {
+      "text": "Ensure interception of communications is conducted only lawfully under the warrant framework.",
+      "reference": "Investigatory Powers Act 2016, Part 2",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/2"
+    },
+    {
+      "text": "Obtain communications data only through proper authorisations.",
+      "reference": "Investigatory Powers Act 2016, Part 3",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/3"
+    },
+    {
+      "text": "Comply with the requirements governing retention of communications data.",
+      "reference": "Investigatory Powers Act 2016, Part 4",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/4"
+    },
+    {
+      "text": "Conduct equipment interference only under the relevant authorisation regime.",
+      "reference": "Investigatory Powers Act 2016, Part 5",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/5"
+    },
+    {
+      "text": "Exercise bulk warrant powers within the statutory safeguards.",
+      "reference": "Investigatory Powers Act 2016, Part 6",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/6"
+    },
+    {
+      "text": "Handle bulk personal datasets under the appropriate warrants, authorisations or third party arrangements.",
+      "reference": "Investigatory Powers Act 2016, Part 7",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/7"
+    },
+    {
+      "text": "Use bulk personal dataset authorisations where applicable, including for datasets with low or no reasonable expectation of privacy.",
+      "reference": "Investigatory Powers Act 2016, Part 7A",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/7A"
+    },
+    {
+      "text": "Comply with the requirements for third party bulk personal datasets.",
+      "reference": "Investigatory Powers Act 2016, Part 7B",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/7B"
+    },
+    {
+      "text": "Submit to the oversight arrangements established under the Act.",
+      "reference": "Investigatory Powers Act 2016, Part 8",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/8"
+    },
+    {
+      "text": "Apply the miscellaneous and general provisions of the Act as relevant.",
+      "reference": "Investigatory Powers Act 2016, Part 9",
+      "url": "https://www.legislation.gov.uk/ukpga/2016/25/part/9"
+    }
+  ],
+  "guidance": "Practitioners should consult the statutory codes of practice that correspond to the power being exercised: the Communications data code, the Equipment interference code, the Notices regime code, and the bulk-related codes (Bulk acquisition of communications data, Retention and use of bulk personal datasets, Bulk personal datasets \u2014 low or no reasonable expectation of privacy, and Third party bulk personal datasets). Bodies in specific sectors should also follow tailored guidance such as the HMPPS Investigatory Powers Policy Framework and the investigatory powers guidance for the Renters' Rights Act 2025. Always apply the general privacy protections in Part 1 and the necessity and proportionality tests, and be alert to the oversight arrangements in Part 8 and developing case law such as The Secretary of State for the Home Department v Huda Ammori, R (on the application of).",
+  "generated_at": "2026-06-27T19:19:41.712818+00:00",
+  "edited_by_human": false
+}

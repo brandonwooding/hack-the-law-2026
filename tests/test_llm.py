@@ -26,6 +26,7 @@ def test_dossier_prompt_grounds_in_the_bundle():
     assert "R v X" in p
     # the grounding instruction must forbid inventing citations
     assert "only" in p.lower()
+    assert "3-4 concise Markdown bullet points" in p
 
 
 def test_answer_prompt_includes_query_and_scope():
@@ -116,11 +117,24 @@ def test_refresh_regulatory_guidance_uses_web_search_tool():
     assert client.messages.parse_kwargs["output_format"] is RegulatoryGuidanceFields
 
 
-def test_answer_returns_text_and_uses_opus():
-    client = _FakeClient(text="Ofcom regulates...")
+def test_answer_returns_reply_with_suggestions_and_uses_opus():
+    from legalgraph.llm import ChatReply
+    parsed = ChatReply(answer="Ofcom regulates...",
+                       suggestions=["What are the penalties?", "Who enforces it?"])
+    client = _FakeClient(parsed=parsed)
     scoped = {"regime_names": ["OSA"], "provisions": []}
     out = answer("duties?", scoped, client=client)
-    assert out == "Ofcom regulates..."
-    assert client.messages.create_kwargs["model"] == "claude-opus-4-8"
-    assert client.messages.create_kwargs["thinking"] == {"type": "adaptive"}
-    assert client.messages.create_kwargs["output_config"] == {"effort": "medium"}
+    assert out["answer"] == "Ofcom regulates..."
+    assert out["suggestions"] == ["What are the penalties?", "Who enforces it?"]
+    assert client.messages.parse_kwargs["model"] == "claude-opus-4-8"
+    assert client.messages.parse_kwargs["thinking"] == {"type": "adaptive"}
+    assert client.messages.parse_kwargs["output_format"] is ChatReply
+    # parse populates output_config.format from output_format; don't double-set it
+    assert "output_config" not in client.messages.parse_kwargs
+
+
+def test_answer_prompt_introduces_dora_and_asks_for_suggestions():
+    p = _answer_prompt("what are the duties?", {"regime_names": ["OSA"]})
+    assert "DORA" in p
+    assert "friendly" in p.lower()
+    assert "suggestions" in p

@@ -77,14 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Regime — Cross-Jurisdiction Legal Research" },
+      { title: "DORA — Cross-Jurisdiction Legal Research" },
       {
         name: "description",
         content:
           "A precise legal research instrument for checking regulatory obligations across jurisdictions.",
       },
-      { name: "author", content: "Regime" },
-      { property: "og:title", content: "Regime — Cross-Jurisdiction Legal Research" },
+      { name: "author", content: "DORA" },
+      { property: "og:title", content: "DORA — Cross-Jurisdiction Legal Research" },
       {
         property: "og:description",
         content:

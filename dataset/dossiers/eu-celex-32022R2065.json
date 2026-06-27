@@ -1,0 +1,100 @@
+{
+  "regime_id": "eu-celex-32022R2065",
+  "name": "Digital Services Act",
+  "regulatory_guidance": [],
+  "regulatory_guidance_updated_at": null,
+  "summary": "- The Digital Services Act (Regulation (EU) 2022/2065) sets harmonised rules for intermediary services to create a safe, predictable and trusted online environment while protecting fundamental rights under the Charter (Article 1).\n- It applies to intermediary services offered to recipients located or established in the Union, regardless of where the provider is established (Article 2).\n- It layers obligations by provider type \u2014 mere conduit, caching, hosting, online platforms, and very large online platforms/search engines \u2014 with the heaviest duties (risk assessment, mitigation, independent audit, data access) on VLOPs and VLOSEs designated under Article 33.\n- Enforcement and designation have already generated significant litigation before the General Court and the Court of Justice, including challenges to VLOP designations and supervisory fees.",
+  "scope": "The Regulation applies to intermediary services offered to recipients of the service that have their place of establishment or are located in the Union, irrespective of where the providers are established (Article 2(1)). It does not apply to services that are not intermediary services and does not affect the application of Directive 2000/31/EC (Article 2(2)-(3)). Obligations are tiered: baseline due-diligence duties apply to all providers of intermediary services (Articles 11-15); additional duties apply to hosting services (Articles 16-18) and online platforms (Articles 20-32); and the most extensive obligations apply to very large online platforms and very large online search engines with 45 million or more average monthly active recipients in the Union once designated under Article 33. Certain Sections do not apply to micro and small enterprises as defined in Recommendation 2003/361/EC (Articles 19 and 29).",
+  "process": "Providers benefit from conditional liability exemptions for mere conduit, caching and hosting (Articles 4-6), with no general monitoring obligation imposed (Article 8). National judicial or administrative authorities may issue orders to act against illegal content (Article 9) and orders to provide information (Article 10), to which providers must respond without undue delay. Providers must designate points of contact (Articles 11-12) and, where not established in the Union, a legal representative (Article 13). Designated VLOPs and VLOSEs are subject to systemic risk assessment (Article 34), risk mitigation (Article 35), a crisis response mechanism (Article 36), annual independent audits (Article 37), and must give the Digital Services Coordinator of establishment or the Commission access to data necessary to monitor compliance (Article 40). Enforcement and designation decisions are subject to judicial review: the General Court has ruled on pleas of illegality against Article 33(1) and (4) designations (Case T-348/23; Case T-367/23) and on supervisory fee decisions under Article 43 (Cases T-55/24 and T-58/24), while the Vice-President of the Court of Justice has decided interim-relief appeals concerning designation and Article 39 advertising transparency (Case C-511/24 P(R); Case C-620/24 P(R)).",
+  "consequence": "The provided material does not set out the specific penalty provisions of the Regulation. However, the case law indicates the practical consequences of the regime: designation as a very large online platform under Article 33 triggers the additional obligations of the relevant Section (including Article 39 advertising transparency), and providers face supervisory fees determined by the Commission under Article 43, which the General Court reviewed in Cases T-55/24 and T-58/24 (including temporal adjustment of the effects of an annulment). Designation and fee decisions, as well as Commission enforcement measures, are reviewable before the EU courts, and interim relief has been sought and weighed in Cases C-511/24 P(R) and C-620/24 P(R).",
+  "obligations": [
+    {
+      "text": "Providers of intermediary services must inform the issuing authority of any effect given to an order to act against specific items of illegal content, without undue delay.",
+      "reference": "Article 9 \u2013 Orders to act against illegal content",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_9"
+    },
+    {
+      "text": "Providers of intermediary services must designate a single point of contact for direct electronic communication with Member States' authorities, the Commission and the Board, and make the necessary contact information public and up to date.",
+      "reference": "Article 11 \u2013 Points of contact for Member States' authorities, the Commission and the Board",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_11"
+    },
+    {
+      "text": "Providers of intermediary services not established in the Union but offering services there must designate, in writing, a legal representative in a Member State where they offer services.",
+      "reference": "Article 13 \u2013 Legal representatives",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_13"
+    },
+    {
+      "text": "Providers must include in their terms and conditions clear, plain and intelligible information on any restrictions imposed on use of the service, including content moderation policies, algorithmic decision-making and human review.",
+      "reference": "Article 14 \u2013 Terms and conditions",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_14"
+    },
+    {
+      "text": "Providers of intermediary services must publish at least once a year clear, machine-readable transparency reports on their content moderation activity.",
+      "reference": "Article 15 \u2013 Transparency reporting obligations for providers of intermediary services",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_15"
+    },
+    {
+      "text": "Providers of hosting services must put in place easy-to-access, user-friendly electronic notice and action mechanisms allowing any individual or entity to notify allegedly illegal content.",
+      "reference": "Article 16 \u2013 Notice and action mechanisms",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_16"
+    },
+    {
+      "text": "Providers of hosting services must provide a clear and specific statement of reasons to affected recipients for restrictions imposed on the ground that content is illegal or incompatible with their terms and conditions.",
+      "reference": "Article 17 \u2013 Statement of reasons",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_17"
+    },
+    {
+      "text": "Providers of online platforms must provide an effective internal complaint-handling system, free of charge, for at least six months following a decision.",
+      "reference": "Article 20 \u2013 Internal complaint-handling system",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_20"
+    },
+    {
+      "text": "Providers of online platforms must ensure that notices submitted by trusted flaggers within their area of expertise are given priority and processed without undue delay.",
+      "reference": "Article 22 \u2013 Trusted flaggers",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_22"
+    },
+    {
+      "text": "Providers of online platforms must not design, organise or operate their online interfaces in a way that deceives, manipulates or otherwise materially distorts recipients' ability to make free and informed decisions.",
+      "reference": "Article 25 \u2013 Online interface design and organisation",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_25"
+    },
+    {
+      "text": "Providers of online platforms accessible to minors must put in place appropriate and proportionate measures to ensure a high level of privacy, safety and security of minors, and must not present profiling-based advertising to recipients reasonably known to be minors.",
+      "reference": "Article 28 \u2013 Online protection of minors",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_28"
+    },
+    {
+      "text": "Providers of online platforms allowing distance contracts with traders must obtain and verify specified trader identification information before allowing traders to use the platform (traceability of traders).",
+      "reference": "Article 30 \u2013 Traceability of traders",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_30"
+    },
+    {
+      "text": "Providers of very large online platforms and search engines must diligently identify, analyse and assess systemic risks at least once a year and before deploying high-impact functionalities.",
+      "reference": "Article 34 \u2013 Risk assessment",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_34"
+    },
+    {
+      "text": "Providers of very large online platforms and search engines must put in place reasonable, proportionate and effective mitigation measures tailored to the identified systemic risks, with particular regard to fundamental rights.",
+      "reference": "Article 35 \u2013 Mitigation of risks",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_35"
+    },
+    {
+      "text": "Providers of very large online platforms and search engines must undergo, at their own expense and at least annually, independent audits assessing compliance with Chapter III obligations and relevant code/crisis-protocol commitments.",
+      "reference": "Article 37 \u2013 Independent audit",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_37"
+    },
+    {
+      "text": "Providers of very large online platforms or search engines that present advertisements must compile and make publicly available a searchable advertising repository for the period of display and up to one year afterwards.",
+      "reference": "Article 39 \u2013 Additional online advertising transparency",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_39"
+    },
+    {
+      "text": "Providers of very large online platforms or search engines must give the Digital Services Coordinator of establishment or the Commission access, on reasoned request, to data necessary to monitor and assess compliance with the Regulation.",
+      "reference": "Article 40 \u2013 Data access and scrutiny",
+      "url": "https://publications.europa.eu/resource/celex/32022R2065.ENG.xhtml#art_40"
+    }
+  ],
+  "guidance": "Determine your provider category first (mere conduit, caching, hosting, online platform, or VLOP/VLOSE), since obligations scale accordingly, and check whether the micro/small enterprise exclusions in Articles 19 and 29 apply. All providers should put in place compliant points of contact (Articles 11-12), legal representation where established outside the Union (Article 13), transparent terms and conditions (Article 14), and annual transparency reporting (Article 15). Hosting services should operationalise notice-and-action mechanisms and statements of reasons (Articles 16-17), while online platforms should build internal complaint-handling, trusted-flagger prioritisation, interface-design safeguards and minor protections (Articles 20-28). Platforms approaching the 45 million active-recipient threshold should anticipate VLOP/VLOSE designation under Article 33 and prepare for risk assessment, mitigation, audits and data access (Articles 34-40). Note that designation and supervisory-fee decisions are litigable: the General Court has upheld designation against pleas of illegality (Cases T-348/23 and T-367/23) and reviewed supervisory fee calculations under Article 43 (Cases T-55/24 and T-58/24), and interim relief has been weighed by the Vice-President of the Court (Cases C-511/24 P(R) and C-620/24 P(R)), so document compliance and preserve grounds for any challenge.",
+  "generated_at": "2026-06-27T19:18:41.305116+00:00",
+  "edited_by_human": false
+}

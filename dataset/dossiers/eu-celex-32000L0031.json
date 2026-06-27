@@ -1,0 +1,96 @@
+{
+  "regulatory_guidance": [],
+  "regulatory_guidance_updated_at": null,
+  "regime_id": "eu-celex-32000L0031",
+  "name": "e-Commerce Directive",
+  "summary": "- The e-Commerce Directive (Directive 2000/31/EC) seeks to ensure the free movement of information society services across the EU internal market (Art. 1).\n- It establishes the country-of-origin/internal market principle, prohibits prior authorisation, and imposes transparency duties on service providers and commercial communications (Arts. 3, 4, 5, 6).\n- It creates limited liability 'safe harbours' for intermediaries acting as mere conduits, caches and hosts, and bars any general monitoring obligation (Arts. 12\u201315).\n- It addresses electronic contracts, codes of conduct, dispute settlement, cooperation and effective, proportionate, dissuasive sanctions (Arts. 9\u201311, 16\u201320).",
+  "scope": "The Directive applies to 'information society services' as defined in Article 2 (services within the meaning of Directive 98/34/EC as amended) and to 'service providers' and 'established service providers'. Under Article 3, each Member State regulates providers established on its territory within the 'coordinated field' and may not restrict the freedom to provide such services from another Member State, subject to the exclusions in the Annex and the derogation possibilities in Article 3(4). The Directive covers establishment of providers, commercial communications, electronic contracts, and intermediary liability (Article 1). Case law confirms its reach into diverse contexts: telemedicine information society services (Case C-115/24), commercial communications by regulated professions such as pharmacies (Case C-200/24), and operators of online marketplaces seeking to rely on the intermediary exemptions of Articles 12 to 15 (Case C-492/23).",
+  "process": "The Directive is implemented through national laws transposing it (Article 22, deadline 17 January 2002). Member States must ensure adequate means of supervision and investigation and that providers supply requisite information (Article 19), appointing contact points and cooperating with other Member States and the Commission. Enforcement also operates through rapid court actions and interim measures designed to terminate alleged infringements (Article 18) and through out-of-court dispute settlement schemes (Article 17). The Commission re-examines application of the Directive periodically (Article 21). Codes of conduct are encouraged to support proper implementation (Article 16). Interpretation is developed by the Court of Justice through preliminary references, for example on the intermediary liability exemptions (Case C-492/23) and on commercial communications by regulated professions (Case C-200/24, an infringement action under Articles 49 and 56 TFEU).",
+  "consequence": "Under Article 20, Member States must determine the sanctions applicable to infringements of national provisions adopted pursuant to the Directive and ensure they are enforced; such sanctions must be effective, proportionate and dissuasive. In addition, court actions under Article 18 allow rapid adoption of measures, including interim measures, to terminate infringements and prevent further impairment. Where an intermediary fails to meet the conditions in Articles 12 to 14, it loses the benefit of the liability exemption and may be held liable (as examined in Case C-492/23). Member States may also impose obligations to inform competent authorities of alleged illegal activities (Article 15(2)).",
+  "obligations": [
+    {
+      "text": "Member States must ensure that information society services provided by providers established on their territory comply with national provisions within the coordinated field, and may not restrict the freedom to provide such services from another Member State for reasons within that field.",
+      "reference": "Article 3 \u2013 Internal market",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_3"
+    },
+    {
+      "text": "Member States must ensure that taking up and pursuing the activity of an information society service provider is not subject to prior authorisation or any equivalent requirement.",
+      "reference": "Article 4 \u2013 Principle excluding prior authorisation",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_4"
+    },
+    {
+      "text": "Service providers must render easily, directly and permanently accessible to recipients and competent authorities at least their name, geographic address, and contact details including email allowing rapid and effective communication.",
+      "reference": "Article 5 \u2013 General information to be provided",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_5"
+    },
+    {
+      "text": "Commercial communications must be clearly identifiable as such, the person on whose behalf they are made must be clearly identifiable, and promotional offers must be clearly identified where permitted.",
+      "reference": "Article 6 \u2013 Information to be provided (commercial communications)",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_6"
+    },
+    {
+      "text": "Member States permitting unsolicited commercial communication by electronic mail must ensure it is identifiable clearly and unambiguously as such as soon as received, and that providers consult and respect opt-out registers.",
+      "reference": "Article 7 \u2013 Unsolicited commercial communication",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_7"
+    },
+    {
+      "text": "Member States must ensure that commercial communications by members of regulated professions are permitted subject to compliance with professional rules on independence, dignity, honour, professional secrecy and fairness.",
+      "reference": "Article 8 \u2013 Regulated professions",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_8"
+    },
+    {
+      "text": "Member States must ensure their legal systems allow contracts to be concluded by electronic means and that legal requirements do not obstruct or deprive electronic contracts of legal effectiveness and validity.",
+      "reference": "Article 9 \u2013 Treatment of contracts",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_9"
+    },
+    {
+      "text": "Service providers must give specified information clearly, comprehensibly and unambiguously prior to the order, including the technical steps to conclude the contract and means to identify and correct input errors.",
+      "reference": "Article 10 \u2013 Information to be provided (electronic contracts)",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_10"
+    },
+    {
+      "text": "Where an order is placed by technological means, the service provider must acknowledge receipt of the order without undue delay and by electronic means.",
+      "reference": "Article 11 \u2013 Placing of the order",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_11"
+    },
+    {
+      "text": "Mere conduit providers are not liable for transmitted information provided they do not initiate the transmission, do not select the receiver, and do not select or modify the information.",
+      "reference": "Article 12 \u2013 \"Mere conduit\"",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_12"
+    },
+    {
+      "text": "Caching providers are not liable for automatic, intermediate and temporary storage made to make onward transmission more efficient, provided the conditions on non-modification and access are met.",
+      "reference": "Article 13 \u2013 \"Caching\"",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_13"
+    },
+    {
+      "text": "Hosting providers are not liable for stored information at a recipient's request provided they lack actual knowledge of illegal activity and act expeditiously to remove or disable access upon obtaining such knowledge.",
+      "reference": "Article 14 \u2013 Hosting",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_14"
+    },
+    {
+      "text": "Member States must not impose a general obligation on intermediary providers to monitor information they transmit or store, nor to actively seek facts indicating illegal activity.",
+      "reference": "Article 15 \u2013 No general obligation to monitor",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_15"
+    },
+    {
+      "text": "Member States must ensure court actions allow rapid adoption of measures, including interim measures, to terminate alleged infringements and prevent further impairment of interests.",
+      "reference": "Article 18 \u2013 Court actions",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_18"
+    },
+    {
+      "text": "Member States must have adequate means of supervision and investigation, ensure providers supply requisite information, and cooperate with other Member States through contact points.",
+      "reference": "Article 19 \u2013 Cooperation",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_19"
+    },
+    {
+      "text": "Member States must determine sanctions for infringements of national provisions adopted under the Directive that are effective, proportionate and dissuasive, and take all measures to ensure they are enforced.",
+      "reference": "Article 20 \u2013 Sanctions",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32000L0031#art_20"
+    }
+  ],
+  "guidance": "Providers should first confirm whether their offering qualifies as an 'information society service' (Article 2), which courts have applied broadly, including to telemedicine (Case C-115/24). Establish where you are 'established' to determine which Member State's coordinated-field rules govern you under the country-of-origin principle (Article 3), and remember that no prior authorisation specific to such services may be imposed (Article 4). Build compliant interfaces: publish required identity and contact information (Article 5), label commercial communications and promotional offers clearly (Article 6), and follow the rules on unsolicited email and opt-out registers (Article 7). For e-contracts, provide pre-order information, error-correction tools, and acknowledge orders without undue delay (Articles 10-11). Intermediaries must structure their roles carefully to fit within the mere conduit, caching, or hosting exemptions (Articles 12-14): hosting platforms in particular should implement notice-and-action procedures so they act expeditiously upon gaining knowledge, since failure to meet the conditions forfeits the exemption (see Case C-492/23 on whether an online marketplace operator can rely on Articles 12-15). Avoid relying on the absence of monitoring duties as a shield against targeted obligations (Article 15). Members of regulated professions (e.g. pharmacies) should note that advertising restrictions must be assessed against Article 8 and the freedom to provide services, as in Case C-200/24. Finally, ensure national-level compliance to avoid effective, proportionate and dissuasive sanctions (Article 20) and rapid injunctive court measures (Article 18).",
+  "generated_at": "2026-06-27T18:59:24.227956+00:00",
+  "edited_by_human": false,
+  "summary_regenerated_at": "2026-06-27T19:21:08.377388+00:00"
+}

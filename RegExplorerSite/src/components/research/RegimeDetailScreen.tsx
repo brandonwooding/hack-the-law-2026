@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { ExternalLink, RefreshCw, Pencil } from "lucide-react";
 import type { Regime } from "@/lib/regimes";
 import { fetchRegime, refreshRegulatoryGuidance, saveRegime } from "@/lib/api";
+import { DossierReferenceText } from "./DossierReferenceText";
+import { JurisdictionTag } from "./JurisdictionTag";
 
 interface RegimeDetailScreenProps {
   regime: Regime;
@@ -170,9 +172,12 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
 
       <main className="flex-1 overflow-y-auto px-6 py-10">
         <div className="mx-auto max-w-[720px]">
-          <h1 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-ink">
-            {data.name || (loaded ? regime.id : "Loading…")}
-          </h1>
+          <div className="flex items-start gap-3">
+            <h1 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-ink">
+              {data.name || (loaded ? regime.id : "Loading…")}
+            </h1>
+            <JurisdictionTag id={regime.id} className="mt-1.5" />
+          </div>
           <hr className="my-6 border-0 border-t border-hairline" />
 
           <section>
@@ -183,7 +188,7 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                 onChange={(v) => setField("summary", v)}
               />
             ) : (
-              <p className="text-[0.9375rem] leading-relaxed text-ink">
+              <p className="whitespace-pre-line text-[0.9375rem] leading-relaxed text-ink">
                 {data.summary || <Placeholder />}
               </p>
             )}
@@ -203,8 +208,10 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                       value={draft.scope}
                       onChange={(v) => setField("scope", v)}
                     />
+                  ) : data.scope ? (
+                    <DossierReferenceText text={data.scope} regime={data} />
                   ) : (
-                    data.scope || <Placeholder />
+                    <Placeholder />
                   )}
                 </td>
               </tr>
@@ -219,8 +226,10 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                       value={draft.process}
                       onChange={(v) => setField("process", v)}
                     />
+                  ) : data.process ? (
+                    <DossierReferenceText text={data.process} regime={data} />
                   ) : (
-                    data.process || <Placeholder />
+                    <Placeholder />
                   )}
                 </td>
               </tr>
@@ -235,8 +244,10 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                       value={draft.consequence}
                       onChange={(v) => setField("consequence", v)}
                     />
+                  ) : data.consequence ? (
+                    <DossierReferenceText text={data.consequence} regime={data} />
                   ) : (
-                    data.consequence || <Placeholder />
+                    <Placeholder />
                   )}
                 </td>
               </tr>
@@ -292,7 +303,9 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                     />
                   ) : data.guidance ? (
                     <blockquote className="border-l-2 border-navy bg-secondary/40 py-1 pl-4">
-                      <p className="text-[0.9375rem] leading-relaxed text-ink">{data.guidance}</p>
+                      <p className="text-[0.9375rem] leading-relaxed text-ink">
+                        <DossierReferenceText text={data.guidance} regime={data} />
+                      </p>
                     </blockquote>
                   ) : (
                     <p className="text-[0.9375rem] leading-relaxed">
@@ -353,7 +366,7 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                               </td>
                               <td className="py-3 pr-4 text-ink">{row.title}</td>
                               <td className="py-3 pr-4 leading-relaxed text-ink">
-                                {row.description}
+                                <DossierReferenceText text={row.description} regime={data} />
                               </td>
                               <td className="py-3">
                                 <a

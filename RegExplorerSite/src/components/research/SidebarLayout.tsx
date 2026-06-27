@@ -7,13 +7,19 @@ const NAV = [
   { to: "/regimes", label: "Regimes", icon: Scale, exact: false },
 ] as const;
 
-export function SidebarLayout({ children }: { children: ReactNode }) {
+export function SidebarLayout({
+  children,
+  onHome,
+}: {
+  children: ReactNode;
+  onHome?: () => void;
+}) {
   return (
     <div className="flex h-screen bg-paper">
       <nav className="flex w-56 shrink-0 flex-col border-r border-hairline">
         <div className="flex items-baseline gap-2.5 border-b border-hairline px-5 py-3.5">
           <span className="font-serif text-lg font-semibold tracking-tight text-ink">
-            Regime
+            DORA
           </span>
         </div>
         <ul className="flex-1 space-y-0.5 px-3 py-4">
@@ -22,6 +28,18 @@ export function SidebarLayout({ children }: { children: ReactNode }) {
               <Link
                 to={to}
                 activeOptions={{ exact }}
+                onClick={(event) => {
+                  if (to !== "/" || !onHome) return;
+                  if (
+                    event.button !== 0 ||
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey
+                  ) return;
+                  event.preventDefault();
+                  onHome();
+                }}
                 className="flex items-center gap-2.5 rounded-[3px] px-3 py-2 text-sm text-ink transition-colors hover:bg-secondary data-[status=active]:bg-secondary data-[status=active]:font-medium data-[status=active]:text-navy"
               >
                 <Icon className="h-4 w-4" aria-hidden="true" />
@@ -32,7 +50,7 @@ export function SidebarLayout({ children }: { children: ReactNode }) {
         </ul>
         <div className="border-t border-hairline px-5 py-3">
           <span className="text-[0.6875rem] uppercase tracking-[0.14em] text-muted-ink">
-            Cross-Jurisdiction Legal Research
+            The Regulatory Explorer
           </span>
         </div>
       </nav>

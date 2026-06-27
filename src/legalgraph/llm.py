@@ -16,7 +16,6 @@ from .db import load_dotenv
 
 MODEL = "claude-opus-4-8"
 _THINKING = {"type": "adaptive"}
-_EFFORT = {"effort": "medium"}
 _WEB_SEARCH_TOOL = {
     "type": "web_search_20250305",
     "name": "web_search",
@@ -50,6 +49,11 @@ class RegulatoryGuidanceFields(BaseModel):
     regulatory_guidance: list[RegulatoryGuidanceItem]
 
 
+class ChatReply(BaseModel):
+    answer: str
+    suggestions: list[str]
+
+
 def _client():
     import anthropic
     load_dotenv()
@@ -68,7 +72,9 @@ def _dossier_prompt(bundle: dict) -> str:
         f"Guidance:\n{json.dumps(bundle.get('guidance', []), indent=2)}\n\n"
         "Fill: summary, scope, process (how it is regulated/enforced), "
         "consequence (penalties), obligations (each with a real reference + url "
-        "from the provisions/cases above), and guidance (practical advice)."
+        "from the provisions/cases above), and guidance (practical advice). "
+        "The summary field MUST be 3-4 concise Markdown bullet points, one "
+        "point per line, not a prose paragraph."
     )
 
 
@@ -105,6 +111,10 @@ def _regulatory_guidance_prompt(bundle: dict) -> str:
 def _answer_prompt(query: str, scoped: dict) -> str:
     names = ", ".join(scoped.get("regime_names", []))
     return (
+        "You are DORA, a warm and friendly legal-research assistant. Answer in a "
+        "helpful, approachable tone — be personable and encouraging while staying "
+        "precise and grounded. It is fine to open with a brief friendly remark, "
+        "but never sacrifice accuracy for warmth.\n\n"
         "Answer the question using ONLY the material below, which is scoped to "
         f"the user's confirmed regimes ({names}). The material may include both "
         "provisions and related documents from the regime neighbourhood. Cite "
@@ -123,7 +133,13 @@ def _answer_prompt(query: str, scoped: dict) -> str:
         f"(debates, guidance, SIs, cases, bills, notes):\n"
         f"{json.dumps(scoped.get('related_documents', []), indent=2)}\n\n"
         "Cached Regulatory Guidance from the selected regime dossiers:\n"
-        f"{json.dumps(scoped.get('regulatory_guidance', []), indent=2)}"
+        f"{json.dumps(scoped.get('regulatory_guidance', []), indent=2)}\n\n"
+        "Then suggest a next step: propose 2-3 natural follow-up questions the user "
+        "might want to ask next, phrased in the user's own first-person voice (e.g. "
+        "\"What are the penalties for non-compliance?\"). Each must be a concrete, "
+        "self-contained question answerable from the confirmed regimes and the "
+        "material above. Put your written reply in 'answer' (Markdown is fine) and "
+        "the follow-up questions in 'suggestions'."
     )
 
 
@@ -133,7 +149,7 @@ def draft_dossier(bundle: dict, client=None) -> dict:
     # also pass output_config here or it would clobber the schema. Effort defaults
     # to high under adaptive thinking, which is fine for a one-time dossier.
     resp = client.messages.parse(
-        model=MODEL, max_tokens=4000, thinking=_THINKING,
+        model=MODEL, max_tokens=8000, thinking=_THINKING,
         output_format=DossierFields,
         messages=[{"role": "user", "content": _dossier_prompt(bundle)}],
     )
@@ -151,10 +167,16 @@ def refresh_regulatory_guidance(bundle: dict, client=None) -> list[dict]:
     return resp.parsed_output.model_dump()["regulatory_guidance"]
 
 
-def answer(query: str, scoped: dict, client=None) -> str:
+def answer(query: str, scoped: dict, client=None) -> dict:
+    """Friendly grounded reply plus 2-3 suggested follow-up questions.
+
+    Returns {"answer": str, "suggestions": list[str]}. Structured output via
+    messages.parse (which sets output_config.format from output_format — so we do
+    not pass output_config here, mirroring draft_dossier)."""
     client = client or _client()
-    resp = client.messages.create(
-        model=MODEL, max_tokens=2000, thinking=_THINKING, output_config=_EFFORT,
+    resp = client.messages.parse(
+        model=MODEL, max_tokens=2000, thinking=_THINKING,
+        output_format=ChatReply,
         messages=[{"role": "user", "content": _answer_prompt(query, scoped)}],
     )
-    return next((b.text for b in resp.content if b.type == "text"), "")
+    return resp.parsed_output.model_dump()

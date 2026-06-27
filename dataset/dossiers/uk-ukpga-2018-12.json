@@ -1,0 +1,40 @@
+{
+  "regime_id": "uk-ukpga-2018-12",
+  "name": "Data Protection Act 2018",
+  "regulatory_guidance": [],
+  "regulatory_guidance_updated_at": null,
+  "summary": "- The **Data Protection Act 2018** is the UK's principal data protection statute, supplementing the UK GDPR and governing the processing of personal data across general, law enforcement, and intelligence services contexts.\n- It establishes the **Information Commissioner** as the independent regulator (Part 5) and provides a comprehensive enforcement framework (Part 6).\n- It sets out distinct processing regimes: general processing (Part 2), law enforcement processing (Part 3), and intelligence services processing (Part 4).\n- Failures are enforced through the First-tier Tribunal (General Regulatory Chamber) and can result in significant financial penalties.",
+  "scope": "The Act applies across multiple processing contexts. Part 1 sets out preliminary and definitional provisions, while Part 2 covers general processing (supplementing the UK GDPR). Part 3 governs law enforcement processing by competent authorities, and Part 4 addresses processing by the intelligence services. The Act binds data controllers and processors handling personal data, with sector-specific application illustrated by privacy notices for HMRC, the Home Office (including immigration enforcement and NHS patient debt sharing), the National ANPR Service, Ofsted, and tenancy deposit protection schemes. Schedules provide detailed conditions and exemptions.",
+  "process": "Regulation is led by the Information Commissioner under Part 5, with enforcement powers under Part 6. The Commissioner can investigate, issue notices, and impose penalties. Disputes and appeals are heard by the First-tier Tribunal (General Regulatory Chamber), as seen in cases such as Ashu Mathias Ashu v The Information Commissioner, Leila Kozma v Information Commissioner, Xinxin Xu v The Information Commissioner, Iftikhar Ahmed v Information Commissioner, Colin Shepherd v Information Commissioner, and Diane Tracey White v The Information Commissioner. National security certificates (under Part 4 and related provisions) provide a mechanism for exemptions in the national security context. The High Court may also adjudicate data protection claims, as in Good Law Project Ltd v Reform UK Party Ltd.",
+  "consequence": "Breaches can lead to enforcement action by the Information Commissioner under Part 6, including monetary penalties. The Commissioner's approach to setting fines is described in the 'Data protection fining' guidance. Affected data subjects may bring claims and appeals before the First-tier Tribunal or the courts, and controllers found in breach may face penalty notices and orders to remediate processing.",
+  "obligations": [
+    {
+      "text": "Comply with the requirements governing general processing of personal data, supplementing the UK GDPR.",
+      "reference": "Data Protection Act 2018, Part 2 (General processing)",
+      "url": "https://www.legislation.gov.uk/ukpga/2018/12/part/2"
+    },
+    {
+      "text": "Competent authorities must comply with the law enforcement processing regime when processing personal data for law enforcement purposes.",
+      "reference": "Data Protection Act 2018, Part 3 (Law enforcement processing)",
+      "url": "https://www.legislation.gov.uk/ukpga/2018/12/part/3"
+    },
+    {
+      "text": "Intelligence services must process personal data in accordance with the intelligence services processing regime.",
+      "reference": "Data Protection Act 2018, Part 4 (Intelligence services processing)",
+      "url": "https://www.legislation.gov.uk/ukpga/2018/12/part/4"
+    },
+    {
+      "text": "Controllers and processors are subject to the regulatory oversight and powers of the Information Commissioner.",
+      "reference": "Data Protection Act 2018, Part 5 (The Information Commissioner)",
+      "url": "https://www.legislation.gov.uk/ukpga/2018/12/part/5"
+    },
+    {
+      "text": "Controllers and processors must comply with enforcement notices and obligations arising under the enforcement framework.",
+      "reference": "Data Protection Act 2018, Part 6 (Enforcement)",
+      "url": "https://www.legislation.gov.uk/ukpga/2018/12/part/6"
+    }
+  ],
+  "guidance": "Start with the 'Data Protection Act 2018 Overview' for an orientation to the Act's structure. Controllers should publish clear privacy notices tailored to their processing activities, following examples such as the HMRC Privacy Notice, Ofsted privacy notices, and the Tenancy deposit protection privacy notice. Public bodies engaged in data sharing should consult sector-specific guidance, including the immigration enforcement digital device extraction policy, NHS patient debt information sharing notice, and the National ANPR Service data subject rights material. For procurement and public-sector contracts, refer to 'PPN 020: Guidance on data protection legislation'. Where national security exemptions are relevant, consult the National Security Certificates guidance. Caseworkers should follow the 'Data protection: caseworker guidance', and those assessing penalty exposure should review the 'Data protection fining' guidance. Data subjects exercising rights can rely on the Data Protection Information Rights Requests Privacy Notice.",
+  "generated_at": "2026-06-27T19:17:06.526658+00:00",
+  "edited_by_human": false
+}

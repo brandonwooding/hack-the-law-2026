@@ -90,8 +90,11 @@ def provision(provision_id: str):
 
 @app.get("/regimes")
 def list_regimes(topic: str = Query(..., min_length=2),
-                 jurisdiction: str | None = None):
-    """Surface candidate regimes (anchor Acts + related) for a topic."""
+                 jurisdiction: list[str] | None = Query(None)):
+    """Surface candidate regimes (anchor Acts + related) for a topic.
+
+    `jurisdiction` may be repeated to scope across several jurisdictions at once
+    (e.g. ?jurisdiction=UK&jurisdiction=EU); omit it for an unscoped search."""
     cards = regimes.surface_regimes(_driver(), topic, jurisdiction=jurisdiction)
     return {"regimes": cards}
 
@@ -114,7 +117,9 @@ def chat(req: ChatRequest):
         _driver(), req.query, top_k=12, regime_ids=req.regime_ids or None)
     scoped["regulatory_guidance"] = _regulatory_guidance_context(
         scoped.get("regime_ids") or req.regime_ids)
-    return {"answer": llm.answer(req.query, scoped),
+    reply = llm.answer(req.query, scoped)
+    return {"answer": reply["answer"],
+            "suggestions": reply.get("suggestions", []),
             "citations": scoped["provisions"],
             "related_documents": scoped["related_documents"],
             "regulatory_guidance": scoped["regulatory_guidance"]}

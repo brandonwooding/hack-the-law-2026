@@ -1,0 +1,125 @@
+{
+  "regime_id": "eu-celex-32024R1689",
+  "name": "Artificial Intelligence Act",
+  "regulatory_guidance": [],
+  "regulatory_guidance_updated_at": null,
+  "summary": "- The Artificial Intelligence Act (Regulation (EU) 2024/1689) sets harmonised rules for placing on the market, putting into service and using AI systems in the Union, while protecting health, safety and fundamental rights.\n- It applies broadly to providers, deployers, importers and distributors, including those in third countries where AI outputs are used in the Union.\n- It adopts a risk-based approach: prohibiting certain AI practices, imposing detailed requirements on high-risk AI systems, and addressing general-purpose AI models.\n- Compliance is built around risk management, data governance, technical documentation, transparency, human oversight, conformity assessment and ongoing obligations across the value chain.",
+  "scope": "Per Article 2, the Regulation applies to: providers placing on the market or putting into service AI systems, or placing general-purpose AI models on the market in the Union, whether established in the Union or a third country; deployers of AI systems located or established in the Union; providers and deployers in third countries where the output produced by the AI system is used in the Union; and importers and distributors of AI systems. The Regulation's purpose (Article 1) is to improve the functioning of the internal market and promote human-centric, trustworthy AI, while ensuring a high level of protection of health, safety and fundamental rights enshrined in the Charter. Key definitions appear in Article 3, including 'AI system' as a machine-based system operating with varying autonomy that infers from inputs how to generate outputs such as predictions, content, recommendations or decisions. Classification of high-risk AI systems is governed by Article 6 (safety components / products under Annex I harmonisation legislation) and Annex III use-cases, which the Commission may amend by delegated act under Article 7.",
+  "process": "The Regulation regulates through a tiered, risk-based framework. Article 5 prohibits certain AI practices outright (e.g. subliminal, manipulative or deceptive techniques materially distorting behaviour). High-risk AI systems must meet substantive requirements in Articles 8\u201315: compliance with requirements (Art. 8), a continuous risk management system (Art. 9), data and data governance (Art. 10), technical documentation per Annex IV (Art. 11), automatic record-keeping/logs (Art. 12), transparency and instructions for use (Art. 13), human oversight (Art. 14), and accuracy, robustness and cybersecurity (Art. 15). Providers carry operational obligations (Art. 16), including a quality management system (Art. 17), documentation keeping for 10 years (Art. 18), retention of logs (Art. 19), corrective actions and duty of information (Art. 20) and cooperation with competent authorities (Art. 21). Third-country providers must appoint an authorised representative (Art. 22). Importers (Art. 23), distributors (Art. 24) and other actors along the value chain (Art. 25) have defined verification duties, and deployers have their own obligations (Art. 26), including fundamental rights impact assessments in defined cases (Art. 27). Conformity is verified through notified bodies overseen by notifying authorities (Articles 28\u201339), with a presumption of conformity available through harmonised standards (Articles 32 and 40). The Commission assigns identification numbers and maintains the public list of notified bodies (Art. 35) and may investigate notified bodies' competence (Art. 37).",
+  "consequence": "The provided material does not include the specific penalty or fine provisions of the Regulation, so exact sanction levels cannot be cited here. The material does indicate enforcement-relevant consequences: providers who consider a high-risk AI system to be non-conforming must immediately take corrective actions to bring it into conformity, withdraw, disable or recall it, and inform distributors, deployers, authorised representatives and importers (Article 20). Providers must cooperate with and provide information and documentation to competent authorities on reasoned request (Article 21), and logs must be retained (Articles 12 and 19) to support post-market monitoring and traceability. Notified bodies' competence may be challenged and investigated by the Commission (Article 37), and notifications may be changed or withdrawn (Article 36).",
+  "obligations": [
+    {
+      "text": "Providers and deployers must take measures to ensure a sufficient level of AI literacy among their staff and others operating or using AI systems on their behalf, considering technical knowledge, experience, training and the deployment context.",
+      "reference": "Article 4 \u2013 AI literacy",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_4"
+    },
+    {
+      "text": "Certain AI practices are prohibited, including AI systems deploying subliminal, purposefully manipulative or deceptive techniques that materially distort behaviour and impair informed decision-making in a manner likely to cause harm.",
+      "reference": "Article 5 \u2013 Prohibited AI practices",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_5"
+    },
+    {
+      "text": "High-risk AI systems must comply with the requirements of Section 2, taking into account their intended purpose and the state of the art, with the risk management system of Article 9 taken into account.",
+      "reference": "Article 8 \u2013 Compliance with the requirements",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_8"
+    },
+    {
+      "text": "A risk management system must be established, implemented, documented and maintained as a continuous iterative process throughout the lifecycle of a high-risk AI system, with regular review and updating.",
+      "reference": "Article 9 \u2013 Risk management system",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_9"
+    },
+    {
+      "text": "High-risk AI systems using model training must be developed on training, validation and testing data sets meeting quality criteria and subject to appropriate data governance and management practices.",
+      "reference": "Article 10 \u2013 Data and data governance",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_10"
+    },
+    {
+      "text": "Technical documentation demonstrating compliance must be drawn up before the system is placed on the market or put into service, kept up to date, and contain at minimum the elements set out in Annex IV.",
+      "reference": "Article 11 \u2013 Technical documentation",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_11"
+    },
+    {
+      "text": "High-risk AI systems must technically allow automatic recording of events (logs) over their lifetime to ensure traceability appropriate to the intended purpose.",
+      "reference": "Article 12 \u2013 Record-keeping",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_12"
+    },
+    {
+      "text": "High-risk AI systems must be sufficiently transparent to enable deployers to interpret and appropriately use outputs, and must be accompanied by clear, complete instructions for use.",
+      "reference": "Article 13 \u2013 Transparency and provision of information to deployers",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_13"
+    },
+    {
+      "text": "High-risk AI systems must be designed to be effectively overseen by natural persons through appropriate human-machine interface tools during use, to prevent or minimise risks.",
+      "reference": "Article 14 \u2013 Human oversight",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_14"
+    },
+    {
+      "text": "High-risk AI systems must achieve and consistently maintain an appropriate level of accuracy, robustness and cybersecurity throughout their lifecycle.",
+      "reference": "Article 15 \u2013 Accuracy, robustness and cybersecurity",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_15"
+    },
+    {
+      "text": "Providers of high-risk AI systems must ensure compliance with Section 2 requirements, indicate their identity and contact details, maintain a quality management system, keep documentation and retain logs under their control.",
+      "reference": "Article 16 \u2013 Obligations of providers of high-risk AI systems",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_16"
+    },
+    {
+      "text": "Providers must put in place a documented quality management system ensuring regulatory compliance, including a compliance strategy and design control procedures.",
+      "reference": "Article 17 \u2013 Quality management system",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_17"
+    },
+    {
+      "text": "Providers must keep technical documentation, quality management documentation, notified body documents and the EU declaration of conformity at the disposal of national competent authorities for 10 years after market placement or putting into service.",
+      "reference": "Article 18 \u2013 Documentation keeping",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_18"
+    },
+    {
+      "text": "Providers must keep automatically generated logs under their control for a period appropriate to the intended purpose, of at least six months unless otherwise provided by Union or national law.",
+      "reference": "Article 19 \u2013 Automatically generated logs",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_19"
+    },
+    {
+      "text": "Providers who consider a high-risk AI system non-conforming must immediately take corrective actions (bring into conformity, withdraw, disable or recall) and inform distributors, deployers, authorised representatives and importers.",
+      "reference": "Article 20 \u2013 Corrective actions and duty of information",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_20"
+    },
+    {
+      "text": "On reasoned request, providers must give competent authorities all information and documentation needed to demonstrate conformity, in an easily understood official Union language, and access to logs under their control.",
+      "reference": "Article 21 \u2013 Cooperation with competent authorities",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_21"
+    },
+    {
+      "text": "Providers established in third countries must, by written mandate, appoint an authorised representative established in the Union before making high-risk AI systems available on the Union market.",
+      "reference": "Article 22 \u2013 Authorised representatives of providers of high-risk AI systems",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_22"
+    },
+    {
+      "text": "Before placing a high-risk AI system on the market, importers must verify conformity assessment has been carried out, technical documentation drawn up, CE marking and EU declaration of conformity present, and an authorised representative appointed where required.",
+      "reference": "Article 23 \u2013 Obligations of importers",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_23"
+    },
+    {
+      "text": "Before making a high-risk AI system available, distributors must verify the CE marking, the accompanying EU declaration of conformity and instructions for use, and that providers and importers have complied with their obligations.",
+      "reference": "Article 24 \u2013 Obligations of distributors",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_24"
+    },
+    {
+      "text": "A distributor, importer, deployer or third party is considered a provider and subject to Article 16 obligations where it puts its name/trademark on the system or makes a substantial modification to a high-risk AI system.",
+      "reference": "Article 25 \u2013 Responsibilities along the AI value chain",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_25"
+    },
+    {
+      "text": "Deployers must take appropriate technical and organisational measures to use high-risk AI systems in accordance with instructions for use and assign human oversight to competent, trained and authorised natural persons.",
+      "reference": "Article 26 \u2013 Obligations of deployers of high-risk AI systems",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_26"
+    },
+    {
+      "text": "Certain deployers (public law bodies, private entities providing public services, and deployers of specified Annex III systems) must perform a fundamental rights impact assessment before deploying a high-risk AI system.",
+      "reference": "Article 27 \u2013 Fundamental rights impact assessment for high-risk AI systems",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R1689#art_27"
+    }
+  ],
+  "guidance": "Practical steps: (1) First determine whether your activity falls within scope under Article 2 and whether your system meets the Article 3 definition of an AI system, then assess whether it is a prohibited practice (Article 5) or high-risk (Article 6 and Annex III). (2) If high-risk, build compliance around the Section 2 requirements early \u2014 establish a lifecycle risk management system (Art. 9), strong data governance (Art. 10), Annex IV technical documentation (Art. 11), logging (Art. 12), transparency and instructions for use (Art. 13), human oversight design (Art. 14) and accuracy/robustness/cybersecurity controls (Art. 15). (3) Providers should implement a quality management system (Art. 17), retain documentation for 10 years (Art. 18) and logs for at least six months (Art. 19), and prepare corrective-action and authority-cooperation procedures (Arts. 20\u201321). (4) Third-country providers must appoint an EU authorised representative (Art. 22); importers, distributors and downstream actors should map their verification duties (Arts. 23\u201325) and watch for value-chain triggers that convert them into providers. (5) Deployers should ensure trained human oversight (Art. 26) and, where applicable, complete a fundamental rights impact assessment (Art. 27). (6) Use harmonised standards to benefit from the presumption of conformity (Arts. 32 and 40) and ensure AI literacy across staff (Art. 4). Note: the supplied material does not include the Regulation's penalty articles or substantive case law (the only listed 'case' reference is EUR-Lex website boilerplate, not a usable judgment), so confirm sanctions and any relevant rulings against the full text before relying on them.",
+  "generated_at": "2026-06-27T19:15:55.110183+00:00",
+  "edited_by_human": false
+}

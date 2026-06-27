@@ -44,6 +44,7 @@ from tests.conftest import FakeDriver
 from legalgraph.regimes import (
     surface_regimes,
     normalize_jurisdiction,
+    normalize_jurisdictions,
     list_anchor_regimes,
 )
 
@@ -85,11 +86,28 @@ def test_normalize_jurisdiction_passes_through_none_and_unknown():
     assert normalize_jurisdiction("United States (federal)") == "United States (federal)"
 
 
+def test_normalize_jurisdictions_maps_one_or_many_labels_to_codes():
+    assert normalize_jurisdictions(None) is None
+    assert normalize_jurisdictions([]) is None
+    assert normalize_jurisdictions("United Kingdom") == ["UK"]
+    assert normalize_jurisdictions(["United Kingdom", "European Union"]) == ["UK", "EU"]
+    # de-duplicates labels that map to the same code, preserving order
+    assert normalize_jurisdictions(["UK", "United Kingdom"]) == ["UK"]
+
+
 def test_surface_regimes_normalizes_jurisdiction_into_the_query():
     driver = FakeDriver({"queryNodes": []})
     surface_regimes(driver, "online safety", jurisdiction="United Kingdom")
     provision_calls = [p for c, p in driver.calls if "queryNodes" in c]
-    assert provision_calls and provision_calls[0]["jdx"] == "UK"
+    assert provision_calls and provision_calls[0]["jdx"] == ["UK"]
+
+
+def test_surface_regimes_scopes_across_multiple_jurisdictions():
+    driver = FakeDriver({"queryNodes": []})
+    surface_regimes(driver, "online safety",
+                    jurisdiction=["United Kingdom", "European Union"])
+    provision_calls = [p for c, p in driver.calls if "queryNodes" in c]
+    assert provision_calls and provision_calls[0]["jdx"] == ["UK", "EU"]
 
 
 def test_surface_regimes_blends_provision_hits_and_related_anchors():

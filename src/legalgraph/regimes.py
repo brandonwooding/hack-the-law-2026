@@ -40,6 +40,26 @@ def normalize_jurisdiction(jurisdiction: str | None) -> str | None:
     return _JURISDICTION_ALIASES.get(jurisdiction.strip().lower(), jurisdiction)
 
 
+def normalize_jurisdictions(
+        jurisdiction: list[str] | str | None) -> list[str] | None:
+    """Map one or more UI jurisdiction labels to a list of graph codes.
+
+    Accepts a single label, a list of labels, or None. Returns a de-duplicated
+    list of codes (order preserved), or None when nothing is selected — None
+    means unscoped, matching every jurisdiction. Selecting UK and EU together
+    yields ["UK", "EU"], so the search filter spans both rather than dropping
+    one."""
+    if not jurisdiction:
+        return None
+    labels = [jurisdiction] if isinstance(jurisdiction, str) else jurisdiction
+    codes: list[str] = []
+    for label in labels:
+        code = normalize_jurisdiction(label)
+        if code and code not in codes:
+            codes.append(code)
+    return codes or None
+
+
 def _db(database: str | None) -> str | None:
     return database or os.environ.get("NEO4J_DATABASE")
 
@@ -95,7 +115,7 @@ def _short_description(doc: dict) -> str:
 
 
 def rollup_regimes(provisions: list[dict], related: list[dict],
-                   jurisdiction: str | None = None) -> list[dict]:
+                   jurisdiction: list[str] | str | None = None) -> list[dict]:
     """Pure: group Act/Treaty-layer provision hits into ranked regime cards,
     then append related anchors not already present."""
     scored: dict[str, dict] = {}
@@ -129,7 +149,7 @@ _RELATED_ANCHORS = """
 MATCH (d:Document {id: $id})-[:ABOUT]->(:Concept)-[:RELATED|BROADER]-(:Concept)
       <-[:ABOUT]-(o:Document)
 WHERE o.id <> $id AND ('Act' IN labels(o) OR 'Treaty' IN labels(o))
-  AND ($jdx IS NULL OR o.jurisdiction = $jdx)
+  AND ($jdx IS NULL OR o.jurisdiction IN $jdx)
 RETURN DISTINCT o.id AS id, o.citation AS citation,
        [l IN labels(o) WHERE l <> 'Document'][0] AS layer,
        o.source_url AS url, o.regulator AS regulator
@@ -139,7 +159,7 @@ LIMIT 25
 _TITLE_ANCHORS = """
 CALL db.index.fulltext.queryNodes('document_title', $q) YIELD node, score
 WHERE ('Act' IN labels(node) OR 'Treaty' IN labels(node))
-  AND ($jdx IS NULL OR node.jurisdiction = $jdx)
+  AND ($jdx IS NULL OR node.jurisdiction IN $jdx)
 RETURN node.id AS id, node.citation AS citation,
        [l IN labels(node) WHERE l <> 'Document'][0] AS layer,
        node.source_url AS url, node.regulator AS regulator, score
@@ -161,7 +181,7 @@ CALL (s) {
   RETURN a, type(r) AS relationship
 }
 WITH a, relationship
-WHERE ($jdx IS NULL OR a.jurisdiction = $jdx)
+WHERE ($jdx IS NULL OR a.jurisdiction IN $jdx)
 RETURN DISTINCT a.id AS id, a.citation AS citation,
        [l IN labels(a) WHERE l <> 'Document'][0] AS layer,
        a.source_url AS url, a.regulator AS regulator,
@@ -188,7 +208,7 @@ CALL (d) {
   RETURN a
 }
 WITH a
-WHERE ($jdx IS NULL OR a.jurisdiction = $jdx)
+WHERE ($jdx IS NULL OR a.jurisdiction IN $jdx)
 RETURN DISTINCT a.id AS id, a.citation AS citation,
        [l IN labels(a) WHERE l <> 'Document'][0] AS layer,
        a.source_url AS url, a.regulator AS regulator
@@ -221,10 +241,14 @@ def list_anchor_regimes(driver, database: str | None = None) -> list[dict]:
     ]
 
 
-def surface_regimes(driver, topic: str, jurisdiction: str | None = None,
+def surface_regimes(driver, topic: str,
+                    jurisdiction: list[str] | str | None = None,
                     database: str | None = None) -> list[dict]:
-    """Provision search → anchor rollup, blended with concept-related anchors."""
-    jurisdiction = normalize_jurisdiction(jurisdiction)
+    """Provision search → anchor rollup, blended with concept-related anchors.
+
+    `jurisdiction` may be one label, several labels, or None (unscoped). All
+    selected jurisdictions are searched together."""
+    jurisdiction = normalize_jurisdictions(jurisdiction)
     provisions = retrieval.search_provisions(
         driver, topic, top_k=25, jurisdiction=jurisdiction, database=database)
     cards = rollup_regimes(provisions, related=[], jurisdiction=jurisdiction)

@@ -1,12 +1,15 @@
 {
+  "regulatory_guidance": [],
+  "regulatory_guidance_updated_at": null,
   "regime_id": "custom-1782572705415",
   "name": "custom-1782572705415",
-  "summary": "No source material was provided for this regime (custom-1782572705415). The provisions, cases, and guidance lists are all empty, so no substantive regulatory content can be summarized.",
+  "summary": "- No source material (provisions, cases, or guidance) was supplied for the regime identified as \"custom-1782572705415\".\n- As a result, no substantive summary of the regime's requirements, scope, or enforcement framework can be provided.\n- This dossier cannot cite any obligations, cases, or guidance because none were included in the source material.\n- To produce a complete dossier, please supply the relevant provisions, case law, and guidance documents.",
   "scope": "Scope cannot be determined. No provisions, cases, or guidance materials were supplied to define the subject matter, jurisdiction, or regulated parties of this regime.",
   "process": "No regulatory or enforcement process can be described. The material contains no provisions, enforcement bodies, or procedural rules from which to draw.",
   "consequence": "No penalties or consequences can be stated, as no provisions or cases describing sanctions were provided.",
   "obligations": [],
   "guidance": "No practical guidance can be offered based on the supplied material. To produce a meaningful dossier, please provide the relevant provisions (with references and URLs), any applicable cases, and guidance documents. Once those sources are available, this dossier can be populated with an accurate summary, scope, enforcement process, consequences, and sourced obligations.",
   "generated_at": "2026-06-27T15:05:20.425035+00:00",
-  "edited_by_human": false
+  "edited_by_human": false,
+  "summary_regenerated_at": "2026-06-27T19:21:17.718229+00:00"
 }

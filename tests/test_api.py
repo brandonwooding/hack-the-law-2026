@@ -19,6 +19,20 @@ def test_regimes_endpoint_returns_cards(monkeypatch, tmp_path):
     assert resp.json()["regimes"][0]["id"] == "r1"
 
 
+def test_regimes_endpoint_passes_repeated_jurisdictions_as_list(monkeypatch, tmp_path):
+    captured = {}
+    monkeypatch.setattr(api.regimes, "surface_regimes",
+                        lambda driver, topic, jurisdiction=None: captured.update(
+                            jurisdiction=jurisdiction) or [])
+    client = _client(monkeypatch, tmp_path)
+    resp = client.get("/regimes",
+                      params=[("topic", "online safety"),
+                              ("jurisdiction", "United Kingdom"),
+                              ("jurisdiction", "European Union")])
+    assert resp.status_code == 200
+    assert captured["jurisdiction"] == ["United Kingdom", "European Union"]
+
+
 def test_chat_endpoint_scopes_and_answers(monkeypatch, tmp_path):
     monkeypatch.setattr(api.retrieval, "chat_context",
                         lambda *a, **k: {
@@ -48,14 +62,17 @@ def test_chat_endpoint_scopes_and_answers(monkeypatch, tmp_path):
     }, tmp_path)
 
     seen = {}
-    monkeypatch.setattr(api.llm, "answer",
-                        lambda q, scoped, **k: seen.setdefault(
-                            "regulatory_guidance", scoped["regulatory_guidance"])
-                        and "Ofcom regulates.")
+
+    def fake_answer(q, scoped, **k):
+        seen["regulatory_guidance"] = scoped["regulatory_guidance"]
+        return {"answer": "Ofcom regulates.", "suggestions": ["What are the penalties?"]}
+
+    monkeypatch.setattr(api.llm, "answer", fake_answer)
     resp = client.post("/chat", json={"query": "duties?",
                                       "regime_ids": ["uk-ukpga-2023-50"]})
     assert resp.status_code == 200
     assert resp.json()["answer"] == "Ofcom regulates."
+    assert resp.json()["suggestions"] == ["What are the penalties?"]
     assert resp.json()["citations"][0]["number"] == "9"
     assert resp.json()["related_documents"][0]["layer"] == "HansardDebate"
     assert resp.json()["regulatory_guidance"][0]["guidance"][0]["regulator"] == "Ofcom"
@@ -117,7 +134,8 @@ def test_chat_empty_regime_ids_passes_none(monkeypatch, tmp_path):
         }
 
     monkeypatch.setattr(api.retrieval, "chat_context", recorder)
-    monkeypatch.setattr(api.llm, "answer", lambda q, scoped, **k: "ok")
+    monkeypatch.setattr(api.llm, "answer",
+                        lambda q, scoped, **k: {"answer": "ok", "suggestions": []})
     client = _client(monkeypatch, tmp_path)
     resp = client.post("/chat", json={"query": "duties?", "regime_ids": []})
     assert resp.status_code == 200

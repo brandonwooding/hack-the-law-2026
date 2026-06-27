@@ -1,0 +1,61 @@
+{
+  "regulatory_guidance": [],
+  "regulatory_guidance_updated_at": null,
+  "regime_id": "eu-celex-32021R0784",
+  "name": "Terrorist Content Online Regulation",
+  "summary": "- The Terrorist Content Online Regulation (Regulation (EU) 2021/784) lays down uniform rules to address the misuse of hosting services for the dissemination to the public of terrorist content online, applying from 7 June 2022.\n- It imposes reasonable and proportionate duties of care on hosting service providers, including expeditious removal of or disabling access to terrorist content following removal orders from competent authorities.\n- It establishes cross-border removal order procedures, specific measures, preservation, transparency, remedies and complaint mechanisms, all subject to safeguards protecting fundamental rights including freedom of expression.\n- Member States must designate competent authorities, lay down effective, proportionate and dissuasive penalties, and report annually on implementation.",
+  "scope": "The Regulation applies to hosting service providers offering services in the Union, regardless of their place of main establishment, where they store information provided by and at the request of a content provider and disseminate it to the public (Articles 1 and 2). The Member State of the main establishment of the hosting service provider has jurisdiction for the purposes of Articles 5, 18 and 21; a provider without a main establishment in the Union is deemed under the jurisdiction of the Member State where its legal representative resides or is established, and where no legal representative is designated all Member States have jurisdiction (Article 16). Providers without a Union main establishment must designate a legal representative in the Union (Article 17).",
+  "process": "Competent authorities designated by each Member State (Article 12) issue removal orders under Article 3, scrutinise cross-border removal orders under Article 4, oversee specific measures under Article 5, and impose penalties under Article 18. Removal orders may require removal or disabling of access in all Member States, with at least 12 hours' advance information before a first order (except in emergencies) (Article 3). For cross-border orders, the issuing authority simultaneously submits a copy to the competent authority of the Member State of main establishment or of the legal representative (Article 4). Competent authorities cooperate and exchange information with each other and, where appropriate, with Europol (Article 14). Hosting service providers must designate a contact point for receipt of removal orders by electronic means (Article 15). Enforcement is supported by transparency reporting by providers (Article 7) and authorities (Article 8), monitoring data sent annually to the Commission by 31 March (Article 21), an implementation report by 7 June 2023 (Article 22) and an evaluation by 7 June 2024 (Article 23). The Commission is empowered to adopt delegated acts on technical requirements and to amend the annexes (Articles 19 and 20).",
+  "consequence": "Member States must lay down rules on penalties applicable to infringements by hosting service providers and take all measures necessary to ensure their implementation. Penalties are limited to addressing infringements of Article 3(3) and (6), Article 4(2) and (7), Article 5(1), (2), (3), (5) and (6), Articles 6, 7, 10 and 11, Article 14(5), Article 15(1) and Article 17, and must be effective, proportionate and dissuasive. Member States were required to notify the Commission of those rules by 7 June 2022 (Article 18). Affected hosting service providers and content providers have rights to effective remedies including challenge before the courts (Article 9).",
+  "obligations": [
+    {
+      "text": "Hosting service providers must comply with removal orders by removing terrorist content or disabling access to it (within the deadlines set out), following the procedure under Article 3.",
+      "reference": "Article 3 \u2013 Removal orders",
+      "url": "https://publications.europa.eu/resource/celex/32021R0784.ENG.xhtml#art_3"
+    },
+    {
+      "text": "On receipt of a cross-border removal order, the hosting service provider must take the measures provided for in Article 3 and the related cross-border steps.",
+      "reference": "Article 4 \u2013 Procedure for cross-border removal orders",
+      "url": "https://publications.europa.eu/resource/celex/32021R0784.ENG.xhtml#art_4"
+    },
+    {
+      "text": "A hosting service provider exposed to terrorist content must, where applicable, include and apply provisions in its terms and conditions to address misuse, doing so in a diligent, proportionate and non-discriminatory manner with due regard to fundamental rights including freedom of expression.",
+      "reference": "Article 5 \u2013 Specific measures",
+      "url": "https://publications.europa.eu/resource/celex/32021R0784.ENG.xhtml#art_5"
+    },
+    {
+      "text": "Hosting service providers must preserve terrorist content and related data removed or disabled as a result of a removal order or specific measures, for review/complaint proceedings or for the prevention, detection, investigation and prosecution of terrorist offences.",
+      "reference": "Article 6 \u2013 Preservation of content and related data",
+      "url": "https://publications.europa.eu/resource/celex/32021R0784.ENG.xhtml#art_6"
+    },
+    {
+      "text": "Hosting service providers must set out their policy for addressing terrorist content clearly in their terms and conditions and publish an annual transparency report where they have taken or been required to take action.",
+      "reference": "Article 7 \u2013 Transparency obligations for hosting service providers",
+      "url": "https://publications.europa.eu/resource/celex/32021R0784.ENG.xhtml#art_7"
+    },
+    {
+      "text": "Each hosting service provider must establish an effective and accessible complaint mechanism allowing content providers to seek reinstatement, and must expeditiously examine complaints and reinstate content removed without justification.",
+      "reference": "Article 10 \u2013 Complaint mechanisms",
+      "url": "https://publications.europa.eu/resource/celex/32021R0784.ENG.xhtml#art_10"
+    },
+    {
+      "text": "Where a hosting service provider removes or disables access to terrorist content, it must make information on that action available to the content provider and, upon request, provide reasons or a copy of the removal order (subject to exceptions).",
+      "reference": "Article 11 \u2013 Information to content providers",
+      "url": "https://publications.europa.eu/resource/celex/32021R0784.ENG.xhtml#art_11"
+    },
+    {
+      "text": "Each hosting service provider must designate or establish a contact point for the receipt of removal orders by electronic means and their expeditious processing, and make information about it publicly available.",
+      "reference": "Article 15 \u2013 Hosting service providers' contact points",
+      "url": "https://publications.europa.eu/resource/celex/32021R0784.ENG.xhtml#art_15"
+    },
+    {
+      "text": "A hosting service provider without a main establishment in the Union must designate in writing a legal representative in the Union for receipt of, compliance with and enforcement of removal orders and decisions, and provide it with the necessary powers and resources.",
+      "reference": "Article 17 \u2013 Legal representative",
+      "url": "https://publications.europa.eu/resource/celex/32021R0784.ENG.xhtml#art_17"
+    }
+  ],
+  "guidance": "Hosting service providers offering services in the Union should map their exposure to terrorist content and update their terms and conditions to set out clear policies (Articles 5 and 7). Establish, before any order arrives, an electronic contact point for receiving and processing removal orders expeditiously (Article 15), and, if not established in the Union, formally designate a legal representative with adequate powers and resources (Article 17). Build internal workflows to meet the strict removal/disabling timelines and preserve removed content and related data for review and law-enforcement purposes (Articles 3 and 6). Implement an accessible complaint mechanism and content-provider notification procedures to protect fundamental rights and reduce remedy disputes (Articles 9, 10 and 11). Prepare annual transparency reports and gather the data required for Member State monitoring submitted to the Commission by 31 March (Articles 7 and 21). Note that the cited Advocate General opinions (Cases C-401/19, C-460/20, C-376/22 and C-662/22 to C-667/22) address related questions on intermediary liability and fundamental rights and may inform interpretation; consult them and the latest delegated acts adopted under Articles 19 and 20 for technical compliance requirements.",
+  "generated_at": "2026-06-27T18:57:49.709030+00:00",
+  "edited_by_human": false,
+  "summary_regenerated_at": "2026-06-27T19:20:27.996943+00:00"
+}

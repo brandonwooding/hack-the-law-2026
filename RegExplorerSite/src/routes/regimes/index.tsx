@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { SidebarLayout } from "@/components/research/SidebarLayout";
+import { JurisdictionTag } from "@/components/research/JurisdictionTag";
 import { fetchAllRegimes, type RegimeCard } from "@/lib/api";
 
 export const Route = createFileRoute("/regimes/")({
@@ -68,8 +69,9 @@ function RegimesIndex() {
                     className="group flex items-center gap-4 py-4 transition-colors hover:bg-secondary"
                   >
                     <div className="min-w-0 flex-1 px-2">
-                      <h2 className="font-serif text-[0.9375rem] font-medium leading-snug text-ink">
-                        {regime.name}
+                      <h2 className="flex items-center gap-2 font-serif text-[0.9375rem] font-medium leading-snug text-ink">
+                        <span className="min-w-0">{regime.name}</span>
+                        <JurisdictionTag id={regime.id} />
                       </h2>
                       {regime.short_description && (
                         <p className="mt-0.5 text-xs leading-relaxed text-muted-ink">

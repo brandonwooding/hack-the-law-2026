@@ -8,22 +8,28 @@ const JURISDICTIONS = [
 ];
 
 interface SetupScreenProps {
-  onStart: (jurisdiction: string, topic: string) => void;
+  onStart: (jurisdictions: string[], topic: string) => void;
 }
 
 export function SetupScreen({ onStart }: SetupScreenProps) {
-  const [jurisdiction, setJurisdiction] = useState("");
+  const [jurisdictions, setJurisdictions] = useState<string[]>([]);
   const [topic, setTopic] = useState("");
   const [touched, setTouched] = useState(false);
 
-  const jurisdictionError = touched && !jurisdiction;
+  const jurisdictionError = touched && jurisdictions.length === 0;
   const topicError = touched && !topic.trim();
+
+  function toggleJurisdiction(j: string) {
+    setJurisdictions((prev) =>
+      prev.includes(j) ? prev.filter((x) => x !== j) : [...prev, j],
+    );
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setTouched(true);
-    if (!jurisdiction || !topic.trim()) return;
-    onStart(jurisdiction, topic.trim());
+    if (jurisdictions.length === 0 || !topic.trim()) return;
+    onStart(jurisdictions, topic.trim());
   }
 
   return (
@@ -31,47 +37,49 @@ export function SetupScreen({ onStart }: SetupScreenProps) {
       <AppHeader />
       <main className="flex flex-1 items-center justify-center px-6 py-16">
         <div className="w-full max-w-[480px]">
-          <p className="eyebrow mb-6">New research session</p>
+          <p className="eyebrow mb-3">New research session</p>
+          <h1 className="mb-8 font-serif text-3xl font-semibold leading-tight tracking-tight text-ink">
+            What regime do you want to look into today?
+          </h1>
 
           <form onSubmit={handleSubmit} className="space-y-7" noValidate>
             <div>
-              <label
-                htmlFor="jurisdiction"
-                className="mb-2 block font-serif text-base font-medium text-ink"
-              >
-                Reference jurisdiction
+              <label className="mb-2 block font-serif text-base font-medium text-ink">
+                Reference jurisdictions
               </label>
-              <div className="relative">
-                <select
-                  id="jurisdiction"
-                  value={jurisdiction}
-                  onChange={(e) => setJurisdiction(e.target.value)}
-                  className={`w-full appearance-none rounded-[3px] border bg-paper px-3.5 py-2.5 pr-9 text-sm text-ink outline-none transition-colors focus:border-navy ${
-                    jurisdictionError ? "border-destructive" : "border-hairline"
-                  } ${jurisdiction ? "text-ink" : "text-muted-ink"}`}
-                >
-                  <option value="" disabled>
-                    Select a jurisdiction
-                  </option>
-                  {JURISDICTIONS.map((j) => (
-                    <option key={j} value={j}>
+              <p className="mb-3 text-xs text-muted-ink">
+                Select one or more to scope the search across jurisdictions.
+              </p>
+              <div
+                role="group"
+                aria-label="Reference jurisdictions"
+                className="flex flex-wrap gap-2"
+              >
+                {JURISDICTIONS.map((j) => {
+                  const selected = jurisdictions.includes(j);
+                  return (
+                    <button
+                      key={j}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => toggleJurisdiction(j)}
+                      className={`rounded-full border px-3.5 py-2 text-sm transition-colors ${
+                        selected
+                          ? "border-navy bg-navy text-navy-foreground"
+                          : `bg-paper text-ink hover:border-navy ${
+                              jurisdictionError ? "border-destructive" : "border-hairline"
+                            }`
+                      }`}
+                    >
                       {j}
-                    </option>
-                  ))}
-                </select>
-                <svg
-                  className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-ink"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  aria-hidden="true"
-                >
-                  <path d="M4 6l4 4 4-4" />
-                </svg>
+                    </button>
+                  );
+                })}
               </div>
               {jurisdictionError && (
-                <p className="mt-1.5 text-xs text-destructive">Please select a jurisdiction.</p>
+                <p className="mt-1.5 text-xs text-destructive">
+                  Please select at least one jurisdiction.
+                </p>
               )}
             </div>
 

@@ -1,0 +1,100 @@
+{
+  "regime_id": "eu-celex-32016R0679",
+  "name": "General Data Protection Regulation",
+  "regulatory_guidance": [],
+  "regulatory_guidance_updated_at": null,
+  "summary": "- The GDPR (Regulation (EU) 2016/679) lays down rules protecting natural persons regarding the processing of their personal data while safeguarding the free movement of such data within the Union (Art. 1).\n- It applies to automated and structured manual processing, with broad territorial reach covering controllers/processors established in the Union and those targeting or monitoring data subjects in the Union (Arts. 2\u20133).\n- It imposes core principles, lawful bases, data-subject rights, and accountability obligations on controllers and processors (Arts. 5\u20136, 12\u201322, 24\u201332).\n- Enforcement runs through supervisory authorities and the consistency/dispute-resolution mechanism of the European Data Protection Board, as recently examined by the Court of Justice (Case C\u201197/23 P).",
+  "scope": "The Regulation applies to the processing of personal data wholly or partly by automated means, and to non-automated processing of data forming part of a filing system (Art. 2(1)). It does not apply to activities outside Union law, common foreign/security policy activities, or purely personal/household activities (Art. 2(2)). Territorially, it applies to processing in the context of the activities of an establishment of a controller or processor in the Union, regardless of where processing occurs, and to controllers/processors not established in the Union where they offer goods or services to, or monitor the behaviour of, data subjects in the Union (Art. 3). 'Personal data' and 'processing' are defined broadly (Art. 4). The recent ruling in Case C\u201124/422 confirmed that Articles 13 and 14 information obligations extend to data collected via body cameras worn by ticket inspectors on public transport.",
+  "process": "Compliance is built on the accountability principle: controllers must implement and demonstrate appropriate technical and organisational measures (Art. 24), apply data protection by design and by default (Art. 25), and keep records of processing activities (Art. 30). High-risk processing requires a data protection impact assessment (Art. 35) and, where residual high risk remains, prior consultation with the supervisory authority (Art. 36). Controllers and processors must cooperate with the supervisory authority on request (Art. 31) and, where required, designate a data protection officer (Arts. 37\u201339). Cross-border supervision operates through the consistency mechanism and dispute resolution by the European Data Protection Board; in Case C\u201197/23 P (Grand Chamber, 10 February 2026) the Court of Justice addressed the reviewability of the Board's binding decisions under Article 65 and the admissibility of actions for annulment under Article 263 TFEU.",
+  "consequence": "The provisions supplied focus on substantive obligations and rights rather than the penalty regime, so specific fine levels are not set out in this material. Enforcement consequences flow from supervisory-authority powers: controllers must notify personal data breaches to the supervisory authority within 72 hours where feasible (Art. 33) and communicate high-risk breaches to affected data subjects (Art. 34), and unlawful processing may trigger erasure and restriction obligations (Arts. 17\u201318). Disputes and supervisory decisions can be escalated through the European Data Protection Board's binding dispute-resolution process, which is itself subject to judicial review before the EU Courts, as illustrated by Case C\u201197/23 P.",
+  "obligations": [
+    {
+      "text": "Process personal data lawfully, fairly and transparently, for specified purposes, with data minimisation and other core principles.",
+      "reference": "Article 5",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_5"
+    },
+    {
+      "text": "Ensure each processing operation rests on at least one valid lawful basis (e.g. consent, contract, legal obligation, legitimate interests).",
+      "reference": "Article 6",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_6"
+    },
+    {
+      "text": "Where relying on consent, be able to demonstrate it and present consent requests clearly and distinguishably.",
+      "reference": "Article 7",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_7"
+    },
+    {
+      "text": "Provide concise, transparent and intelligible information and facilitate the exercise of data-subject rights.",
+      "reference": "Article 12",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_12"
+    },
+    {
+      "text": "Provide prescribed information to data subjects when personal data are collected from them.",
+      "reference": "Article 13",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_13"
+    },
+    {
+      "text": "Provide prescribed information where personal data have not been obtained from the data subject.",
+      "reference": "Article 14",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_14"
+    },
+    {
+      "text": "Honour data-subject rights of access, rectification and erasure.",
+      "reference": "Articles 15\u201317",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_15"
+    },
+    {
+      "text": "Implement appropriate technical and organisational measures to ensure and demonstrate compliance (accountability).",
+      "reference": "Article 24",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_24"
+    },
+    {
+      "text": "Apply data protection by design and by default.",
+      "reference": "Article 25",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_25"
+    },
+    {
+      "text": "Use only processors providing sufficient guarantees and govern the relationship by a written contract.",
+      "reference": "Article 28",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_28"
+    },
+    {
+      "text": "Maintain records of processing activities.",
+      "reference": "Article 30",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_30"
+    },
+    {
+      "text": "Cooperate with the supervisory authority on request.",
+      "reference": "Article 31",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_31"
+    },
+    {
+      "text": "Implement security measures appropriate to the risk, including pseudonymisation and encryption as appropriate.",
+      "reference": "Article 32",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_32"
+    },
+    {
+      "text": "Notify personal data breaches to the supervisory authority without undue delay and, where feasible, within 72 hours.",
+      "reference": "Article 33",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_33"
+    },
+    {
+      "text": "Communicate high-risk personal data breaches to affected data subjects without undue delay.",
+      "reference": "Article 34",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_34"
+    },
+    {
+      "text": "Carry out a data protection impact assessment for processing likely to result in high risk.",
+      "reference": "Article 35",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_35"
+    },
+    {
+      "text": "Designate a data protection officer where the prescribed conditions are met.",
+      "reference": "Article 37",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#art_37"
+    }
+  ],
+  "guidance": "Map your processing activities first: confirm material and territorial scope (Arts. 2\u20133), then document the lawful basis for each activity (Art. 6) and check whether special-category or criminal-offence data trigger heightened conditions (Arts. 9\u201310). Build privacy notices that satisfy Articles 13 and 14 \u2014 and note the ruling in Case C\u201124/422 confirming these duties apply even to body-camera and similar field collection. Operationalise data-subject rights with workflows for access, rectification, erasure, restriction, portability and objection (Arts. 15\u201322). Embed accountability through records of processing (Art. 30), data protection by design and by default (Art. 25), processor contracts (Art. 28), and a breach-response plan keyed to the 72-hour notification deadline (Arts. 33\u201334). Conduct DPIAs for high-risk processing and consult the supervisory authority where residual risk remains (Arts. 35\u201336). Where required, appoint and properly resource a DPO (Arts. 37\u201339). For cross-border operations, anticipate cooperation and consistency procedures and the possibility of binding EDPB dispute-resolution decisions, the legal status of which was clarified in Case C\u201197/23 P.",
+  "generated_at": "2026-06-27T19:19:18.391203+00:00",
+  "edited_by_human": false
+}

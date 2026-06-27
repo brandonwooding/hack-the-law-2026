@@ -3,6 +3,8 @@ import { ExternalLink, RefreshCw } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { AppHeader } from "./AppHeader";
+import { DossierReferenceText } from "./DossierReferenceText";
+import { JurisdictionTag } from "./JurisdictionTag";
 import type { Regime } from "@/lib/regimes";
 import { fetchRegime, refreshRegulatoryGuidance, sendChat } from "@/lib/api";
 
@@ -10,10 +12,11 @@ interface Message {
   id: number;
   role: "user" | "assistant";
   text: string;
+  suggestions?: string[];
 }
 
 interface WorkspaceScreenProps {
-  jurisdiction: string;
+  jurisdictions: string[];
   topic: string;
   regimes: Regime[];
   regimeLoadState: "idle" | "loading" | "ready" | "error";
@@ -112,7 +115,9 @@ function RegulatoryGuidanceSection({
                 <tr key={`${row.regulator}-${row.title}-${i}`} className="border-b border-hairline/70 align-top">
                   <td className="py-3 pr-4 font-medium text-ink">{row.regulator}</td>
                   <td className="py-3 pr-4 text-ink">{row.title}</td>
-                  <td className="py-3 pr-4 leading-relaxed text-ink">{row.description}</td>
+                  <td className="py-3 pr-4 leading-relaxed text-ink">
+                    <DossierReferenceText text={row.description} regime={regime} />
+                  </td>
                   <td className="py-3">
                     <a
                       href={row.official_link}
@@ -164,19 +169,35 @@ function InlineRegimeDossier({
       {status === "ready" && (
         <div>
           <InlineField label="Summary">
-            {regime.summary || <Placeholder />}
+            {regime.summary ? (
+              <p className="whitespace-pre-line">{regime.summary}</p>
+            ) : (
+              <Placeholder />
+            )}
           </InlineField>
 
           <InlineField label="Scope">
-            {regime.scope || <Placeholder />}
+            {regime.scope ? (
+              <DossierReferenceText text={regime.scope} regime={regime} />
+            ) : (
+              <Placeholder />
+            )}
           </InlineField>
 
           <InlineField label="Process">
-            {regime.process || <Placeholder />}
+            {regime.process ? (
+              <DossierReferenceText text={regime.process} regime={regime} />
+            ) : (
+              <Placeholder />
+            )}
           </InlineField>
 
           <InlineField label="Consequence">
-            {regime.consequence || <Placeholder />}
+            {regime.consequence ? (
+              <DossierReferenceText text={regime.consequence} regime={regime} />
+            ) : (
+              <Placeholder />
+            )}
           </InlineField>
 
           <InlineField label="Obligations">
@@ -219,7 +240,7 @@ function InlineRegimeDossier({
           <InlineField label="Guidance">
             {regime.guidance ? (
               <blockquote className="border-l-2 border-navy py-1 pl-4">
-                {regime.guidance}
+                <DossierReferenceText text={regime.guidance} regime={regime} />
               </blockquote>
             ) : (
               <Placeholder />
@@ -239,7 +260,7 @@ function InlineRegimeDossier({
 }
 
 export function WorkspaceScreen({
-  jurisdiction,
+  jurisdictions,
   topic,
   regimes,
   regimeLoadState,
@@ -250,16 +271,20 @@ export function WorkspaceScreen({
   onNoteChange,
   onNewSession,
 }: WorkspaceScreenProps) {
+  const jurisdictionLabel =
+    jurisdictions.length <= 1
+      ? jurisdictions[0] ?? ""
+      : `${jurisdictions.slice(0, -1).join(", ")} and ${jurisdictions.at(-1)}`;
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
       role: "user",
-      text: `What regulatory regimes apply to ${topic} in the ${jurisdiction}?`,
+      text: `What regulatory regimes apply to ${topic} in the ${jurisdictionLabel}?`,
     },
     {
       id: 2,
       role: "assistant",
-      text: `For ${topic} in the ${jurisdiction}, the analysis centres on platform duties, the handling of personal data, and the institutional powers behind enforcement. The relevant statutes operate together rather than in isolation, so obligations frequently overlap. I've identified the following regimes that may apply:`,
+      text: `For ${topic} in the ${jurisdictionLabel}, the analysis centres on platform duties, the handling of personal data, and the institutional powers behind enforcement. The relevant statutes operate together rather than in isolation, so obligations frequently overlap. I've identified the following regimes that may apply:`,
     },
   ]);
   const [draft, setDraft] = useState("");
@@ -280,24 +305,31 @@ export function WorkspaceScreen({
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
 
-  async function handleSend(e: React.FormEvent) {
-    e.preventDefault();
-    const text = draft.trim();
-    if (!text) return;
+  async function submitQuery(raw: string) {
+    const text = raw.trim();
+    if (!text || thinking) return;
     setMessages((m) => [...m, { id: Date.now(), role: "user", text }]);
     setDraft("");
     const confirmedIds = regimes.filter((r) => r.confirmed).map((r) => r.id);
     const ids = confirmedIds.length > 0 ? confirmedIds : regimes.map((r) => r.id);
     setThinking(true);
     try {
-      const { answer } = await sendChat(text, ids);
-      setMessages((m) => [...m, { id: Date.now() + 1, role: "assistant", text: answer }]);
+      const { answer, suggestions } = await sendChat(text, ids);
+      setMessages((m) => [
+        ...m,
+        { id: Date.now() + 1, role: "assistant", text: answer, suggestions },
+      ]);
     } catch {
       setMessages((m) => [...m, { id: Date.now() + 1, role: "assistant",
-        text: "Sorry — the assistant is unavailable." }]);
+        text: "Sorry — DORA is unavailable." }]);
     } finally {
       setThinking(false);
     }
+  }
+
+  function handleSend(e: React.FormEvent) {
+    e.preventDefault();
+    submitQuery(draft);
   }
 
   function handleAdd(e: React.FormEvent) {
@@ -365,27 +397,50 @@ export function WorkspaceScreen({
           <div className="border-b border-hairline px-6 py-4">
             <h2 className="font-serif text-base font-semibold text-ink">Chat</h2>
             <p className="mt-0.5 text-xs text-muted-ink">
-              {topic} · {jurisdiction}
+              {topic} · {jurisdictionLabel}
             </p>
           </div>
 
           <div className="flex-1 space-y-6 overflow-y-auto px-6 py-6">
-            {messages.map((m) => (
-              <div key={m.id}>
-                <p className="eyebrow mb-1.5">{m.role === "user" ? "You" : "Assistant"}</p>
-                {m.role === "assistant" ? (
-                  <div className="prose-chat text-sm leading-relaxed text-ink">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.text}</ReactMarkdown>
-                  </div>
-                ) : (
-                  <p className="text-sm leading-relaxed text-ink">{m.text}</p>
-                )}
-              </div>
-            ))}
+            {messages.map((m, i) => {
+              const isLast = i === messages.length - 1;
+              return (
+                <div key={m.id}>
+                  <p className="eyebrow mb-1.5">{m.role === "user" ? "You" : "DORA"}</p>
+                  {m.role === "assistant" ? (
+                    <div className="prose-chat text-sm leading-relaxed text-ink">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.text}</ReactMarkdown>
+                    </div>
+                  ) : (
+                    <p className="text-sm leading-relaxed text-ink">{m.text}</p>
+                  )}
+                  {isLast &&
+                    !thinking &&
+                    m.role === "assistant" &&
+                    (m.suggestions?.length ?? 0) > 0 && (
+                      <div className="mt-3">
+                        <p className="eyebrow mb-1.5">Suggested next steps</p>
+                        <div className="flex flex-col items-start gap-1.5">
+                          {m.suggestions!.map((s, si) => (
+                            <button
+                              key={si}
+                              type="button"
+                              onClick={() => submitQuery(s)}
+                              className="rounded-full border border-hairline bg-paper px-3 py-1.5 text-left text-xs text-navy transition-colors hover:border-navy hover:bg-secondary"
+                            >
+                              {s}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                </div>
+              );
+            })}
             {thinking && (
               <div>
-                <p className="eyebrow mb-1.5">Assistant</p>
-                <div className="flex items-center gap-1.5 py-1" aria-label="Assistant is thinking">
+                <p className="eyebrow mb-1.5">DORA</p>
+                <div className="flex items-center gap-1.5 py-1" aria-label="DORA is thinking">
                   <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-ink [animation-delay:-0.3s]" />
                   <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-ink [animation-delay:-0.15s]" />
                   <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-ink" />
@@ -541,8 +596,9 @@ export function WorkspaceScreen({
                       onClick={() => handleToggleDossier(regime)}
                       className="min-w-0 flex-1 text-left"
                     >
-                      <h3 className="font-serif text-[0.9375rem] font-medium leading-snug text-ink">
-                        {regime.name}
+                      <h3 className="flex items-center gap-2 font-serif text-[0.9375rem] font-medium leading-snug text-ink">
+                        <span className="min-w-0">{regime.name}</span>
+                        <JurisdictionTag id={regime.id} />
                       </h3>
                       {regime.shortDescription && (
                         <p className="mt-0.5 text-xs leading-relaxed text-muted-ink">

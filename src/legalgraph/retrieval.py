@@ -51,16 +51,20 @@ def _scope_clause(regime_ids: list[str] | None) -> tuple[str, dict]:
 
 
 def search_provisions(driver, query: str, top_k: int = 10,
-                      jurisdiction: str | None = None, database: str | None = None,
+                      jurisdiction: list[str] | str | None = None,
+                      database: str | None = None,
                       regime_ids: list[str] | None = None) -> list[dict]:
     """Stage 1+2: best-matching provisions with their document + tree breadcrumb."""
     scope_frag, scope_params = _scope_clause(regime_ids)
     extra = (" AND " + scope_frag) if scope_frag else ""
+    # Accept either a single code or a list; $jdx is always a list (or None) so
+    # the filter is a clean `IN` and multi-jurisdiction scopes work.
+    jdx = [jurisdiction] if isinstance(jurisdiction, str) else jurisdiction
     cypher = f"""
     CALL db.index.fulltext.queryNodes('provision_text', $q) YIELD node, score
     WITH node, score ORDER BY score DESC LIMIT $k
     MATCH path = (d:Document)-[:CONTAINS*]->(node)
-    WHERE ($jdx IS NULL OR d.jurisdiction = $jdx){extra}
+    WHERE ($jdx IS NULL OR d.jurisdiction IN $jdx){extra}
     RETURN node.id AS provision_id, node.number AS number, node.heading AS heading,
            node.text AS text, node.url AS url, score,
            d.id AS doc_id, d.citation AS document,
@@ -69,7 +73,7 @@ def search_provisions(driver, query: str, top_k: int = 10,
            [x IN nodes(path) WHERE x:Provision | x.number] AS breadcrumb
     ORDER BY score DESC
     """
-    params = {"q": _lucene(query), "k": top_k, "jdx": jurisdiction, **scope_params}
+    params = {"q": _lucene(query), "k": top_k, "jdx": jdx, **scope_params}
     rows = _run(driver, cypher, params, database)
     out = []
     for r in rows:
