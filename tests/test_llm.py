@@ -1,0 +1,74 @@
+import types
+
+from legalgraph.llm import (
+    DossierFields, _dossier_prompt, _answer_prompt, draft_dossier, answer,
+)
+
+
+def _bundle():
+    return {
+        "regime_id": "uk-ukpga-2023-50",
+        "name": "Online Safety Act 2023",
+        "anchor": {"citation": "Online Safety Act 2023"},
+        "provisions": [{"number": "9", "heading": "Illegal content duties",
+                        "text": "...", "url": "http://p9"}],
+        "cases": [{"citation": "R v X", "url": "http://case"}],
+        "guidance": [{"citation": "Ofcom code", "url": "http://g"}],
+    }
+
+
+def test_dossier_prompt_grounds_in_the_bundle():
+    p = _dossier_prompt(_bundle())
+    assert "Online Safety Act 2023" in p
+    assert "Illegal content duties" in p
+    assert "R v X" in p
+    # the grounding instruction must forbid inventing citations
+    assert "only" in p.lower()
+
+
+def test_answer_prompt_includes_query_and_scope():
+    scoped = {"regime_names": ["Online Safety Act 2023"],
+              "provisions": [{"number": "9", "heading": "Duties",
+                              "snippet": "illegal content", "url": "http://p"}]}
+    p = _answer_prompt("what are the duties?", scoped)
+    assert "what are the duties?" in p
+    assert "Online Safety Act 2023" in p
+
+
+class _FakeMessages:
+    def __init__(self, parsed=None, text=None):
+        self._parsed, self._text = parsed, text
+        self.parse_kwargs = self.create_kwargs = None
+
+    def parse(self, **kwargs):
+        self.parse_kwargs = kwargs
+        return types.SimpleNamespace(parsed_output=self._parsed)
+
+    def create(self, **kwargs):
+        self.create_kwargs = kwargs
+        return types.SimpleNamespace(
+            content=[types.SimpleNamespace(type="text", text=self._text)])
+
+
+class _FakeClient:
+    def __init__(self, parsed=None, text=None):
+        self.messages = _FakeMessages(parsed, text)
+
+
+def test_draft_dossier_returns_six_fields_and_uses_opus():
+    parsed = DossierFields(summary="s", scope="sc", process="pr",
+                           consequence="c", guidance="g", obligations=[])
+    client = _FakeClient(parsed=parsed)
+    out = draft_dossier(_bundle(), client=client)
+    assert out["summary"] == "s"
+    assert set(out) >= {"summary", "scope", "process", "consequence",
+                        "guidance", "obligations"}
+    assert client.messages.parse_kwargs["model"] == "claude-opus-4-8"
+
+
+def test_answer_returns_text_and_uses_opus():
+    client = _FakeClient(text="Ofcom regulates...")
+    scoped = {"regime_names": ["OSA"], "provisions": []}
+    out = answer("duties?", scoped, client=client)
+    assert out == "Ofcom regulates..."
+    assert client.messages.create_kwargs["model"] == "claude-opus-4-8"
