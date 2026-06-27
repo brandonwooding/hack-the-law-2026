@@ -1,0 +1,112 @@
+"""HTTP API over the retrieval layer — what the UI calls.
+
+JSON in/out, CORS open for local dev. Every result carries source links so the
+frontend can render clickable citations and drill into the provision tree.
+
+Run:  uv run legalgraph serve   (or: uvicorn legalgraph.api:app --reload)
+"""
+
+from __future__ import annotations
+
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+
+from . import retrieval, regimes, llm, dossier
+from .db import connect
+from pydantic import BaseModel
+
+_state: dict = {}
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    _state["driver"] = connect()
+    try:
+        yield
+    finally:
+        _state["driver"].close()
+
+
+app = FastAPI(title="legalgraph API", version="0.1.0", lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],          # tighten to your UI origin in production
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+def _driver():
+    return _state["driver"]
+
+
+@app.get("/health")
+def health():
+    rows = retrieval._run(_driver(), "MATCH (n) RETURN count(n) AS n", {}, None)
+    return {"status": "ok", "nodes": rows[0]["n"]}
+
+
+@app.get("/ask")
+def ask(q: str = Query(..., min_length=2),
+        top_k: int = 10,
+        jurisdiction: str | None = None):
+    """Two-stage retrieval: cited provisions + related authorities + regimes."""
+    return retrieval.ask(_driver(), q, top_k=top_k, jurisdiction=jurisdiction)
+
+
+@app.get("/document/{doc_id}")
+def document(doc_id: str):
+    doc = retrieval.get_document(_driver(), doc_id)
+    if not doc:
+        raise HTTPException(404, f"document not found: {doc_id}")
+    return doc
+
+
+@app.get("/provision/{provision_id:path}")
+def provision(provision_id: str):
+    prov = retrieval.get_provision(_driver(), provision_id)
+    if not prov:
+        raise HTTPException(404, f"provision not found: {provision_id}")
+    return prov
+
+
+@app.get("/regimes")
+def list_regimes(topic: str = Query(..., min_length=2),
+                 jurisdiction: str | None = None):
+    """Surface candidate regimes (anchor Acts + related) for a topic."""
+    cards = regimes.surface_regimes(_driver(), topic, jurisdiction=jurisdiction)
+    return {"regimes": cards}
+
+
+class ChatRequest(BaseModel):
+    query: str
+    regime_ids: list[str] = []
+
+
+@app.post("/chat")
+def chat(req: ChatRequest):
+    """Answer a follow-up, hard-scoped to the confirmed regimes."""
+    provisions = retrieval.search_provisions(
+        _driver(), req.query, top_k=12, regime_ids=req.regime_ids or None)
+    names = sorted({(p.get("document") or {}).get("citation")
+                    for p in provisions if p.get("document")})
+    scoped = {"regime_names": [n for n in names if n], "provisions": provisions}
+    return {"answer": llm.answer(req.query, scoped), "citations": provisions}
+
+
+@app.get("/regime/{regime_id:path}")
+def regime(regime_id: str):
+    """Dossier for a regime — synthesized + cached on first open."""
+    return dossier.get_or_build_dossier(
+        regime_id, dossier.DOSSIER_DIR,
+        gather_fn=lambda rid: dossier.gather_subgraph(_driver(), rid),
+        draft_fn=llm.draft_dossier,
+    )
+
+
+@app.put("/regime/{regime_id:path}")
+def edit_regime(regime_id: str, fields: dict):
+    """Save UI edits to a dossier (overwrites the JSON, flags human-edited)."""
+    return dossier.save_dossier(regime_id, fields, dossier.DOSSIER_DIR)
