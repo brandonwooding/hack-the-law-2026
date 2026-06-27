@@ -1,0 +1,48 @@
+# Scope config — bounds the corpus. Change THIS (not code) to scale up.
+#
+# Anchored on the Online Safety Act 2023 + its key neighbour regimes, all six
+# layers, 1 hop, enacted >= 2000. ~100-200 docs. To go broad later: add seeds,
+# raise max_hops, relax the date filter — same pipeline, no rewrite.
+
+user_agent: "legalgraph/0.1 (brandon.wooding25@imperial.ac.uk)"
+
+uk:
+  filters:
+    enacted_from: "2000-01-01"        # date guard for expansion
+
+  # Seed legislation by stable id (type/year/number) — robust vs title search.
+  seeds:
+    - id: ukpga/2023/50               # THE anchor
+      title: Online Safety Act 2023
+      role: anchor
+      regulator: Office of Communications (Ofcom)
+      concepts: [eurovoc:online-safety]
+    - id: ukpga/2003/21               # Ofcom's founding statute; OSA leans on it
+      title: Communications Act 2003
+      regulator: Office of Communications (Ofcom)
+      concepts: [eurovoc:electronic-communications]
+    - id: ukpga/2018/12               # data protection regime
+      title: Data Protection Act 2018
+      regulator: Information Commissioner's Office (ICO)
+      concepts: [eurovoc:dp]
+    - id: ukpga/2017/30               # age verification origins
+      title: Digital Economy Act 2017
+      regulator: Office of Communications (Ofcom)
+      concepts: [eurovoc:electronic-communications]
+    - id: ukpga/2016/25               # surveillance / interception
+      title: Investigatory Powers Act 2016
+      concepts: [eurovoc:surveillance]
+
+  expand:
+    max_hops: 1
+    follow: [MADE_UNDER, ISSUED_UNDER, EXPLAINS, CONSIDERS, BECAME, DEBATED_IN]
+
+  # per-source caps so a hackathon run stays bounded
+  limits:
+    cases_per_seed: 10                # Find Case Law: low-volume dev (licence)
+    guidance_per_seed: 15
+    debates_per_bill: 25
+
+eu:
+  # CELLAR adapter lands later; same canonical output.
+  seeds: []

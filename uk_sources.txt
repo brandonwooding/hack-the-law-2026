@@ -1,0 +1,19 @@
+UK
+legislation api
+https://legislation.github.io/data-documentation/api/overview.html
+
+statuatory instruments api
+https://statutoryinstruments-api.parliament.uk/index.html
+
+bills api
+https://bills-api.parliament.uk/index.html
+
+hansard (parliamentary debates) api
+https://api.parliament.uk/historic-hansard/api
+
+case law api
+https://nationalarchives.github.io/ds-find-caselaw-docs/public
+
+government / statuatory guidance
+https://content-api.publishing.service.gov.uk/
+
