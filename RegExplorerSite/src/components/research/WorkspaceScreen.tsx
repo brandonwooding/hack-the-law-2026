@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AppHeader } from "./AppHeader";
 import type { Regime } from "@/lib/regimes";
+import { sendChat } from "@/lib/api";
 
 interface Message {
   id: number;
@@ -51,20 +52,20 @@ export function WorkspaceScreen({
   const [newName, setNewName] = useState("");
   const [newDesc, setNewDesc] = useState("");
 
-  function handleSend(e: React.FormEvent) {
+  async function handleSend(e: React.FormEvent) {
     e.preventDefault();
     const text = draft.trim();
     if (!text) return;
-    setMessages((m) => [
-      ...m,
-      { id: Date.now(), role: "user", text },
-      {
-        id: Date.now() + 1,
-        role: "assistant",
-        text: "Noted. I've factored that into the assessment — review the regimes on the right and confirm those you consider in scope.",
-      },
-    ]);
+    setMessages((m) => [...m, { id: Date.now(), role: "user", text }]);
     setDraft("");
+    const ids = regimes.filter((r) => r.confirmed).map((r) => r.id);
+    try {
+      const { answer } = await sendChat(text, ids);
+      setMessages((m) => [...m, { id: Date.now() + 1, role: "assistant", text: answer }]);
+    } catch {
+      setMessages((m) => [...m, { id: Date.now() + 1, role: "assistant",
+        text: "Sorry — the assistant is unavailable." }]);
+    }
   }
 
   function handleAdd(e: React.FormEvent) {

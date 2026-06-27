@@ -4,6 +4,7 @@ import { SetupScreen } from "@/components/research/SetupScreen";
 import { WorkspaceScreen } from "@/components/research/WorkspaceScreen";
 import { RegimeDetailScreen } from "@/components/research/RegimeDetailScreen";
 import { seedRegimes, type Regime } from "@/lib/regimes";
+import { fetchRegimes, type RegimeCard } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,12 +30,24 @@ function Index() {
   const [note, setNote] = useState("");
   const [activeRegimeId, setActiveRegimeId] = useState<string | null>(null);
 
-  function handleStart(j: string, t: string) {
+  async function handleStart(j: string, t: string) {
     setJurisdiction(j);
     setTopic(t);
-    setRegimes(seedRegimes.map((r) => ({ ...r })));
     setNote("");
     setView("workspace");
+    try {
+      const cards = await fetchRegimes(t, j);
+      setRegimes(cards.map((c) => ({
+        id: c.id,
+        name: c.name,
+        shortDescription: c.short_description ?? "",
+        confirmed: false,
+        summary: "", scope: "", process: "", consequence: "",
+        obligations: [], guidance: "",
+      })));
+    } catch {
+      setRegimes([]);
+    }
   }
 
   function handleToggleRegime(id: string) {

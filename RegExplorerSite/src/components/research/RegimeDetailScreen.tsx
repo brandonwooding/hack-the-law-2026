@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { AppHeader } from "./AppHeader";
 import type { Regime } from "@/lib/regimes";
+import { fetchRegime, saveRegime } from "@/lib/api";
 
 interface RegimeDetailScreenProps {
   regime: Regime;
@@ -11,6 +13,11 @@ function Placeholder() {
 }
 
 export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) {
+  const [data, setData] = useState(regime);
+  useEffect(() => {
+    fetchRegime(regime.id).then((d) => setData({ ...regime, ...d })).catch(() => {});
+  }, [regime.id]);
+
   return (
     <div className="flex min-h-screen flex-col bg-paper">
       <AppHeader />
@@ -24,14 +31,14 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
           </button>
 
           <h1 className="font-serif text-3xl font-semibold leading-tight tracking-tight text-ink">
-            {regime.name}
+            {data.name}
           </h1>
           <hr className="my-6 border-0 border-t border-hairline" />
 
           <section>
             <p className="eyebrow mb-2">Summary</p>
             <p className="text-[0.9375rem] leading-relaxed text-ink">
-              {regime.summary || <Placeholder />}
+              {data.summary || <Placeholder />}
             </p>
           </section>
 
@@ -44,7 +51,7 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                   Scope
                 </th>
                 <td className="py-5 text-[0.9375rem] leading-relaxed text-ink">
-                  {regime.scope || <Placeholder />}
+                  {data.scope || <Placeholder />}
                 </td>
               </tr>
 
@@ -53,7 +60,7 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                   Regulatory process
                 </th>
                 <td className="py-5 text-[0.9375rem] leading-relaxed text-ink">
-                  {regime.process || <Placeholder />}
+                  {data.process || <Placeholder />}
                 </td>
               </tr>
 
@@ -62,7 +69,7 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                   Consequence
                 </th>
                 <td className="py-5 text-[0.9375rem] leading-relaxed text-ink">
-                  {regime.consequence || <Placeholder />}
+                  {data.consequence || <Placeholder />}
                 </td>
               </tr>
 
@@ -71,9 +78,9 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                   Obligations
                 </th>
                 <td className="py-5 text-[0.9375rem] leading-relaxed text-ink">
-                  {regime.obligations.length > 0 ? (
+                  {data.obligations.length > 0 ? (
                     <ul className="space-y-3">
-                      {regime.obligations.map((o, i) => (
+                      {data.obligations.map((o, i) => (
                         <li key={i} className="flex gap-3">
                           <span
                             className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-ink"
@@ -103,9 +110,9 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                   Guidance
                 </th>
                 <td className="py-5">
-                  {regime.guidance ? (
+                  {data.guidance ? (
                     <blockquote className="border-l-2 border-navy bg-secondary/40 py-1 pl-4">
-                      <p className="text-[0.9375rem] leading-relaxed text-ink">{regime.guidance}</p>
+                      <p className="text-[0.9375rem] leading-relaxed text-ink">{data.guidance}</p>
                     </blockquote>
                   ) : (
                     <p className="text-[0.9375rem] leading-relaxed">
