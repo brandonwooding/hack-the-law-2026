@@ -17,6 +17,12 @@ export async function fetchRegimes(topic: string, jurisdiction: string): Promise
   return (await r.json()).regimes;
 }
 
+export async function fetchAllRegimes(): Promise<RegimeCard[]> {
+  const r = await fetch(`${BASE}/regimes/all`);
+  if (!r.ok) throw new Error(`regimes/all ${r.status}`);
+  return (await r.json()).regimes;
+}
+
 export async function sendChat(query: string, regimeIds: string[]) {
   const r = await fetch(`${BASE}/chat`, {
     method: "POST",
@@ -30,6 +36,14 @@ export async function sendChat(query: string, regimeIds: string[]) {
 export async function fetchRegime(id: string) {
   const r = await fetch(`${BASE}/regime/${id}`);
   if (!r.ok) throw new Error(`regime ${r.status}`);
+  return r.json();
+}
+
+export async function refreshRegulatoryGuidance(id: string) {
+  const r = await fetch(`${BASE}/regime/${id}/regulatory-guidance/refresh`, {
+    method: "POST",
+  });
+  if (!r.ok) throw new Error(`regulatory guidance refresh ${r.status}`);
   return r.json();
 }
 

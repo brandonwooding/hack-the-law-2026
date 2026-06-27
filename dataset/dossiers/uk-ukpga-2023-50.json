@@ -1,0 +1,131 @@
+{
+  "regulatory_guidance": [
+    {
+      "regulator": "Department for Science, Innovation and Technology (DSIT)",
+      "title": "Online Safety Act: explainer",
+      "description": "Government overview of the Act setting out the new duties on user-to-user and search services, the role of Ofcom as regulator, and the implementation timeline for codes and guidance. It helps organizations understand the overall regime and where their obligations fit.",
+      "official_link": "https://www.gov.uk/government/publications/online-safety-act-explainer"
+    },
+    {
+      "regulator": "Department for Science, Innovation and Technology (DSIT)",
+      "title": "Online Safety Act: Draft amendments (No.2) to the Illegal content Codes of Practice",
+      "description": "Draft statutory amendments to the illegal content Codes of Practice laid before Parliament. It informs organizations of forthcoming changes to recommended measures for tackling illegal content on their services.",
+      "official_link": "https://www.gov.uk/government/publications/online-safety-act-draft-amendments-no2-to-the-illegal-content-codes-of-practice"
+    },
+    {
+      "regulator": "Department for Science, Innovation and Technology (DSIT)",
+      "title": "Online Safety Act: Draft amendments to the Protection of Children Code of Practice for user-to-user services",
+      "description": "Draft statutory amendments to the children's safety Code of Practice laid before Parliament. It helps user-to-user service providers anticipate updated measures required to protect children online.",
+      "official_link": "https://www.gov.uk/government/publications/online-safety-act-draft-amendments-to-the-protection-of-children-code-of-practice-for-user-to-user-services"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Online safety regulatory documents and guidance",
+      "description": "Ofcom's central landing page listing the latest versions of all online safety codes of practice and guidance documents, plus links to superseded versions. It helps organizations find the authoritative, current source documents they need to comply.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Illegal content Codes of Practice for user-to-user services",
+      "description": "Sets out Ofcom's recommended measures\u2014covering governance, content moderation, reporting and complaints, and user tools\u2014that user-to-user services can implement to comply with their illegal content safety duties. Following the code acts as a 'safe harbour' for compliance.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/illegal-content-duties-under-the-online-safety-act"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Illegal content Codes of Practice for search services",
+      "description": "Sets out Ofcom's recommended measures for search service providers to reduce the risk of users encountering illegal content via search. It enables search services to demonstrate compliance with the Act's illegal content duties.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/illegal-and-harmful-content/illegal-content-duties-under-the-online-safety-act"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Risk Assessment Guidance and Risk Profiles",
+      "description": "Guides service providers on how to carry out the mandatory illegal content risk assessment and apply Ofcom's Risk Profiles to judge whether their service is low, medium or high risk for each kind of illegal harm. It underpins the choice of which code measures apply.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Protection of Children Code of Practice for user-to-user services",
+      "description": "Sets out Ofcom's recommended measures for user-to-user services likely to be accessed by children, including age assurance, safer default settings and content controls. It helps providers meet their child safety duties under the Act.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Protection of Children Code of Practice for search services",
+      "description": "Sets out Ofcom's recommended measures for search services to protect children from harmful content. It helps search providers comply with the Act's child safety duties.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Children's Risk Assessment Guidance and Children's Risk Profiles",
+      "description": "Helps service providers carry out the children's access assessment and children's risk assessment to determine harm to under-18s. It supports providers in identifying which child safety measures they must adopt.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Illegal Content Judgements Guidance (ICJG)",
+      "description": "Guides providers on how to make judgements about whether content is illegal under the Act so they can apply their moderation and removal duties consistently. It clarifies the legal tests for the priority offences.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Record-Keeping and Review Guidance",
+      "description": "Explains what records providers must keep of their risk assessments and the safety measures they have taken, and when those records must be reviewed. It is especially important for providers relying on 'alternative measures' rather than the recommended code measures.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Guidance on highly effective age assurance and other Part 5 duties",
+      "description": "Sets out Ofcom's expectations for highly effective age assurance, particularly for services publishing pornographic content, to prevent children accessing age-restricted material. It helps providers implement robust age checks that meet the Act's standards.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Guidance on content communicated 'publicly' and 'privately' under the Online Safety Act",
+      "description": "Clarifies how to distinguish content communicated publicly from privately, which affects how certain safety measures apply. It helps providers correctly scope their duties for different communication features.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    },
+    {
+      "regulator": "Ofcom",
+      "title": "Online Safety Enforcement Guidance",
+      "description": "Explains how Ofcom will use its enforcement powers, including investigations, information requests, fines and business disruption measures, for breaches of the Act. It helps organizations understand the consequences of non-compliance and Ofcom's procedural approach.",
+      "official_link": "https://www.ofcom.org.uk/online-safety/online-safety-regulatory-documents"
+    }
+  ],
+  "regulatory_guidance_updated_at": "2026-06-27T17:50:22.584942+00:00",
+  "regime_id": "uk-ukpga-2023-50",
+  "name": "Online Safety Act 2023",
+  "summary": "The Online Safety Act 2023 is a UK statute establishing a regulatory framework for online safety. It imposes duties of care on providers of regulated user-to-user services and search services, introduces specific duties relating to certain pornographic content, creates communications offences, and confers extensive powers and duties on OFCOM as the regulator. The Act is structured across twelve Parts plus Schedules, covering definitions, duties, fees, OFCOM's enforcement powers, appeals and super-complaints, the Secretary of State's functions, and supplementary provisions.",
+  "scope": "The Act applies to providers of regulated user-to-user services and regulated search services (Parts 3 and 4), as well as providers of regulated services that publish or display certain pornographic content (Part 5). Key definitions establishing what falls within scope are set out in Part 2. The framework captures a broad range of online platforms and services, with OFCOM acting as the regulator with powers and duties in relation to regulated services under Part 7.",
+  "process": "Regulation and enforcement are administered principally by OFCOM, whose powers and duties in relation to regulated services are set out in Part 7. Providers may be required to pay fees under Part 6. OFCOM issues Codes of Practice (such as the Illegal Content Codes of Practice and the Protection of Children Code of Practice) to guide compliance. Part 8 provides mechanisms for appeals and super-complaints, and Part 9 sets out the Secretary of State's functions in relation to regulated services. Supplementary and general provisions appear in Parts 11 and 12.",
+  "consequence": "The Act creates communications offences under Part 10. Enforcement consequences flow from OFCOM's powers and duties in relation to regulated services under Part 7, and providers are subject to the fee regime under Part 6. (The provided material identifies these enforcement and offence Parts but does not reproduce the specific penalty amounts.)",
+  "obligations": [
+    {
+      "text": "Providers of regulated user-to-user services and regulated search services must comply with the duties of care imposed by the Act.",
+      "reference": "Online Safety Act 2023, Part 3",
+      "url": "https://www.legislation.gov.uk/ukpga/2023/50/part/3"
+    },
+    {
+      "text": "Providers of regulated user-to-user services and regulated search services must comply with the other duties imposed on them under the Act.",
+      "reference": "Online Safety Act 2023, Part 4",
+      "url": "https://www.legislation.gov.uk/ukpga/2023/50/part/4"
+    },
+    {
+      "text": "Providers of regulated services must comply with duties relating to certain pornographic content.",
+      "reference": "Online Safety Act 2023, Part 5",
+      "url": "https://www.legislation.gov.uk/ukpga/2023/50/part/5"
+    },
+    {
+      "text": "Providers of regulated services are subject to duties in relation to fees.",
+      "reference": "Online Safety Act 2023, Part 6",
+      "url": "https://www.legislation.gov.uk/ukpga/2023/50/part/6"
+    },
+    {
+      "text": "Persons are subject to the communications offences created by the Act.",
+      "reference": "Online Safety Act 2023, Part 10",
+      "url": "https://www.legislation.gov.uk/ukpga/2023/50/part/10"
+    }
+  ],
+  "guidance": "Providers should first determine whether their service falls within scope by reference to the key definitions in Part 2, then identify which duties apply (Part 3 duties of care, Part 4 other duties, and Part 5 pornographic content duties). Consult OFCOM's Codes of Practice \u2014 including the Illegal Content Codes of Practice and the Protection of Children Code of Practice for user-to-user services \u2014 for practical compliance steps, noting that draft amendments to these Codes are being issued. The Online Safety Act: explainer published by the government provides an accessible overview. Be prepared to meet fee obligations under Part 6 and engage with OFCOM's enforcement processes under Part 7, and note the routes for appeals and super-complaints under Part 8.",
+  "generated_at": "2026-06-27T15:36:36.345384+00:00",
+  "edited_by_human": false
+}

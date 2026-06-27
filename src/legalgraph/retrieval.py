@@ -19,6 +19,7 @@ import re
 from .db import Op  # noqa: F401  (kept for type parity)
 
 SNIPPET = 320
+CHAT_AUTHORITY_LIMIT = 40
 
 
 def _db(database: str | None) -> str | None:
@@ -115,6 +116,120 @@ def related_authorities(driver, doc_id: str, limit: int = 25,
     ORDER BY relationship LIMIT $limit
     """
     return _run(driver, cypher, {"id": doc_id, "limit": limit}, database)
+
+
+_REGIME_DOCS = """
+MATCH (d:Document)
+WHERE d.id IN $ids
+RETURN d.id AS id, d.citation AS citation,
+       [l IN labels(d) WHERE l <> 'Document'][0] AS layer,
+       d.source_url AS url, d.regulator AS regulator,
+       d.date_enacted AS date_enacted, d.status AS status
+ORDER BY d.citation
+"""
+
+
+def get_regime_documents(driver, regime_ids: list[str] | None,
+                         database: str | None = None) -> list[dict]:
+    """Anchor documents selected by the user as confirmed regimes."""
+    if not regime_ids:
+        return []
+    return _run(driver, _REGIME_DOCS, {"ids": list(regime_ids)}, database)
+
+
+_RELATED_DOCUMENTS_FOR_REGIMES = """
+UNWIND $ids AS regime_id
+MATCH (regime:Document {id: regime_id})
+CALL (regime) {
+  MATCH (regime)-[r]-(n:Document)
+  WHERE type(r) <> 'CONTAINS'
+  RETURN n, type(r) AS relationship
+  UNION
+  MATCH (regime)-[:CONTAINS*]->(p:Provision)<-[r]-(n:Document)
+  WHERE type(r) <> 'CONTAINS'
+  RETURN n, type(r) AS relationship
+  UNION
+  MATCH (regime)-[:ABOUT]->(:Concept)<-[:ABOUT]-(n:Document)
+  WHERE n <> regime AND (n:Guidance OR n:RegulatoryPolicy)
+  RETURN n, 'ABOUT' AS relationship
+}
+WITH DISTINCT regime.id AS regime_id, regime.citation AS regime, n, relationship
+WITH regime_id, regime, n, collect(DISTINCT relationship) AS relationships
+WITH regime_id, regime, n, relationships,
+     CASE
+       WHEN 'ISSUED_UNDER' IN relationships THEN 'ISSUED_UNDER'
+       WHEN 'MADE_UNDER' IN relationships THEN 'MADE_UNDER'
+       WHEN 'DEBATED_IN' IN relationships THEN 'DEBATED_IN'
+       ELSE relationships[0]
+     END AS relationship
+RETURN regime_id, regime,
+       n.id AS id, n.citation AS citation, n.title AS title,
+       [l IN labels(n) WHERE l <> 'Document'][0] AS layer,
+       relationship, relationships, n.source_url AS url, n.regulator AS regulator,
+       n.date_enacted AS date_enacted, n.date_decided AS date_decided,
+       n.status AS status
+LIMIT $limit
+"""
+
+
+def _authority_rank(row: dict, query: str) -> tuple[int, str, str]:
+    """Query-aware ordering for the prompt; keeps asked-for layers near the top."""
+    q = query.lower()
+    layer = row.get("layer") or ""
+    relationship = row.get("relationship") or ""
+    wanted = {
+        "HansardDebate": ("hansard", "debate", "parliament", "lords", "commons"),
+        "Guidance": ("guidance", "code", "ofcom", "ico"),
+        "RegulatoryPolicy": ("policy", "policies", "procedure", "procedures", "ofcom", "ico"),
+        "Case": ("case", "court", "judgment", "judgement", "held"),
+        "StatutoryInstrument": ("si", "statutory instrument", "regulation", "regulations"),
+        "Bill": ("bill", "parliament"),
+        "ExplanatoryNote": ("explanatory", "notes"),
+    }
+    rank = 1
+    if any(term in q for term in wanted.get(layer, ())):
+        rank = 0
+    return (rank, relationship, row.get("citation") or "")
+
+
+def related_documents_for_regimes(driver, regime_ids: list[str] | None, query: str = "",
+                                  limit: int = CHAT_AUTHORITY_LIMIT,
+                                  database: str | None = None) -> list[dict]:
+    """Documents in the selected regimes' graph neighbourhood.
+
+    This is the chat counterpart to provision retrieval: it exposes document-only
+    material such as Hansard debates and Bills that have no Provision text.
+    """
+    if not regime_ids:
+        return []
+    rows = _run(driver, _RELATED_DOCUMENTS_FOR_REGIMES,
+                {"ids": list(regime_ids), "limit": limit}, database)
+    rows.sort(key=lambda r: _authority_rank(r, query))
+    return rows[:limit]
+
+
+def chat_context(driver, query: str, regime_ids: list[str] | None = None,
+                 top_k: int = 12, database: str | None = None) -> dict:
+    """Ground a chat turn in both scoped provisions and regime neighbourhood docs."""
+    regime_ids = list(regime_ids or [])
+    provisions = search_provisions(
+        driver, query, top_k=top_k, regime_ids=regime_ids or None,
+        database=database)
+    regimes = get_regime_documents(driver, regime_ids, database=database)
+    related_documents = related_documents_for_regimes(
+        driver, regime_ids, query=query, database=database)
+
+    names = [r.get("citation") for r in regimes if r.get("citation")]
+    if not names:
+        names = sorted({(p.get("document") or {}).get("citation")
+                        for p in provisions if p.get("document")})
+    return {
+        "regime_ids": regime_ids,
+        "regime_names": [n for n in names if n],
+        "regimes": regimes,
+        "provisions": provisions,
+        "related_documents": related_documents,
+    }
 
 
 def related_regimes(driver, doc_id: str, database: str | None = None) -> list[dict]:

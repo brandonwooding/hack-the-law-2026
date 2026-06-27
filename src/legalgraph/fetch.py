@@ -24,6 +24,8 @@ HOST_MIN_INTERVAL: dict[str, float] = {
     "www.legislation.gov.uk": 0.2,
     "caselaw.nationalarchives.gov.uk": 0.5,
     "www.gov.uk": 0.15,
+    "eur-lex.europa.eu": 0.3,
+    "publications.europa.eu": 0.3,
     "bills-api.parliament.uk": 0.25,
     "statutoryinstruments-api.parliament.uk": 0.25,
     "hansard-api.parliament.uk": 0.25,
@@ -96,6 +98,45 @@ class Fetcher:
     def get_json(self, url: str, force: bool = False) -> dict:
         body, _ = self.get(url, accept="application/json", ext="json", force=force)
         return json.loads(body)
+
+    def get_bytes(self, url: str, accept: str | None = None, ext: str = "bin",
+                  force: bool = False, max_retries: int = 5) -> tuple[bytes, Path]:
+        """Return (body_bytes, cache_path). Cached unless force=True."""
+        path = self._cache_path(url, ext)
+        if path.exists() and not force:
+            return path.read_bytes(), path
+
+        host = urllib.parse.urlparse(url).netloc
+        headers = {"User-Agent": self.user_agent}
+        if accept:
+            headers["Accept"] = accept
+
+        last_err: Exception | None = None
+        for attempt in range(max_retries):
+            self._throttle(host)
+            req = urllib.request.Request(url, headers=headers)
+            try:
+                with urllib.request.urlopen(req, timeout=90) as r:
+                    status = getattr(r, "status", 200)
+                    body = r.read()
+                if status == 202:
+                    time.sleep(5 * (attempt + 1))
+                    continue
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(body)
+                return body, path
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    raise NotFound(url)
+                if e.code in (429, 500, 503, 504):
+                    last_err = e
+                    time.sleep(min(60, 3 * 2 ** attempt))
+                    continue
+                raise
+            except urllib.error.URLError as e:
+                last_err = e
+                time.sleep(2 ** attempt)
+        raise RuntimeError(f"failed after {max_retries} retries: {url} ({last_err})")
 
     @staticmethod
     def content_hash(text: str) -> str:

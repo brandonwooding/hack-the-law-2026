@@ -44,5 +44,43 @@ uk:
     debates_per_bill: 25
 
 eu:
-  # CELLAR adapter lands later; same canonical output.
-  seeds: []
+  filters:
+    enacted_from: "2000-01-01"
+
+  # Online-safety EU backbone. CELEX is the stable key; text comes from the
+  # English CELLAR XHTML manifestation, metadata/links from CELLAR RDF/SPARQL.
+  seeds:
+    - celex: "32022R2065"
+      title: "Digital Services Act"
+      role: anchor
+      regulator: "European Commission"
+      concepts: [eurovoc:online-safety]
+    - celex: "32000L0031"
+      title: "e-Commerce Directive"
+      concepts: [eurovoc:online-safety]
+    - celex: "32010L0013"
+      title: "Audiovisual Media Services Directive"
+      concepts: [eurovoc:online-safety]
+    - celex: "32016R0679"
+      title: "General Data Protection Regulation"
+      regulator: "European Data Protection Board (EDPB)"
+      concepts: [eurovoc:dp]
+    - celex: "32021R0784"
+      title: "Terrorist Content Online Regulation"
+      concepts: [eurovoc:online-safety]
+    - celex: "32022R1925"
+      title: "Digital Markets Act"
+      regulator: "European Commission"
+      concepts: [eurovoc:digital-markets]
+    - celex: "32024R1689"
+      title: "Artificial Intelligence Act"
+      regulator: "European Commission"
+      concepts: [eurovoc:ai]
+
+  expand:
+    max_hops: 1
+    follow: [CITES, CONSIDERS, AMENDS, MADE_UNDER]
+
+  limits:
+    cases_per_seed: 8
+    citations_per_doc: 25

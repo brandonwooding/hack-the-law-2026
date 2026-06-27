@@ -42,6 +42,22 @@ def _driver():
     return _state["driver"]
 
 
+def _regulatory_guidance_context(regime_ids: list[str]) -> list[dict]:
+    context = []
+    for regime_id in regime_ids:
+        saved = dossier.read_dossier(regime_id, dossier.DOSSIER_DIR)
+        rows = (saved or {}).get("regulatory_guidance") or []
+        if not rows:
+            continue
+        context.append({
+            "regime_id": regime_id,
+            "regime_name": (saved or {}).get("name") or regime_id,
+            "updated_at": (saved or {}).get("regulatory_guidance_updated_at"),
+            "guidance": rows,
+        })
+    return context
+
+
 @app.get("/health")
 def health():
     rows = retrieval._run(_driver(), "MATCH (n) RETURN count(n) AS n", {}, None)
@@ -80,6 +96,12 @@ def list_regimes(topic: str = Query(..., min_length=2),
     return {"regimes": cards}
 
 
+@app.get("/regimes/all")
+def list_all_regimes():
+    """Every top-level regime (Act/Treaty anchor) — for the Regimes browser."""
+    return {"regimes": regimes.list_anchor_regimes(_driver())}
+
+
 class ChatRequest(BaseModel):
     query: str
     regime_ids: list[str] = []
@@ -88,12 +110,14 @@ class ChatRequest(BaseModel):
 @app.post("/chat")
 def chat(req: ChatRequest):
     """Answer a follow-up, hard-scoped to the confirmed regimes."""
-    provisions = retrieval.search_provisions(
+    scoped = retrieval.chat_context(
         _driver(), req.query, top_k=12, regime_ids=req.regime_ids or None)
-    names = sorted({(p.get("document") or {}).get("citation")
-                    for p in provisions if p.get("document")})
-    scoped = {"regime_names": [n for n in names if n], "provisions": provisions}
-    return {"answer": llm.answer(req.query, scoped), "citations": provisions}
+    scoped["regulatory_guidance"] = _regulatory_guidance_context(
+        scoped.get("regime_ids") or req.regime_ids)
+    return {"answer": llm.answer(req.query, scoped),
+            "citations": scoped["provisions"],
+            "related_documents": scoped["related_documents"],
+            "regulatory_guidance": scoped["regulatory_guidance"]}
 
 
 @app.get("/regime/{regime_id:path}")
@@ -103,6 +127,16 @@ def regime(regime_id: str):
         regime_id, dossier.DOSSIER_DIR,
         gather_fn=lambda rid: dossier.gather_subgraph(_driver(), rid),
         draft_fn=llm.draft_dossier,
+    )
+
+
+@app.post("/regime/{regime_id:path}/regulatory-guidance/refresh")
+def refresh_regulatory_guidance(regime_id: str):
+    """Refresh only the live, web-sourced regulatory guidance section."""
+    return dossier.refresh_regulatory_guidance(
+        regime_id, dossier.DOSSIER_DIR,
+        gather_fn=lambda rid: dossier.gather_subgraph(_driver(), rid),
+        refresh_fn=llm.refresh_regulatory_guidance,
     )
 
 

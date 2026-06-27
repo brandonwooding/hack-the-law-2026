@@ -17,3 +17,12 @@ https://nationalarchives.github.io/ds-find-caselaw-docs/public
 government / statuatory guidance
 https://content-api.publishing.service.gov.uk/
 
+EU
+CELLAR / Publications Office SPARQL endpoint
+https://publications.europa.eu/webapi/rdf/sparql
+
+EUR-Lex web services / data reuse
+https://eur-lex.europa.eu/content/help/data-reuse/webservice.html?locale=en
+
+English XHTML manifestations by CELEX
+https://publications.europa.eu/resource/celex/{CELEX}.ENG.xhtml

@@ -1,3 +1,10 @@
+export interface RegulatoryGuidanceEntry {
+  regulator: string;
+  title: string;
+  description: string;
+  official_link: string;
+}
+
 export interface Regime {
   id: string;
   name: string;
@@ -7,8 +14,10 @@ export interface Regime {
   scope: string;
   process: string;
   consequence: string;
-  obligations: { text: string; reference: string }[];
+  obligations: { text: string; reference: string; url?: string }[];
   guidance: string;
+  regulatory_guidance: RegulatoryGuidanceEntry[];
+  regulatory_guidance_updated_at: string | null;
 }
 
 export const seedRegimes: Regime[] = [
@@ -45,6 +54,8 @@ export const seedRegimes: Regime[] = [
     ],
     guidance:
       "Begin with a documented illegal-content risk assessment, as this anchors every downstream duty and is the first thing Ofcom will request. Map your service against the relevant codes of practice early, and retain evidence of the proportionality of each measure adopted — Ofcom's enforcement posture favours demonstrable process over perfection.",
+    regulatory_guidance: [],
+    regulatory_guidance_updated_at: null,
   },
   {
     id: "uk-gdpr-dpa-2018",
@@ -79,6 +90,8 @@ export const seedRegimes: Regime[] = [
     ],
     guidance:
       "Where online safety measures rely on processing personal data — age verification, behavioural monitoring, or content review — document the lawful basis and a DPIA before launch. The ICO's Children's Code is particularly relevant to services accessed by minors and should be read alongside the Online Safety Act duties rather than in isolation.",
+    regulatory_guidance: [],
+    regulatory_guidance_updated_at: null,
   },
   {
     id: "communications-act-2003",
@@ -109,5 +122,7 @@ export const seedRegimes: Regime[] = [
     ],
     guidance:
       "Treat this Act as the procedural backbone behind Ofcom's online-safety enforcement rather than a standalone compliance target for most platforms. Where your service also operates as a communications provider, confirm which general conditions apply, as these run in parallel to any online-safety duties.",
+    regulatory_guidance: [],
+    regulatory_guidance_updated_at: null,
   },
 ];

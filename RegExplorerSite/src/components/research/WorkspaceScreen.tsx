@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
+import { ExternalLink, RefreshCw } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { AppHeader } from "./AppHeader";
 import type { Regime } from "@/lib/regimes";
-import { sendChat } from "@/lib/api";
+import { fetchRegime, refreshRegulatoryGuidance, sendChat } from "@/lib/api";
 
 interface Message {
   id: number;
@@ -13,8 +16,8 @@ interface WorkspaceScreenProps {
   jurisdiction: string;
   topic: string;
   regimes: Regime[];
+  regimeLoadState: "idle" | "loading" | "ready" | "error";
   onToggleRegime: (id: string) => void;
-  onOpenRegime: (id: string) => void;
   onAddRegime: (name: string, description: string) => void;
   onRemoveRegime: (id: string) => void;
   note: string;
@@ -22,12 +25,225 @@ interface WorkspaceScreenProps {
   onNewSession: () => void;
 }
 
+function Placeholder() {
+  return <span className="italic text-muted-ink">Not yet documented.</span>;
+}
+
+function formatUpdatedAt(value?: string | null) {
+  if (!value) return "Never refreshed";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Last updated date unavailable";
+  return `Last updated ${new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date)}`;
+}
+
+function InlineField({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="grid gap-2 border-t border-hairline py-4 sm:grid-cols-[9rem_minmax(0,1fr)]">
+      <p className="eyebrow">{label}</p>
+      <div className="text-sm leading-relaxed text-ink">{children}</div>
+    </div>
+  );
+}
+
+function RegulatoryGuidanceSection({
+  regime,
+  refreshing,
+  refreshError,
+  onRefresh,
+}: {
+  regime: Regime;
+  refreshing: boolean;
+  refreshError: boolean;
+  onRefresh: () => void;
+}) {
+  const rows = regime.regulatory_guidance ?? [];
+
+  return (
+    <div className="border-t border-hairline py-4">
+      <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="eyebrow">Regulatory Guidance</p>
+          <p className="mt-1 text-xs text-muted-ink">
+            {formatUpdatedAt(regime.regulatory_guidance_updated_at)}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onRefresh}
+          disabled={refreshing}
+          className="inline-flex items-center gap-1.5 rounded-[3px] border border-hairline bg-paper px-2.5 py-1.5 text-xs font-medium text-navy transition-colors hover:bg-secondary disabled:cursor-wait disabled:opacity-60"
+        >
+          <RefreshCw
+            className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`}
+            aria-hidden="true"
+          />
+          {refreshing ? "Refreshing" : "Refresh"}
+        </button>
+      </div>
+
+      {refreshError && (
+        <p className="mb-3 text-xs text-destructive">
+          Unable to refresh regulatory guidance.
+        </p>
+      )}
+
+      {rows.length > 0 ? (
+        <div className="overflow-x-auto">
+          <table className="min-w-[640px] border-collapse text-left text-xs">
+            <thead>
+              <tr className="border-b border-hairline text-muted-ink">
+                <th className="py-2 pr-4 font-medium">Regulator</th>
+                <th className="py-2 pr-4 font-medium">Document / Policy</th>
+                <th className="py-2 pr-4 font-medium">Description</th>
+                <th className="py-2 font-medium">Official Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, i) => (
+                <tr key={`${row.regulator}-${row.title}-${i}`} className="border-b border-hairline/70 align-top">
+                  <td className="py-3 pr-4 font-medium text-ink">{row.regulator}</td>
+                  <td className="py-3 pr-4 text-ink">{row.title}</td>
+                  <td className="py-3 pr-4 leading-relaxed text-ink">{row.description}</td>
+                  <td className="py-3">
+                    <a
+                      href={row.official_link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-navy underline decoration-navy/30 underline-offset-2 transition-colors hover:decoration-navy"
+                    >
+                      Source
+                      <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <Placeholder />
+      )}
+    </div>
+  );
+}
+
+function InlineRegimeDossier({
+  id,
+  regime,
+  status,
+  refreshingRegulatoryGuidance,
+  regulatoryGuidanceError,
+  onRefreshRegulatoryGuidance,
+}: {
+  id: string;
+  regime: Regime;
+  status: "loading" | "ready" | "error";
+  refreshingRegulatoryGuidance: boolean;
+  regulatoryGuidanceError: boolean;
+  onRefreshRegulatoryGuidance: () => void;
+}) {
+  return (
+    <div id={id} className="border-t border-hairline bg-secondary/30 px-6 py-5">
+      {status === "loading" && (
+        <p className="text-sm text-muted-ink">Loading dossier...</p>
+      )}
+      {status === "error" && (
+        <p className="text-sm text-muted-ink">
+          Unable to load the dossier for this regime.
+        </p>
+      )}
+      {status === "ready" && (
+        <div>
+          <InlineField label="Summary">
+            {regime.summary || <Placeholder />}
+          </InlineField>
+
+          <InlineField label="Scope">
+            {regime.scope || <Placeholder />}
+          </InlineField>
+
+          <InlineField label="Process">
+            {regime.process || <Placeholder />}
+          </InlineField>
+
+          <InlineField label="Consequence">
+            {regime.consequence || <Placeholder />}
+          </InlineField>
+
+          <InlineField label="Obligations">
+            {regime.obligations.length > 0 ? (
+              <ul className="space-y-2">
+                {regime.obligations.map((o, i) => (
+                  <li key={i} className="flex gap-2.5">
+                    <span
+                      className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-ink"
+                      aria-hidden="true"
+                    />
+                    <span>
+                      {o.text}
+                      {o.reference && (
+                        <>
+                          {" "}
+                          {o.url ? (
+                            <a
+                              href={o.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-navy underline decoration-navy/30 underline-offset-2 transition-colors hover:decoration-navy"
+                            >
+                              ({o.reference})
+                            </a>
+                          ) : (
+                            <span className="text-muted-ink">({o.reference})</span>
+                          )}
+                        </>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Placeholder />
+            )}
+          </InlineField>
+
+          <InlineField label="Guidance">
+            {regime.guidance ? (
+              <blockquote className="border-l-2 border-navy py-1 pl-4">
+                {regime.guidance}
+              </blockquote>
+            ) : (
+              <Placeholder />
+            )}
+          </InlineField>
+
+          <RegulatoryGuidanceSection
+            regime={regime}
+            refreshing={refreshingRegulatoryGuidance}
+            refreshError={regulatoryGuidanceError}
+            onRefresh={onRefreshRegulatoryGuidance}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function WorkspaceScreen({
   jurisdiction,
   topic,
   regimes,
+  regimeLoadState,
   onToggleRegime,
-  onOpenRegime,
   onAddRegime,
   onRemoveRegime,
   note,
@@ -47,6 +263,18 @@ export function WorkspaceScreen({
     },
   ]);
   const [draft, setDraft] = useState("");
+  const [thinking, setThinking] = useState(false);
+  const [expandedRegimeId, setExpandedRegimeId] = useState<string | null>(null);
+  const [dossiers, setDossiers] = useState<Record<string, Regime>>({});
+  const [dossierStatus, setDossierStatus] = useState<
+    Record<string, "loading" | "ready" | "error">
+  >({});
+  const [refreshingRegulatoryGuidance, setRefreshingRegulatoryGuidance] = useState<
+    Record<string, boolean>
+  >({});
+  const [regulatoryGuidanceErrors, setRegulatoryGuidanceErrors] = useState<
+    Record<string, boolean>
+  >({});
 
   const [adding, setAdding] = useState(false);
   const [newName, setNewName] = useState("");
@@ -58,13 +286,17 @@ export function WorkspaceScreen({
     if (!text) return;
     setMessages((m) => [...m, { id: Date.now(), role: "user", text }]);
     setDraft("");
-    const ids = regimes.filter((r) => r.confirmed).map((r) => r.id);
+    const confirmedIds = regimes.filter((r) => r.confirmed).map((r) => r.id);
+    const ids = confirmedIds.length > 0 ? confirmedIds : regimes.map((r) => r.id);
+    setThinking(true);
     try {
       const { answer } = await sendChat(text, ids);
       setMessages((m) => [...m, { id: Date.now() + 1, role: "assistant", text: answer }]);
     } catch {
       setMessages((m) => [...m, { id: Date.now() + 1, role: "assistant",
         text: "Sorry — the assistant is unavailable." }]);
+    } finally {
+      setThinking(false);
     }
   }
 
@@ -76,6 +308,42 @@ export function WorkspaceScreen({
     setNewName("");
     setNewDesc("");
     setAdding(false);
+  }
+
+  async function handleToggleDossier(regime: Regime) {
+    const next = expandedRegimeId === regime.id ? null : regime.id;
+    setExpandedRegimeId(next);
+    if (!next || dossiers[regime.id] || dossierStatus[regime.id] === "loading") return;
+    setDossierStatus((s) => ({ ...s, [regime.id]: "loading" }));
+    try {
+      const data = await fetchRegime(regime.id);
+      setDossiers((d) => ({ ...d, [regime.id]: { ...regime, ...data } }));
+      setDossierStatus((s) => ({ ...s, [regime.id]: "ready" }));
+    } catch {
+      setDossierStatus((s) => ({ ...s, [regime.id]: "error" }));
+    }
+  }
+
+  async function handleRefreshRegulatoryGuidance(regime: Regime) {
+    setRefreshingRegulatoryGuidance((s) => ({ ...s, [regime.id]: true }));
+    setRegulatoryGuidanceErrors((s) => ({ ...s, [regime.id]: false }));
+    try {
+      const data = await refreshRegulatoryGuidance(regime.id);
+      setDossiers((d) => ({
+        ...d,
+        [regime.id]: { ...regime, ...d[regime.id], ...data },
+      }));
+      setDossierStatus((s) => ({ ...s, [regime.id]: "ready" }));
+    } catch {
+      setRegulatoryGuidanceErrors((s) => ({ ...s, [regime.id]: true }));
+    } finally {
+      setRefreshingRegulatoryGuidance((s) => ({ ...s, [regime.id]: false }));
+    }
+  }
+
+  function handleRemove(id: string) {
+    if (expandedRegimeId === id) setExpandedRegimeId(null);
+    onRemoveRegime(id);
   }
 
   return (
@@ -105,9 +373,25 @@ export function WorkspaceScreen({
             {messages.map((m) => (
               <div key={m.id}>
                 <p className="eyebrow mb-1.5">{m.role === "user" ? "You" : "Assistant"}</p>
-                <p className="text-sm leading-relaxed text-ink">{m.text}</p>
+                {m.role === "assistant" ? (
+                  <div className="prose-chat text-sm leading-relaxed text-ink">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>{m.text}</ReactMarkdown>
+                  </div>
+                ) : (
+                  <p className="text-sm leading-relaxed text-ink">{m.text}</p>
+                )}
               </div>
             ))}
+            {thinking && (
+              <div>
+                <p className="eyebrow mb-1.5">Assistant</p>
+                <div className="flex items-center gap-1.5 py-1" aria-label="Assistant is thinking">
+                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-ink [animation-delay:-0.3s]" />
+                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-ink [animation-delay:-0.15s]" />
+                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-ink" />
+                </div>
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSend} className="border-t border-hairline p-4">
@@ -115,13 +399,15 @@ export function WorkspaceScreen({
               <input
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                placeholder="Ask a follow-up..."
-                className="flex-1 bg-transparent py-1 text-sm text-ink outline-none placeholder:text-muted-ink"
+                disabled={thinking}
+                placeholder={thinking ? "Waiting for a response..." : "Ask a follow-up..."}
+                className="flex-1 bg-transparent py-1 text-sm text-ink outline-none placeholder:text-muted-ink disabled:opacity-60"
               />
               <button
                 type="submit"
                 aria-label="Send message"
-                className="flex h-7 w-7 items-center justify-center rounded-[3px] bg-navy text-navy-foreground transition-colors hover:bg-[#16304e]"
+                disabled={thinking}
+                className="flex h-7 w-7 items-center justify-center rounded-[3px] bg-navy text-navy-foreground transition-colors hover:bg-[#16304e] disabled:opacity-50"
               >
                 <svg
                   className="h-4 w-4"
@@ -201,26 +487,25 @@ export function WorkspaceScreen({
           )}
 
           <div className="flex-1 overflow-y-auto">
-            <ul>
-              {regimes.length === 0 && (
+            <ul aria-live="polite">
+              {regimeLoadState === "loading" && (
+                <li className="px-6 py-8 text-sm text-muted-ink">
+                  Finding relevant regimes...
+                </li>
+              )}
+              {regimeLoadState === "error" && (
+                <li className="px-6 py-8 text-sm text-muted-ink">
+                  Unable to load regimes. Check the API is running, then start a new session.
+                </li>
+              )}
+              {regimeLoadState !== "loading" && regimeLoadState !== "error" && regimes.length === 0 && (
                 <li className="px-6 py-8 text-sm text-muted-ink">
                   No regimes in this session. Use “+ Add regime” to add one.
                 </li>
               )}
               {regimes.map((regime) => (
                 <li key={regime.id} className="border-b border-hairline">
-                  <div
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => onOpenRegime(regime.id)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        onOpenRegime(regime.id);
-                      }
-                    }}
-                    className="group/row flex cursor-pointer items-start gap-3.5 px-6 py-4 transition-colors hover:bg-secondary"
-                  >
+                  <div className="group/row flex items-start gap-3.5 px-6 py-4 transition-colors hover:bg-secondary">
                     <button
                       type="button"
                       role="checkbox"
@@ -249,7 +534,13 @@ export function WorkspaceScreen({
                         </svg>
                       )}
                     </button>
-                    <div className="min-w-0 flex-1">
+                    <button
+                      type="button"
+                      aria-expanded={expandedRegimeId === regime.id}
+                      aria-controls={`regime-panel-${regime.id}`}
+                      onClick={() => handleToggleDossier(regime)}
+                      className="min-w-0 flex-1 text-left"
+                    >
                       <h3 className="font-serif text-[0.9375rem] font-medium leading-snug text-ink">
                         {regime.name}
                       </h3>
@@ -258,7 +549,7 @@ export function WorkspaceScreen({
                           {regime.shortDescription}
                         </p>
                       )}
-                    </div>
+                    </button>
                     <div className="flex flex-shrink-0 items-center gap-2">
                       <button
                         type="button"
@@ -266,7 +557,7 @@ export function WorkspaceScreen({
                         title="Remove — not relevant"
                         onClick={(e) => {
                           e.stopPropagation();
-                          onRemoveRegime(regime.id);
+                          handleRemove(regime.id);
                         }}
                         className="flex h-6 w-6 items-center justify-center rounded-[2px] text-muted-ink opacity-0 transition-all hover:bg-paper hover:text-destructive focus:opacity-100 group-hover/row:opacity-100"
                       >
@@ -282,7 +573,9 @@ export function WorkspaceScreen({
                         </svg>
                       </button>
                       <svg
-                        className="h-3.5 w-3.5 text-muted-ink"
+                        className={`h-3.5 w-3.5 text-muted-ink transition-transform ${
+                          expandedRegimeId === regime.id ? "rotate-90" : ""
+                        }`}
                         viewBox="0 0 16 16"
                         fill="none"
                         stroke="currentColor"
@@ -293,6 +586,18 @@ export function WorkspaceScreen({
                       </svg>
                     </div>
                   </div>
+                  {expandedRegimeId === regime.id && (
+                    <InlineRegimeDossier
+                      id={`regime-panel-${regime.id}`}
+                      regime={dossiers[regime.id] ?? regime}
+                      status={dossierStatus[regime.id] ?? "loading"}
+                      refreshingRegulatoryGuidance={!!refreshingRegulatoryGuidance[regime.id]}
+                      regulatoryGuidanceError={!!regulatoryGuidanceErrors[regime.id]}
+                      onRefreshRegulatoryGuidance={() => handleRefreshRegulatoryGuidance(
+                        dossiers[regime.id] ?? regime,
+                      )}
+                    />
+                  )}
                 </li>
               ))}
             </ul>

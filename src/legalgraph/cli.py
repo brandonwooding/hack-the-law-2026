@@ -17,8 +17,9 @@ import yaml
 
 from . import io, loader, linker, skeleton, validator
 from .adapters import ADAPTERS
+from .adapters import eu as _eu  # noqa: F401  (imports register the EU adapters)
 from .adapters import uk as _uk  # noqa: F401  (imports register the UK adapters)
-from .db import connect
+from .db import connect, load_dotenv
 from .fetch import Fetcher
 
 _NEEDS_DB = {"skeleton", "load", "link", "validate"}
@@ -57,6 +58,7 @@ def main(argv: list[str] | None = None) -> int:
     ps.add_argument("--port", type=int, default=8000)
 
     args = ap.parse_args(argv)
+    load_dotenv()
 
     if args.cmd == "serve":
         import uvicorn

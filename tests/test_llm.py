@@ -1,7 +1,9 @@
 import types
 
 from legalgraph.llm import (
-    DossierFields, _dossier_prompt, _answer_prompt, draft_dossier, answer,
+    DossierFields, RegulatoryGuidanceFields, RegulatoryGuidanceItem,
+    _dossier_prompt, _regulatory_guidance_prompt, _answer_prompt,
+    draft_dossier, refresh_regulatory_guidance, answer,
 )
 
 
@@ -29,10 +31,38 @@ def test_dossier_prompt_grounds_in_the_bundle():
 def test_answer_prompt_includes_query_and_scope():
     scoped = {"regime_names": ["Online Safety Act 2023"],
               "provisions": [{"number": "9", "heading": "Duties",
-                              "snippet": "illegal content", "url": "http://p"}]}
+                              "snippet": "illegal content", "url": "http://p"}],
+              "related_documents": [{"layer": "HansardDebate",
+                                     "citation": "OSA debate",
+                                     "url": "http://h"}],
+              "regulatory_guidance": [{
+                  "regime_id": "uk-ukpga-2023-50",
+                  "regime_name": "Online Safety Act 2023",
+                  "updated_at": "2026-06-27T17:00:00+00:00",
+                  "guidance": [{
+                      "regulator": "Ofcom",
+                      "title": "Illegal content Codes of Practice",
+                      "description": "Sets out compliance measures.",
+                      "official_link": "https://www.ofcom.org.uk/",
+                  }],
+              }]}
     p = _answer_prompt("what are the duties?", scoped)
     assert "what are the duties?" in p
     assert "Online Safety Act 2023" in p
+    assert "Related documents" in p
+    assert "OSA debate" in p
+    assert "metadata but not transcript/body text" in p
+    assert "Cached Regulatory Guidance" in p
+    assert "Illegal content Codes of Practice" in p
+    assert "updated_at" in p
+
+
+def test_regulatory_guidance_prompt_requires_live_official_search():
+    p = _regulatory_guidance_prompt(_bundle())
+    assert "web_search" in p
+    assert "official" in p.lower()
+    assert "live" in p.lower()
+    assert "Ofcom code" in p
 
 
 class _FakeMessages:
@@ -67,6 +97,23 @@ def test_draft_dossier_returns_six_fields_and_uses_opus():
     assert client.messages.parse_kwargs["thinking"] == {"type": "adaptive"}
     assert "output_config" not in client.messages.parse_kwargs
     assert client.messages.parse_kwargs["output_format"] is DossierFields
+
+
+def test_refresh_regulatory_guidance_uses_web_search_tool():
+    parsed = RegulatoryGuidanceFields(regulatory_guidance=[
+        RegulatoryGuidanceItem(
+            regulator="Ofcom",
+            title="Online Safety Act guidance",
+            description="Explains compliance expectations.",
+            official_link="https://www.ofcom.org.uk/",
+        )
+    ])
+    client = _FakeClient(parsed=parsed)
+    out = refresh_regulatory_guidance(_bundle(), client=client)
+    assert out[0]["regulator"] == "Ofcom"
+    assert client.messages.parse_kwargs["model"] == "claude-opus-4-8"
+    assert client.messages.parse_kwargs["tools"][0]["name"] == "web_search"
+    assert client.messages.parse_kwargs["output_format"] is RegulatoryGuidanceFields
 
 
 def test_answer_returns_text_and_uses_opus():

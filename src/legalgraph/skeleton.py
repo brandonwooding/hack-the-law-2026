@@ -25,6 +25,9 @@ INDEXES: list[str] = [
     "CREATE INDEX doc_type      IF NOT EXISTS FOR (d:Document) ON (d.type)",
     "CREATE INDEX doc_status    IF NOT EXISTS FOR (d:Document) ON (d.status)",
     "CREATE INDEX doc_regulator IF NOT EXISTS FOR (d:Document) ON (d.regulator)",
+    "CREATE INDEX doc_publisher IF NOT EXISTS FOR (d:Document) ON (d.publisher)",
+    "CREATE INDEX doc_kind      IF NOT EXISTS FOR (d:Document) ON (d.document_kind)",
+    "CREATE INDEX doc_effect    IF NOT EXISTS FOR (d:Document) ON (d.legal_effect)",
     "CREATE INDEX prov_number   IF NOT EXISTS FOR (p:Provision) ON (p.number)",
     "CREATE INDEX concept_label IF NOT EXISTS FOR (c:Concept) ON (c.label)",
 ]

@@ -39,6 +39,7 @@ class DocType(str, Enum):
     ACT = "Act"                             # primary legislation
     STATUTORY_INSTRUMENT = "StatutoryInstrument"   # delegated, ministerial
     REGULATORY_INSTRUMENT = "RegulatoryInstrument" # delegated, regulator-made, BINDING
+    REGULATORY_POLICY = "RegulatoryPolicy" # regulator policy/procedure; usually non-binding
     BILL = "Bill"                           # proposed legislation
     HANSARD_DEBATE = "HansardDebate"        # debates / travaux préparatoires
     CASE = "Case"                           # case law
@@ -85,7 +86,7 @@ class EdgeType(str, Enum):
     DISTINGUISHES = "DISTINGUISHES"     # Case -> Case
     OVERRULES = "OVERRULES"             # Case -> Case
     # soft law & aids
-    ISSUED_UNDER = "ISSUED_UNDER"       # Guidance -> Act/SI
+    ISSUED_UNDER = "ISSUED_UNDER"       # Guidance/RegulatoryPolicy -> Act/SI/provision
     EXPLAINS = "EXPLAINS"               # ExplanatoryNote -> Act / Provision
     # cross-jurisdiction (the payoff of one multi-jurisdiction graph)
     TRANSPOSES = "TRANSPOSES"           # national SI/Act -> EU Directive
@@ -104,6 +105,7 @@ PRECEDENCE: dict[DocType, int] = {
     DocType.ACT: 90,
     DocType.STATUTORY_INSTRUMENT: 80,
     DocType.REGULATORY_INSTRUMENT: 70,
+    DocType.REGULATORY_POLICY: 15,
     DocType.CASE: 60,
     DocType.HANSARD_DEBATE: 30,
     DocType.EXPLANATORY_NOTE: 20,
@@ -140,6 +142,8 @@ class Provision(BaseModel):
     text: Optional[str] = None
     url: Optional[str] = Field(None, description="deep link to this provision on the source site")
     legal_force: LegalForce = LegalForce.OPERATIVE
+    page_start: Optional[int] = None
+    page_end: Optional[int] = None
     # point-in-time validity (UK legislation is heavily amended)
     valid_from: Optional[str] = None
     valid_to: Optional[str] = None
@@ -216,6 +220,10 @@ class Document(BaseModel):
     date_in_force: Optional[str] = None
     date_repealed: Optional[str] = None
     date_decided: Optional[str] = None
+    published_date: Optional[str] = None
+    updated_date: Optional[str] = None
+    withdrawn_date: Optional[str] = None
+    version: Optional[str] = None
 
     # classification
     status: Status = Status.UNKNOWN
@@ -226,6 +234,13 @@ class Document(BaseModel):
     level: Optional[str] = Field(None, description="UKSC, EWCA, CJEU, ...")
     regulator: Optional[str] = Field(
         None, description="competent authority, e.g. ICO / FCA / EDPB (relatedness signal)"
+    )
+    publisher: Optional[str] = None
+    document_kind: Optional[str] = Field(
+        None, description="source-level kind, e.g. guidance, corporate_policy, procedure"
+    )
+    legal_effect: Optional[str] = Field(
+        None, description="binding, statutory_guidance, non_binding_guidance, policy_position"
     )
     precedence: Optional[int] = Field(
         None, description="authority weight; defaults from type+level if omitted"
@@ -244,6 +259,11 @@ class Document(BaseModel):
     edges: list[Edge] = Field(default_factory=list)
 
     # provenance
+    landing_page_url: Optional[str] = None
+    pdf_url: Optional[str] = None
+    ocr_model: Optional[str] = None
+    ocr_parsed_at: Optional[str] = None
+    parse_version: Optional[str] = None
     source: SourceMeta = Field(default_factory=SourceMeta)
 
     @model_validator(mode="after")

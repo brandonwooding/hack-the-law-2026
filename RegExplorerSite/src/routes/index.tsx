@@ -2,9 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SetupScreen } from "@/components/research/SetupScreen";
 import { WorkspaceScreen } from "@/components/research/WorkspaceScreen";
-import { RegimeDetailScreen } from "@/components/research/RegimeDetailScreen";
+import { SidebarLayout } from "@/components/research/SidebarLayout";
 import { seedRegimes, type Regime } from "@/lib/regimes";
-import { fetchRegimes, type RegimeCard } from "@/lib/api";
+import { fetchRegimes } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,20 +20,23 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type View = "setup" | "workspace" | "detail";
+type View = "setup" | "workspace";
+type RegimeLoadState = "idle" | "loading" | "ready" | "error";
 
 function Index() {
   const [view, setView] = useState<View>("setup");
   const [jurisdiction, setJurisdiction] = useState("");
   const [topic, setTopic] = useState("");
   const [regimes, setRegimes] = useState<Regime[]>(seedRegimes);
+  const [regimeLoadState, setRegimeLoadState] = useState<RegimeLoadState>("idle");
   const [note, setNote] = useState("");
-  const [activeRegimeId, setActiveRegimeId] = useState<string | null>(null);
 
   async function handleStart(j: string, t: string) {
     setJurisdiction(j);
     setTopic(t);
     setNote("");
+    setRegimes([]);
+    setRegimeLoadState("loading");
     setView("workspace");
     try {
       const cards = await fetchRegimes(t, j);
@@ -44,9 +47,13 @@ function Index() {
         confirmed: false,
         summary: "", scope: "", process: "", consequence: "",
         obligations: [], guidance: "",
+        regulatory_guidance: [],
+        regulatory_guidance_updated_at: null,
       })));
+      setRegimeLoadState("ready");
     } catch {
       setRegimes([]);
+      setRegimeLoadState("error");
     }
   }
 
@@ -71,13 +78,14 @@ function Index() {
         consequence: "",
         obligations: [],
         guidance: "",
+        regulatory_guidance: [],
+        regulatory_guidance_updated_at: null,
       },
     ]);
   }
 
   function handleRemoveRegime(id: string) {
     setRegimes((rs) => rs.filter((r) => r.id !== id));
-    setActiveRegimeId((current) => (current === id ? null : current));
   }
 
 
@@ -85,36 +93,31 @@ function Index() {
     setView("setup");
     setJurisdiction("");
     setTopic("");
-    setActiveRegimeId(null);
+    setRegimeLoadState("idle");
   }
-
-  const activeRegime = regimes.find((r) => r.id === activeRegimeId) ?? null;
 
   if (view === "setup") {
-    return <SetupScreen onStart={handleStart} />;
-  }
-
-  if (view === "detail" && activeRegime) {
     return (
-      <RegimeDetailScreen regime={activeRegime} onBack={() => setView("workspace")} />
+      <SidebarLayout>
+        <SetupScreen onStart={handleStart} />
+      </SidebarLayout>
     );
   }
 
   return (
-    <WorkspaceScreen
-      jurisdiction={jurisdiction}
-      topic={topic}
-      regimes={regimes}
-      onToggleRegime={handleToggleRegime}
-      onOpenRegime={(id) => {
-        setActiveRegimeId(id);
-        setView("detail");
-      }}
-      onAddRegime={handleAddRegime}
-      onRemoveRegime={handleRemoveRegime}
-      note={note}
-      onNoteChange={setNote}
-      onNewSession={handleNewSession}
-    />
+    <SidebarLayout>
+      <WorkspaceScreen
+        jurisdiction={jurisdiction}
+        topic={topic}
+        regimes={regimes}
+        regimeLoadState={regimeLoadState}
+        onToggleRegime={handleToggleRegime}
+        onAddRegime={handleAddRegime}
+        onRemoveRegime={handleRemoveRegime}
+        note={note}
+        onNoteChange={setNote}
+        onNewSession={handleNewSession}
+      />
+    </SidebarLayout>
   );
 }

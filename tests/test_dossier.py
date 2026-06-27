@@ -1,5 +1,6 @@
 from legalgraph.dossier import (
-    dossier_path, read_dossier, write_dossier, get_or_build_dossier, save_dossier,
+    dossier_path, read_dossier, write_dossier, get_or_build_dossier,
+    refresh_regulatory_guidance, save_dossier,
 )
 
 
@@ -10,6 +11,8 @@ def test_read_returns_none_when_absent(tmp_path):
 def test_write_then_read_roundtrips(tmp_path):
     write_dossier({"regime_id": "r1", "summary": "hi"}, tmp_path)
     assert read_dossier("r1", tmp_path)["summary"] == "hi"
+    assert read_dossier("r1", tmp_path)["regulatory_guidance"] == []
+    assert read_dossier("r1", tmp_path)["regulatory_guidance_updated_at"] is None
     assert dossier_path("r1", tmp_path).exists()
 
 
@@ -33,6 +36,31 @@ def test_get_or_build_calls_llm_once_then_serves_cache(tmp_path):
     second = get_or_build_dossier("r1", tmp_path, gather, draft)
     assert second["summary"] == "generated"
     assert calls == {"gather": 1, "draft": 1}  # not regenerated
+
+
+def test_refresh_regulatory_guidance_updates_only_that_section(tmp_path):
+    get_or_build_dossier(
+        "r1", tmp_path, lambda rid: {"regime_id": rid, "name": "OSA"},
+        lambda b: {"summary": "auto", "scope": "", "process": "",
+                   "consequence": "", "obligations": [], "guidance": ""})
+
+    saved = refresh_regulatory_guidance(
+        "r1", tmp_path,
+        lambda rid: {"regime_id": rid, "name": "OSA"},
+        lambda b: [{
+            "regulator": "Ofcom",
+            "title": "Online safety guidance",
+            "description": "Explains compliance expectations.",
+            "official_link": "https://www.ofcom.org.uk/",
+        }],
+    )
+
+    assert saved["summary"] == "auto"
+    assert saved["regulatory_guidance"][0]["regulator"] == "Ofcom"
+    assert saved["regulatory_guidance_updated_at"]
+    assert read_dossier("r1", tmp_path)["regulatory_guidance"][0]["title"] == (
+        "Online safety guidance"
+    )
 
 
 def test_save_marks_human_edited_and_persists(tmp_path):

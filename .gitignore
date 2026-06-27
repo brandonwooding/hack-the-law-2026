@@ -7,3 +7,9 @@ dataset/parsed/*
 dataset/graph/*
 dataset/thesaurus/*
 !dataset/**/.gitkeep
+.codex
+.superpowers
+.pytest_cache
+API.MD
+DEMO.MD
+aura_semantic_extract.csv

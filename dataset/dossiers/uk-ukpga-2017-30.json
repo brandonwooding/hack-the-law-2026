@@ -1,0 +1,48 @@
+{
+  "regime_id": "uk-ukpga-2017-30",
+  "name": "Digital Economy Act 2017",
+  "summary": "The Digital Economy Act 2017 is a UK statute structured into seven Parts plus Schedules, addressing a broad range of digital policy areas. Part 1 deals with access to digital services, Part 2 with digital infrastructure, Part 3 with online pornography, Part 4 with intellectual property, Part 5 with digital government, Part 6 with miscellaneous provisions, and Part 7 with general provisions. The Act supports both consumer-facing measures (such as access to digital communications) and government data-sharing and infrastructure reforms. Codes of Practice and Regulations supplement the statutory framework, particularly in relation to Part 5 (digital government) and electronic communications infrastructure.",
+  "scope": "The regime applies across multiple digital policy domains in the UK. Part 1 (Access to digital services) and Part 2 (Digital infrastructure) cover electronic communications networks and apparatus, which have generated significant litigation under the related electronic communications code framework. Part 3 governs online pornography. Part 4 concerns intellectual property. Part 5 covers digital government, including public-sector information sharing for purposes such as debt and fraud. Parts 6 and 7 contain miscellaneous and general provisions, and the Act is accompanied by Schedules. Affected parties include telecommunications operators, site providers and landowners, government departments sharing data, online service providers, and intellectual property holders.",
+  "process": "The Act is implemented and enforced through a combination of statutory provisions, secondary regulations, and Codes of Practice. The Government has published Draft Codes of Practice and Regulations as well as specific Codes of Practice for Part 5 (digital government), and established oversight bodies such as the Debt and Fraud Information Sharing Review Board to govern data-sharing practices. Disputes concerning digital infrastructure and electronic communications rights are resolved through the courts and tribunals, as evidenced by litigation in the Upper Tribunal (Lands Chamber) and the Court of Appeal, including On Tower UK Limited v AP Wireless II (UK) Limited, EE Limited & Anor v Clocktower Investments Limited, and AP Wireless II (UK) Limited v EE Limited & Anor.",
+  "consequence": "The provided material does not set out specific penalty provisions or sanction amounts. Consequences for non-compliance are addressed through the relevant Parts of the Act, the supporting Regulations and Codes of Practice, and through dispute resolution and enforcement before the courts and tribunals as illustrated by the cited case law. Specific penalties cannot be stated beyond the material supplied.",
+  "obligations": [
+    {
+      "text": "Comply with the requirements governing access to digital services under Part 1 of the Act.",
+      "reference": "Digital Economy Act 2017, Part 1 (Access to digital services)",
+      "url": "https://www.legislation.gov.uk/ukpga/2017/30/part/1"
+    },
+    {
+      "text": "Observe the rules relating to digital infrastructure, including electronic communications apparatus and rights, under Part 2.",
+      "reference": "Digital Economy Act 2017, Part 2 (Digital infrastructure)",
+      "url": "https://www.legislation.gov.uk/ukpga/2017/30/part/2"
+    },
+    {
+      "text": "Comply with the provisions regulating online pornography under Part 3.",
+      "reference": "Digital Economy Act 2017, Part 3 (Online pornography)",
+      "url": "https://www.legislation.gov.uk/ukpga/2017/30/part/3"
+    },
+    {
+      "text": "Adhere to the intellectual property provisions under Part 4.",
+      "reference": "Digital Economy Act 2017, Part 4 (Intellectual Property)",
+      "url": "https://www.legislation.gov.uk/ukpga/2017/30/part/4"
+    },
+    {
+      "text": "Follow the digital government data-sharing requirements and associated Codes of Practice under Part 5.",
+      "reference": "Digital Economy Act 2017, Part 5 (Digital government)",
+      "url": "https://www.legislation.gov.uk/ukpga/2017/30/part/5"
+    },
+    {
+      "text": "Comply with the miscellaneous provisions of the Act under Part 6.",
+      "reference": "Digital Economy Act 2017, Part 6 (Miscellaneous)",
+      "url": "https://www.legislation.gov.uk/ukpga/2017/30/part/6"
+    },
+    {
+      "text": "Observe the general provisions of the Act under Part 7.",
+      "reference": "Digital Economy Act 2017, Part 7 (General)",
+      "url": "https://www.legislation.gov.uk/ukpga/2017/30/part/7"
+    }
+  ],
+  "guidance": "Parties affected by the Act should identify which Part(s) apply to their activity, as the Act spans distinct policy areas with different requirements. Telecommunications operators, landowners and site providers should pay close attention to the digital infrastructure framework in Part 2, which has generated substantial tribunal and appellate litigation \u2014 see On Tower UK Limited v AP Wireless II (UK) Limited (Court of Appeal), EE Limited & Anor v Clocktower Investments Limited (Upper Tribunal, Lands Chamber), and AP Wireless II (UK) Limited v EE Limited & Anor (Upper Tribunal, Lands Chamber) for how disputes over rights and renewals are resolved. Government departments engaging in data sharing under Part 5 should consult the published Codes of Practice for Part 5 and the work of the Debt and Fraud Information Sharing Review Board. More generally, review the Draft Codes of Practice and Regulations published by the Government to understand detailed compliance expectations, since the statutory Parts are supplemented by secondary instruments and codes.",
+  "generated_at": "2026-06-27T15:37:11.661535+00:00",
+  "edited_by_human": false
+}

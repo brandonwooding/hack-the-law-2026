@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RegimesIndexRouteImport } from './routes/regimes/index'
+import { Route as RegimesRegimeIdRouteImport } from './routes/regimes/$regimeId'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -22,31 +24,49 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RegimesIndexRoute = RegimesIndexRouteImport.update({
+  id: '/regimes/',
+  path: '/regimes/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegimesRegimeIdRoute = RegimesRegimeIdRouteImport.update({
+  id: '/regimes/$regimeId',
+  path: '/regimes/$regimeId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/regimes/$regimeId': typeof RegimesRegimeIdRoute
+  '/regimes/': typeof RegimesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/regimes/$regimeId': typeof RegimesRegimeIdRoute
+  '/regimes': typeof RegimesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/regimes/$regimeId': typeof RegimesRegimeIdRoute
+  '/regimes/': typeof RegimesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sitemap.xml'
+  fullPaths: '/' | '/sitemap.xml' | '/regimes/$regimeId' | '/regimes/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sitemap.xml'
-  id: '__root__' | '/' | '/sitemap.xml'
+  to: '/' | '/sitemap.xml' | '/regimes/$regimeId' | '/regimes'
+  id: '__root__' | '/' | '/sitemap.xml' | '/regimes/$regimeId' | '/regimes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  RegimesRegimeIdRoute: typeof RegimesRegimeIdRoute
+  RegimesIndexRoute: typeof RegimesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,13 +85,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/regimes/': {
+      id: '/regimes/'
+      path: '/regimes'
+      fullPath: '/regimes/'
+      preLoaderRoute: typeof RegimesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/regimes/$regimeId': {
+      id: '/regimes/$regimeId'
+      path: '/regimes/$regimeId'
+      fullPath: '/regimes/$regimeId'
+      preLoaderRoute: typeof RegimesRegimeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  RegimesRegimeIdRoute: RegimesRegimeIdRoute,
+  RegimesIndexRoute: RegimesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

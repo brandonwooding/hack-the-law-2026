@@ -1,0 +1,68 @@
+{
+  "regime_id": "uk-ukpga-2003-21",
+  "name": "Communications Act 2003",
+  "summary": "The Communications Act 2003 is the principal UK statute governing the communications sector. It establishes the Office of Communications (OFCOM) as the unified regulator and sets out the framework for electronic communications networks and services, the radio spectrum, television and radio broadcasting, on-demand and video-sharing platform services, online advertising of less healthy food and drink, competition in communications markets, and the licensing of TV reception. The Act consolidates regulatory functions across the converged communications landscape and confers extensive duties and powers on OFCOM.",
+  "scope": "The Act applies across the UK communications sector. Part 1 establishes OFCOM's functions; Part 2 covers electronic communications networks, services and the radio spectrum; Part 3 covers television and radio services, supplemented by Part 3A (prominence on television selection services) and Part 3B (regulation of radio selection services); Part 4 deals with licensing of TV reception; Part 4A covers on-demand programme services; Part 4B covers video-sharing platform services; Part 4C covers online advertising of less healthy food and drink; Part 5 addresses competition in communications markets; and Part 6 contains miscellaneous and supplemental provisions. The regime affects network and service providers, broadcasters, on-demand and video-sharing platform operators, and others operating in communications markets.",
+  "process": "Regulation and enforcement are carried out principally by OFCOM, whose functions are set out in Part 1. OFCOM administers the regulation of networks, services and the radio spectrum under Part 2, and supervises broadcasting and related selection services under Parts 3, 3A and 3B. Competition matters in communications markets are addressed under Part 5. Coordination between government departments and the regulator is reflected in the Memorandum of Understanding between DCMS, BEIS and OFCOM. Security measures for electronic communications are addressed through the draft Electronic Communications (Security Measures) Regulations and the framework introduced by the Telecommunications (Security) Bill. Price control matters may be subject to appeal, with the Competition and Markets Authority providing guidance for participants (CMA72).",
+  "consequence": "The material provided does not set out specific penalty figures or sanctions. Enforcement is administered by OFCOM under its functions in Part 1 and the substantive Parts of the Act, with competition matters under Part 5 and appeals mechanisms (such as telecoms price control appeals) available as described in the CMA72 guidance. Consult the full text of the relevant Part for the precise enforcement powers, sanctions and penalties applicable.",
+  "obligations": [
+    {
+      "text": "Functions of OFCOM \u2014 establishes the general duties and functions of the regulator.",
+      "reference": "Communications Act 2003, Part 1",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/1"
+    },
+    {
+      "text": "Networks, services and the radio spectrum \u2014 regulation of electronic communications networks and services and the radio spectrum.",
+      "reference": "Communications Act 2003, Part 2",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/2"
+    },
+    {
+      "text": "Television and Radio Services etc \u2014 regulation of broadcasting services.",
+      "reference": "Communications Act 2003, Part 3",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/3"
+    },
+    {
+      "text": "Prominence on television selection services.",
+      "reference": "Communications Act 2003, Part 3A",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/3A"
+    },
+    {
+      "text": "Regulation of radio selection services.",
+      "reference": "Communications Act 2003, Part 3B",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/3B"
+    },
+    {
+      "text": "Licensing of TV reception.",
+      "reference": "Communications Act 2003, Part 4",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/4"
+    },
+    {
+      "text": "On-demand programme services \u2014 regulatory requirements for on-demand programme providers.",
+      "reference": "Communications Act 2003, Part 4A",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/4A"
+    },
+    {
+      "text": "Video-sharing platform services \u2014 obligations for video-sharing platform providers.",
+      "reference": "Communications Act 2003, Part 4B",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/4B"
+    },
+    {
+      "text": "Online advertising of less healthy food and drink.",
+      "reference": "Communications Act 2003, Part 4C",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/4C"
+    },
+    {
+      "text": "Competition in communications markets.",
+      "reference": "Communications Act 2003, Part 5",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/5"
+    },
+    {
+      "text": "Miscellaneous and supplemental provisions.",
+      "reference": "Communications Act 2003, Part 6",
+      "url": "https://www.legislation.gov.uk/ukpga/2003/21/part/6"
+    }
+  ],
+  "guidance": "Identify which Part of the Act applies to your activity (for example, network providers should focus on Part 2, broadcasters on Part 3, on-demand providers on Part 4A, and video-sharing platforms on Part 4B). Review the relevant supporting guidance: the draft Electronic Communications (Security Measures) Regulations and the Telecommunications (Security) Bill factsheets for network security obligations; the Electronic Communications Code - Part 4A guidance for code-related matters; and the Memorandum of Understanding between DCMS, BEIS and OFCOM to understand the division of regulatory responsibilities. If you face a telecoms price control appeal, consult the CMA72 guidance for participants and note the procedure for requesting an extension of time by e-mail. Because the provided material does not reproduce the full statutory text, always confirm precise duties, enforcement powers and penalties by consulting the full text of the relevant Part on legislation.gov.uk.",
+  "generated_at": "2026-06-27T15:37:05.464110+00:00",
+  "edited_by_human": false
+}

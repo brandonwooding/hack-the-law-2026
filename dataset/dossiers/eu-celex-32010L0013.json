@@ -1,0 +1,95 @@
+{
+  "regime_id": "eu-celex-32010L0013",
+  "name": "Audiovisual Media Services Directive",
+  "regulatory_guidance": [],
+  "regulatory_guidance_updated_at": null,
+  "summary": "The Audiovisual Media Services Directive (Directive 2010/13/EU) establishes a harmonised EU framework for the regulation of audiovisual media services, covering both traditional television broadcasts and on-demand services. It sets out definitions and jurisdictional rules, guarantees freedom of reception across Member States, and imposes substantive obligations on media service providers concerning identification, protection of human dignity, accessibility, protection of minors, the promotion of European works, and rules governing audiovisual commercial communications, sponsorship, product placement, advertising, and teleshopping. The Directive operates on the 'country of origin' principle whereby providers must comply with the rules of the Member State having jurisdiction over them, while allowing Member States to adopt more detailed or stricter rules in compliance with Union law.",
+  "scope": "The Directive applies to all audiovisual media services transmitted by media service providers under the jurisdiction of a Member State (Article 2), including both television broadcasts and on-demand audiovisual media services as defined in Article 1. A media service provider is under the jurisdiction of the Member State where it is established or to which the connecting factors in Article 2 apply. Certain chapters do not apply to local broadcasts not forming part of a national network (Article 18), and television channels devoted exclusively to advertising, teleshopping or self-promotion are subject to the Directive mutatis mutandis with exceptions for Chapter VI and Articles 20 and 23 (Article 25). The Directive is addressed to the Member States (Article 36).",
+  "process": "Regulation operates principally through the Member States, which must ensure by appropriate means that providers under their jurisdiction comply with the rules (e.g., Articles 2, 6, 27). Member States guarantee freedom of reception and may only provisionally derogate from retransmission of broadcasts from other Member States under the strict conditions of Article 3. A contact committee established under the aegis of the Commission facilitates effective implementation through regular consultation (Article 29), and Member States must provide each other and the Commission with necessary information through their competent independent regulatory bodies (Article 30). Member States must communicate the text of main national implementing provisions to the Commission (Article 32), and the Commission reports periodically to the European Parliament, Council and Economic and Social Committee on the application of the Directive (Article 33). Enforcement of transposition obligations may be pursued by the Commission via infringement proceedings under Article 258 TFEU, as in Case C-679/22 concerning failure to transpose Directive (EU) 2018/1808.",
+  "consequence": "The Directive itself does not prescribe specific penalty amounts, leaving enforcement and sanctions to Member States. Where a Member State fails to transpose or communicate transposition measures, the Court of Justice may, under Article 260(3) TFEU, order the payment of a lump sum and a penalty payment, as illustrated in the judgment in Case C-679/22 (29 February 2024). National law implementing the Directive may impose obligations such as respect for human dignity and prohibitions on broadcasting content of poor quality, but national penalties are constrained by the principle that offences and penalties must be defined by law and the principle of legal certainty (Case C-555/23, judgment of 26 June 2025). Provisional restrictions on reception and retransmission are available only under the conditions set out in Article 3.",
+  "obligations": [
+    {
+      "text": "Each Member State must ensure that all audiovisual media services transmitted by media service providers under its jurisdiction comply with the rules of the system of law applicable to audiovisual media services intended for the public in that Member State.",
+      "reference": "Article 2(1)",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_2"
+    },
+    {
+      "text": "Member States must ensure freedom of reception and shall not restrict retransmissions of audiovisual media services from other Member States for reasons within the coordinated fields, save for provisional derogations meeting the conditions of Article 3.",
+      "reference": "Article 3(1)",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_3"
+    },
+    {
+      "text": "Media service providers must make easily, directly and permanently accessible to recipients at least their name, geographical address, contact details (email or website), and the competent regulatory or supervisory bodies where applicable.",
+      "reference": "Article 5",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_5"
+    },
+    {
+      "text": "Member States must ensure by appropriate means that audiovisual media services do not contain any incitement to hatred based on race, sex, religion or nationality.",
+      "reference": "Article 6",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_6"
+    },
+    {
+      "text": "Member States must ensure that media service providers do not transmit cinematographic works outside periods agreed with the rights holders.",
+      "reference": "Article 8",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_8"
+    },
+    {
+      "text": "Audiovisual commercial communications must be readily recognisable as such, must not use subliminal techniques, must not be surreptitious, and must not prejudice respect for human dignity or promote discrimination.",
+      "reference": "Article 9(1)",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_9"
+    },
+    {
+      "text": "Product placement shall be prohibited, save for the derogations permitted under Article 11(3) unless a Member State decides otherwise, and only for programmes produced after 19 December 2009.",
+      "reference": "Article 11",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_11"
+    },
+    {
+      "text": "Member States must take appropriate measures to ensure that on-demand services which might seriously impair the physical, mental or moral development of minors are only made available so that minors will not normally hear or see them.",
+      "reference": "Article 12",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_12"
+    },
+    {
+      "text": "Member States must ensure that on-demand audiovisual media services promote, where practicable and by appropriate means, the production of and access to European works.",
+      "reference": "Article 13(1)",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_13"
+    },
+    {
+      "text": "Broadcasters must reserve for European works a majority proportion of their transmission time (excluding news, sports, games, advertising, teletext and teleshopping), where practicable and by appropriate means.",
+      "reference": "Article 16(1)",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_16"
+    },
+    {
+      "text": "Broadcasters must reserve at least 10% of transmission time or programming budget for European works created by independent producers, where practicable and by appropriate means.",
+      "reference": "Article 17",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_17"
+    },
+    {
+      "text": "Television advertising and teleshopping must be readily recognisable, distinguishable from editorial content, and kept quite distinct by optical, acoustic and/or spatial means.",
+      "reference": "Article 19(1)",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_19"
+    },
+    {
+      "text": "The proportion of television advertising spots and teleshopping spots within a given clock hour shall not exceed 20%.",
+      "reference": "Article 23(1)",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_23"
+    },
+    {
+      "text": "Member States must take appropriate measures to ensure that television broadcasts do not include programmes which might seriously impair the physical, mental or moral development of minors, in particular pornography or gratuitous violence.",
+      "reference": "Article 27(1)",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_27"
+    },
+    {
+      "text": "Member States must ensure a right of reply or equivalent remedies for any person whose legitimate interests, in particular reputation and good name, have been damaged by an assertion of incorrect facts in a television programme.",
+      "reference": "Article 28(1)",
+      "url": "https://publications.europa.eu/resource/celex/32010L0013.ENG.xhtml#art_28"
+    },
+    {
+      "text": "Member States must communicate to the Commission the text of the main provisions of national law adopted in the field covered by the Directive; failure to transpose and communicate may lead to financial penalties under Article 260(3) TFEU.",
+      "reference": "Article 32; Case C-679/22 (29 February 2024)",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:62022CJ0679"
+    }
+  ],
+  "guidance": "Media service providers should first determine which Member State has jurisdiction over them under Article 2, since the country-of-origin principle means they must comply with that State's implementing rules, which may be more detailed or stricter than the Directive's minimum (Article 4). Providers should ensure transparency obligations under Article 5 are met and that all commercial communications, sponsorship, product placement and advertising comply with Articles 9 to 24, paying particular attention to the 20% hourly advertising cap (Article 23) and the prohibition on product placement subject to derogations (Article 11). Robust measures to protect minors are essential for both on-demand (Article 12) and television (Article 27) services. Member States transposing the Directive should note that national rules requiring respect for human dignity and restricting poor-quality content must respect the principles that offences and penalties be defined by law and legal certainty, as the Court held in Case C-555/23 (26 June 2025); national courts' duty to interpret law in conformity with EU law has limits. Member States should also act promptly to transpose and communicate measures, as failure can result in lump sum and penalty payments under Article 260(3) TFEU (Case C-679/22).",
+  "generated_at": "2026-06-27T18:46:06.384363+00:00",
+  "edited_by_human": false
+}

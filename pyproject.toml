@@ -10,6 +10,8 @@ dependencies = [
     "fastapi>=0.110",
     "uvicorn>=0.29",
     "anthropic>=0.40",
+    "pillow>=10.0",
+    "pypdfium2>=4.30",
 ]
 
 [dependency-groups]
