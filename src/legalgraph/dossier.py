@@ -78,7 +78,7 @@ def get_or_build_dossier(regime_id: str, dossier_dir: Path,
         "regime_id": regime_id,
         "name": bundle.get("name", regime_id),
         **fields,
-        "generated_at": _dt.datetime.utcnow().isoformat(),
+        "generated_at": _dt.datetime.now(_dt.timezone.utc).isoformat(),
         "edited_by_human": False,
     }
     write_dossier(data, dossier_dir)
