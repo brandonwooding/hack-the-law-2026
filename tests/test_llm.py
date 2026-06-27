@@ -64,6 +64,9 @@ def test_draft_dossier_returns_six_fields_and_uses_opus():
     assert set(out) >= {"summary", "scope", "process", "consequence",
                         "guidance", "obligations"}
     assert client.messages.parse_kwargs["model"] == "claude-opus-4-8"
+    assert client.messages.parse_kwargs["thinking"] == {"type": "adaptive"}
+    assert "output_config" not in client.messages.parse_kwargs
+    assert client.messages.parse_kwargs["output_format"] is DossierFields
 
 
 def test_answer_returns_text_and_uses_opus():
@@ -72,3 +75,5 @@ def test_answer_returns_text_and_uses_opus():
     out = answer("duties?", scoped, client=client)
     assert out == "Ofcom regulates..."
     assert client.messages.create_kwargs["model"] == "claude-opus-4-8"
+    assert client.messages.create_kwargs["thinking"] == {"type": "adaptive"}
+    assert client.messages.create_kwargs["output_config"] == {"effort": "medium"}
