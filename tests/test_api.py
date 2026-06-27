@@ -52,3 +52,18 @@ def test_regime_get_synthesizes_then_put_edits(monkeypatch, tmp_path):
     assert put.status_code == 200
     assert put.json()["summary"] == "human edit"
     assert put.json()["edited_by_human"] is True
+
+
+def test_chat_empty_regime_ids_passes_none(monkeypatch, tmp_path):
+    seen = {}
+
+    def recorder(driver, query, top_k=12, regime_ids=None):
+        seen["regime_ids"] = regime_ids
+        return []
+
+    monkeypatch.setattr(api.retrieval, "search_provisions", recorder)
+    monkeypatch.setattr(api.llm, "answer", lambda q, scoped, **k: "ok")
+    client = _client(monkeypatch, tmp_path)
+    resp = client.post("/chat", json={"query": "duties?", "regime_ids": []})
+    assert resp.status_code == 200
+    assert seen["regime_ids"] is None  # empty list must become None (unscoped)

@@ -138,6 +138,7 @@ class Provision(BaseModel):
     number: str = Field(..., description="e.g. '170', 'COBS 9.2.1'")
     heading: Optional[str] = None
     text: Optional[str] = None
+    url: Optional[str] = Field(None, description="deep link to this provision on the source site")
     legal_force: LegalForce = LegalForce.OPERATIVE
     # point-in-time validity (UK legislation is heavily amended)
     valid_from: Optional[str] = None

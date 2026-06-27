@@ -85,7 +85,9 @@ material to pull. Keeps demos small — no whole-history ingestion.
 - [x] All 6 UK adapters (legislation.gov.uk + CLML, SI/Bills/Hansard Parliament
       APIs, Find Case Law, GOV.UK) — Online Safety Act regime ingested to Aura:
       195 docs, ~41.8k provisions, all six layers
+- [x] Retrieval (Graph RAG + PageIndex) + HTTP API for the UI (see API.md)
+- [ ] Claude answer synthesis on /ask (needs LLM key)
 - [ ] AMENDS edges (CLML Commentaries) + per-section EXPLAINS
 - [ ] EU adapter (CELLAR SPARQL)
-- [ ] PageIndex + Graph RAG layer
+- [ ] Vector search (additive, for paraphrase recall)
 ```

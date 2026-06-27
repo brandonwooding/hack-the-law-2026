@@ -52,7 +52,17 @@ def main(argv: list[str] | None = None) -> int:
     pv.add_argument("--citation", default=None)
     pv.add_argument("--provision-id", default=None)
 
+    ps = sub.add_parser("serve", help="run the HTTP API for the UI")
+    ps.add_argument("--host", default="127.0.0.1")
+    ps.add_argument("--port", type=int, default=8000)
+
     args = ap.parse_args(argv)
+
+    if args.cmd == "serve":
+        import uvicorn
+        uvicorn.run("legalgraph.api:app", host=args.host, port=args.port)
+        return 0
+
     driver = connect() if args.cmd in _NEEDS_DB else None
     try:
         if args.cmd == "fetch":

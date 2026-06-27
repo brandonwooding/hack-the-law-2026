@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import retrieval, regimes, llm, dossier
@@ -107,6 +107,6 @@ def regime(regime_id: str):
 
 
 @app.put("/regime/{regime_id:path}")
-def edit_regime(regime_id: str, fields: dict):
+def edit_regime(regime_id: str, fields: dict = Body(...)):
     """Save UI edits to a dossier (overwrites the JSON, flags human-edited)."""
     return dossier.save_dossier(regime_id, fields, dossier.DOSSIER_DIR)

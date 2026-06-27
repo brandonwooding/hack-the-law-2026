@@ -54,6 +54,7 @@ def _prov_props(p: Provision) -> dict:
             "number": p.number,
             "heading": p.heading,
             "text": p.text,
+            "url": p.url,
             "legal_force": p.legal_force.value,
             "valid_from": p.valid_from,
             "valid_to": p.valid_to,

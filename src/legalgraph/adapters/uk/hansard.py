@@ -7,13 +7,29 @@ We model at debate-section level (not per-speech) to keep volume sane.
 
 from __future__ import annotations
 
+import re
 from urllib.parse import quote
 
 from ...canonical import Document, DocType, Edge, EdgeType, Jurisdiction, SourceMeta, Status
 from .. import register
 from ..base import SourceAdapter
 
-BASE = "https://hansard-api.parliament.uk"
+BASE = "https://hansard-api.parliament.uk"          # the JSON API
+SITE = "https://hansard.parliament.uk"              # the human-readable site
+
+
+def _slug(title: str) -> str:
+    """'Online Safety Act 2023: Repeal' -> 'OnlineSafetyAct2023Repeal'
+    (Hansard's URL slug form: alphanumeric tokens, each capitalised, joined)."""
+    return "".join(t[:1].upper() + t[1:] for t in re.findall(r"[A-Za-z0-9]+", title))
+
+
+def _debate_url(house: str | None, date: str | None, ext: str, title: str) -> str:
+    """Human-readable hansard.parliament.uk page; falls back to the API if we
+    lack the house/date needed to build it."""
+    if house and date:
+        return f"{SITE}/{house}/{date}/debates/{ext}/{_slug(title)}"
+    return f"{BASE}/debates/debate/{ext}.json"
 
 
 @register("uk-hansard")
@@ -57,7 +73,7 @@ class HansardAdapter(SourceAdapter):
                     # (Act)-[:DEBATED_IN]->(this debate)
                     edges=[Edge(type=EdgeType.DEBATED_IN, target=act_id, reverse=True)],
                     source=SourceMeta(
-                        url=f"{BASE}/debates/debate/{ext}.json", raw_format="json"),
+                        url=_debate_url(house, date, ext, dtitle), raw_format="html"),
                 ))
             print(f"  [ok] {term}: {n} debates")
         return docs

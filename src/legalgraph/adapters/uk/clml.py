@@ -138,6 +138,7 @@ def _build_node(el: ET.Element, parents: dict, parent_pid: str, index: int) -> P
         number=number or heading or _ln(el.tag),
         heading=heading,
         text=_body_text(el),
+        url=uri.replace("http://", "https://") if uri else None,
     )
     for i, child in enumerate(_collect_child_nodes(el)):
         prov.children.append(_build_node(child, parents, pid, i))

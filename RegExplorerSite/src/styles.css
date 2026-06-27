@@ -1,0 +1,96 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Legal Regime Research Tool — design system.
+ * Paper background, near-black ink, single navy accent, hairline borders.
+ */
+
+@theme {
+  --color-paper: #faf9f6;
+  --color-ink: #1a1a1a;
+  --color-navy: #1e3a5f;
+  --color-navy-foreground: #faf9f6;
+  --color-hairline: #d8d5cc;
+  --color-muted-ink: #7a766c;
+
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  --radius-instrument: 3px;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --radius: 0.25rem;
+  --background: #faf9f6;
+  --foreground: #1a1a1a;
+  --card: #faf9f6;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
+  --primary: #1e3a5f;
+  --primary-foreground: #faf9f6;
+  --secondary: #f0eee8;
+  --secondary-foreground: #1a1a1a;
+  --muted: #f0eee8;
+  --muted-foreground: #7a766c;
+  --accent: #1e3a5f;
+  --accent-foreground: #faf9f6;
+  --destructive: #8a2a2a;
+  --destructive-foreground: #faf9f6;
+  --border: #d8d5cc;
+  --input: #d8d5cc;
+  --ring: #1e3a5f;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--color-muted-ink);
+}
