@@ -13,7 +13,7 @@ from contextlib import asynccontextmanager
 from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import retrieval, regimes, llm, dossier
+from . import retrieval, regimes, llm, dossier, agent
 from .db import connect
 from pydantic import BaseModel
 
@@ -105,9 +105,29 @@ def list_all_regimes():
     return {"regimes": regimes.list_anchor_regimes(_driver())}
 
 
+@app.post("/regimes/add")
+async def add_regime(req: AddRegimeRequest):
+    """Run the ingestion agent from a natural-language prompt (autonomous).
+
+    Submitting the prompt is the authorization, so writes are auto-approved
+    (confirm=None). Returns the agent's final summary; the UI then refetches
+    /regimes/all to show the new regime."""
+    if not req.prompt.strip():
+        raise HTTPException(422, "prompt must not be empty")
+    try:
+        summary = await agent.run_agent(req.prompt, confirm=None)
+    except Exception as e:  # surface the failure text to the modal
+        raise HTTPException(500, f"ingestion failed: {e}")
+    return {"summary": summary}
+
+
 class ChatRequest(BaseModel):
     query: str
     regime_ids: list[str] = []
+
+
+class AddRegimeRequest(BaseModel):
+    prompt: str
 
 
 @app.post("/chat")
