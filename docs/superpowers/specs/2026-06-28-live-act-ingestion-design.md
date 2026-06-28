@@ -10,11 +10,11 @@ natural-language request, two ways:
 
 1. A **Claude Agent SDK** CLI script — `python scripts/add_act.py "add the AI
    Act from the EU"`.
-2. A **live "Add act" button** in the RegExplorerSite app, backed by new
-   FastAPI endpoints.
+2. An **"Add a regime" button** on the RegExplorerSite Regimes page: submit a
+   free-text prompt that runs the same agent server-side.
 
-Both run the **same deterministic ingestion core**, so behaviour cannot drift
-between the two surfaces.
+Both surfaces drive the **same agent runner** over the **same deterministic
+ingestion core**, so behaviour cannot drift between them.
 
 ## Background — the existing pipeline
 
@@ -88,42 +88,56 @@ def commit(jurisdiction: str, seed: dict, dataset: Path = DEFAULT_DATASET) -> di
 `already_present` is determined by a Neo4j read of the doc id before load, so the
 UI/agent can warn "this act is already in the graph".
 
-### 2. CLI agent — `scripts/add_act.py` (the Claude Agent SDK agent)
+### 2. Agent runner — `src/legalgraph/agent.py` (the Claude Agent SDK agent)
 
-One-shot. `python scripts/add_act.py "<request>" [--model MODEL] [--yes]`.
+The single reusable agent, used by **both** the CLI script and the app endpoint.
+
+```python
+async def run_agent(prompt: str, *, model: str | None = None,
+                    confirm: Callable[[str, dict], Awaitable[bool]] | None = None
+                    ) -> str:
+    """Run one ingestion request to completion. Returns the agent's final
+    summary text. `confirm` is the write-gate decision hook:
+      - CLI passes a terminal y/n prompt.
+      - App passes None -> autonomous (writes auto-approved)."""
+```
 
 - Loads `.env` (so `ANTHROPIC_API_KEY` + `NEO4J_*` are present).
-- Runs an async `ClaudeSDKClient` session, streams assistant text to stdout.
 - `ClaudeAgentOptions`:
   - `cwd` = repo root.
-  - `model` defaults to `claude-opus-4-8` (override via `--model` or env).
+  - `model` defaults to `claude-opus-4-8` (override via arg/env).
   - tools: `Read, Edit, Bash, Glob, Grep, WebSearch` + Neo4j MCP
-    (`mcp-neo4j-cypher`, launched by the script with env from `os.environ`).
-  - `mcp_servers`: neo4j stdio server, same command/args as `.codex/config.toml`,
-    env pulled from the loaded `.env`.
+    (`mcp-neo4j-cypher`, launched with env from `os.environ`, same command/args
+    as `.codex/config.toml`).
 - **System prompt** teaches the pipeline: resolve jurisdiction + identifier
   (NL -> `ukpga/2010/15` / CELEX, using `WebSearch`/`curl` against
   legislation.gov.uk / EUR-Lex when unknown); run the **targeted** core via
   Bash `legalgraph ingest --jurisdiction <j> --id <identifier> --plan` (fetch
-  only, one seed), report the plan, then after confirm
-  `legalgraph ingest --jurisdiction <j> --id <identifier> --commit` (load +
-  link, also appends the seed to `scope.yaml`); verify with `legalgraph
-  validate` + a Neo4j read; print a summary.
-- **Permission gate** — `can_use_tool` callback:
-  - Auto-allow: `Read`, `Glob`, `Grep`, `WebSearch`, `Edit` of `scope.yaml`,
-    Bash `legalgraph ingest ... --plan`, Neo4j read/schema MCP tools.
-  - Prompt `y/n` in terminal before: Bash containing `legalgraph ingest`
-    with `--commit` (also catches bare `legalgraph load`/`legalgraph link`),
-    and `mcp__neo4j__write_neo4j_cypher`.
-  - `--yes` flag auto-approves (for scripted/demo runs).
+  only, one seed), report the plan, then `legalgraph ingest --jurisdiction <j>
+  --id <identifier> --commit` (load + link, also appends the seed to
+  `scope.yaml`); verify with `legalgraph validate` + a Neo4j read; end with a
+  concise summary (title, identifier, provisions/edges added).
+- **Permission gate** — `can_use_tool` callback driven by `confirm`:
+  - Auto-allow always: `Read`, `Glob`, `Grep`, `WebSearch`, `Edit` of
+    `scope.yaml`, Bash `legalgraph ingest ... --plan`, Neo4j read/schema MCP.
+  - "Write" actions (Bash `legalgraph ingest --commit`, bare `legalgraph
+    load`/`link`, `mcp__neo4j__write_neo4j_cypher`) -> if `confirm` is None,
+    auto-approve; else `await confirm(tool_name, tool_input)`.
   - Deterministic helper `is_write_command(tool_name, tool_input) -> bool`
-    decides this — unit-tested.
+    classifies write vs read — unit-tested.
+- Collects assistant text and returns the final summary (for the app) while also
+  yielding/printing it (for the CLI).
 
-The agent calls the core through a thin **`legalgraph ingest` subcommand**
-(below), so the CLI agent and the API endpoints share the same targeted
-one-seed path — no divergence with the full-corpus `fetch`/`load`/`link`.
+### 2a. CLI wrapper — `scripts/add_act.py`
 
-### 2a. CLI subcommand — `legalgraph ingest`
+Thin one-shot wrapper around `agent.run_agent`:
+`python scripts/add_act.py "<request>" [--model MODEL] [--yes]`.
+
+- Passes a `confirm` that prompts `y/n` in the terminal before each write
+  (so nothing hits Aura unattended); `--yes` makes `confirm` always-true.
+- Streams the agent's text to stdout as it runs.
+
+### 2b. CLI subcommand — `legalgraph ingest`
 
 Added to [src/legalgraph/cli.py](../../../src/legalgraph/cli.py):
 
@@ -138,76 +152,79 @@ legalgraph ingest --jurisdiction <uk|eu> --id <identifier> [--plan | --commit]
 This is the single targeted entrypoint both the agent (via Bash) and a human
 can use; the API imports `ingest` directly.
 
-### 3. Live app — backend endpoints in `api.py`
+### 3. Live app — backend endpoint in `api.py` (agent-backed)
 
-Mirrors the existing `refresh` pattern. Deterministic (no Agent SDK in the web
-request).
+The prompt from the Regimes page goes straight to the agent. Mirrors the
+existing `refresh` pattern in shape; runs the Agent SDK runner server-side.
 
 ```python
-class IngestPlanRequest(BaseModel):
-    jurisdiction: str          # "uk" | "eu"
-    query: str                 # free text or an exact id/celex
+class AddRegimeRequest(BaseModel):
+    prompt: str                # free text, e.g. "add the AI Act from the EU"
 
-class IngestCommitRequest(BaseModel):
-    jurisdiction: str
-    identifier: str            # resolved id/celex from the plan step
-    title: str | None = None
-    concepts: list[str] = []
-
-@app.post("/ingest/plan")    # resolve id (llm helper if free text) -> ingest.plan
-@app.post("/ingest/commit")  # ingest.add_seed_to_scope + ingest.commit
+@app.post("/regimes/add")
+async def add_regime(req: AddRegimeRequest):
+    summary = await agent.run_agent(req.prompt, confirm=None)  # autonomous
+    return {"summary": summary}
 ```
 
-- `/ingest/plan` resolves the identifier with a small `llm.py` helper
-  (`resolve_act_identifier(query, jurisdiction) -> {identifier, title}`) so the
-  box accepts "the AI Act"; if `query` already looks like an id/celex, skip the
-  LLM. Then `ingest.plan` and return the plan dict.
-- `/ingest/commit` appends the seed to `scope.yaml` and runs `ingest.commit`,
-  returns stats.
-- Runs synchronously. Acceptable for the hackathon demo; `load`/`link` take
-  seconds. **Future upgrade (documented, not built):** background task +
-  SSE/WebSocket progress streaming.
+- Endpoint is `async` and `await`s `agent.run_agent` directly (FastAPI handles
+  the event loop). `confirm=None` -> writes auto-approved (the UI submission is
+  the authorization).
+- **Synchronous** from the client's view: returns the agent's final summary when
+  done (the agent loop can take 30s–2min). Frontend shows a spinner.
+- `ANTHROPIC_API_KEY` + `NEO4J_*` come from the already-loaded `.env`.
+- **Note:** the Python `claude-agent-sdk` drives the `claude` CLI under the hood,
+  so the server host must have it available — fine for the local hackathon
+  setup. Flag in the plan.
+- **Future upgrade (documented, not built):** SSE/WebSocket so the agent's steps
+  stream into the modal live.
 
 ### 4. Live app — frontend (RegExplorerSite)
 
-- `addActPlan(jurisdiction, query)` and `addActCommit(...)` in `api.ts`.
-- An **"Add act"** button + small modal (jurisdiction toggle + text box),
-  placed on the Regimes browser. Flow: type -> Plan -> show
-  "I'll add <title> (<identifier>, ~N provisions)" -> Confirm -> Commit ->
-  re-fetch `/regimes/all` so the new act appears live. Show a loading state
-  during commit.
+- `addRegime(prompt: string)` in `api.ts` -> `POST /regimes/add`, returns
+  `{ summary }`.
+- On the **Regimes page**: an **"Add a regime"** button -> modal with a prompt
+  textarea ("e.g. add the AI Act from the EU") + Submit. Flow: type prompt ->
+  Submit -> spinner while the agent runs -> show the returned summary ->
+  re-fetch `/regimes/all` so the new regime appears in the list. Handle errors
+  by showing the message in the modal.
 
 ## Data flow
 
 ```
-NL request
-  -> resolve jurisdiction + identifier   (agent: itself; app: llm helper)
-  -> add_seed_to_scope (idempotent)
-  -> plan = fetch only (parsed/*.json, NO graph write)
-  -> CONFIRM gate        (CLI: terminal y/n;  app: Plan->Confirm two-call)
-  -> commit = load + link  (writes to Aura)
-  -> verify (validate + Neo4j read)  -> summary
+Regimes page prompt  /  CLI request
+  -> agent.run_agent(prompt, confirm)
+       -> resolve jurisdiction + identifier  (WebSearch / curl)
+       -> legalgraph ingest --plan   = fetch only (parsed/*.json, NO graph write)
+       -> WRITE GATE                  (CLI: terminal y/n;  app: auto-approve)
+       -> legalgraph ingest --commit = add_seed_to_scope + load + link (Aura)
+       -> verify (validate + Neo4j read)
+  -> final summary  -> stdout (CLI) / JSON (app, then refetch /regimes/all)
 ```
 
 ## Error handling
 
-- Ambiguous / unresolved identifier: agent reports and exits (re-run with
-  specifics); endpoint returns 422 with a message.
-- Fetch `NotFound` (404): report and stop **before** any graph write; endpoint
-  returns 404.
-- `already_present`: surface a warning in plan; commit still allowed (re-load is
-  idempotent via existing loader MERGE semantics).
+- Ambiguous / unresolved identifier: agent reports it in its summary and stops
+  before any write; the app surfaces that text in the modal.
+- Fetch `NotFound` (404): `legalgraph ingest --plan` fails, agent stops **before**
+  any graph write and reports it.
+- `already_present`: agent notes it; re-running commit is safe (loader MERGE
+  semantics are idempotent).
+- App endpoint wraps `run_agent` in try/except -> HTTP 500 with the error
+  message so the modal can display it.
 
 ## Testing
 
 - `tests/test_ingest.py`: `add_seed_to_scope` idempotency (append once, skip on
   repeat); `build_seed` / `minimal_scope` shapes (uk `id` vs eu `celex`,
   `cases_per_seed == 0`).
-- `tests/test_add_act_agent.py`: `is_write_command` gate — allows fetch/read,
-  blocks load/link and `write_neo4j_cypher`.
+- `tests/test_agent.py`: `is_write_command` gate — classifies `legalgraph
+  ingest --plan` / reads as allowed, and `--commit` / `legalgraph load|link` /
+  `write_neo4j_cypher` as writes.
 - `plan`/`commit` against a cached fixture if time allows (the `Fetcher` cache
   makes this offline-repeatable).
-- LLM agent loop itself is not unit-tested.
+- The LLM agent loop and the `/regimes/add` endpoint are not unit-tested
+  (manual demo verification).
 
 ## Dependencies
 
