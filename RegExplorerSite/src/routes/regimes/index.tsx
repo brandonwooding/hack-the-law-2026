@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ChevronRight, Search } from "lucide-react";
 import { SidebarLayout } from "@/components/research/SidebarLayout";
 import { JurisdictionTag, jurisdictionFromId } from "@/components/research/JurisdictionTag";
-import { fetchAllRegimes, type RegimeCard } from "@/lib/api";
+import { addRegime, fetchAllRegimes, type RegimeCard } from "@/lib/api";
 
 export const Route = createFileRoute("/regimes/")({
   head: () => ({
@@ -28,21 +28,43 @@ function RegimesIndex() {
   const [state, setState] = useState<LoadState>("loading");
   const [query, setQuery] = useState("");
   const [jurisdiction, setJurisdiction] = useState("");
+  const [showAdd, setShowAdd] = useState(false);
+  const [prompt, setPrompt] = useState("");
+  const [adding, setAdding] = useState(false);
+  const [addError, setAddError] = useState<string | null>(null);
+  const [addSummary, setAddSummary] = useState<string | null>(null);
 
-  useEffect(() => {
-    let active = true;
+  const loadRegimes = useCallback(() => {
     setState("loading");
-    fetchAllRegimes()
+    return fetchAllRegimes()
       .then((rs) => {
-        if (!active) return;
         setRegimes(rs);
         setState("ready");
       })
-      .catch(() => active && setState("error"));
-    return () => {
-      active = false;
-    };
+      .catch(() => setState("error"));
   }, []);
+
+  useEffect(() => {
+    void loadRegimes();
+  }, [loadRegimes]);
+
+  async function handleAdd(e: React.FormEvent) {
+    e.preventDefault();
+    if (!prompt.trim() || adding) return;
+    setAdding(true);
+    setAddError(null);
+    setAddSummary(null);
+    try {
+      const { summary } = await addRegime(prompt.trim());
+      setAddSummary(summary);
+      setPrompt("");
+      await loadRegimes();
+    } catch (err) {
+      setAddError(err instanceof Error ? err.message : "Failed to add regime");
+    } finally {
+      setAdding(false);
+    }
+  }
 
   const jurisdictionOptions = Array.from(
     new Set(regimes.map(jurisdictionFor).filter(Boolean)),
@@ -62,14 +84,68 @@ function RegimesIndex() {
 
   return (
     <SidebarLayout>
+      {showAdd && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
+          <div className="w-full max-w-[480px] rounded-[4px] border border-hairline bg-paper p-6 shadow-lg">
+            <h2 className="font-serif text-lg font-semibold text-ink">Add a regime</h2>
+            <p className="mt-1 text-xs text-muted-ink">
+              Describe the act to add — the agent resolves it and loads it into the graph.
+            </p>
+            <form onSubmit={handleAdd} className="mt-4 space-y-3">
+              <textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="e.g. add the AI Act from the EU"
+                rows={3}
+                disabled={adding}
+                className="w-full rounded-[3px] border border-hairline bg-paper p-3 text-sm text-ink outline-none focus:border-navy disabled:opacity-60"
+              />
+              {addError && <p className="text-xs text-red-700">{addError}</p>}
+              {addSummary && (
+                <p className="whitespace-pre-wrap rounded-[3px] bg-secondary p-3 text-xs text-ink">
+                  {addSummary}
+                </p>
+              )}
+              <div className="flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAdd(false)}
+                  disabled={adding}
+                  className="h-9 rounded-[3px] border border-hairline px-4 text-sm text-ink transition-colors hover:bg-secondary disabled:opacity-60"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  disabled={adding || !prompt.trim()}
+                  className="h-9 rounded-[3px] bg-navy px-4 text-sm font-medium text-paper transition-colors hover:bg-ink disabled:opacity-60"
+                >
+                  {adding ? "Adding…" : "Add"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       <div className="flex h-full flex-col">
         <div className="border-b border-hairline px-8 py-5">
-          <h1 className="font-serif text-xl font-semibold tracking-tight text-ink">
-            Regimes
-          </h1>
-          <p className="mt-0.5 text-xs text-muted-ink">
-            Top-level regulatory regimes in the dataset
-          </p>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="font-serif text-xl font-semibold tracking-tight text-ink">
+                Regimes
+              </h1>
+              <p className="mt-0.5 text-xs text-muted-ink">
+                Top-level regulatory regimes in the dataset
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowAdd(true)}
+              className="h-9 flex-shrink-0 rounded-[3px] bg-navy px-4 text-sm font-medium text-paper transition-colors hover:bg-ink"
+            >
+              Add a regime
+            </button>
+          </div>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row">
             <label className="relative flex min-w-0 flex-1 items-center">
               <Search
