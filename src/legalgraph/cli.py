@@ -15,7 +15,7 @@ from pathlib import Path
 
 import yaml
 
-from . import io, loader, linker, skeleton, validator
+from . import io, loader, linker, skeleton, validator, ingest
 from .adapters import ADAPTERS
 from .adapters import eu as _eu  # noqa: F401  (imports register the EU adapters)
 from .adapters import uk as _uk  # noqa: F401  (imports register the UK adapters)
@@ -56,6 +56,16 @@ def main(argv: list[str] | None = None) -> int:
     ps = sub.add_parser("serve", help="run the HTTP API for the UI")
     ps.add_argument("--host", default="127.0.0.1")
     ps.add_argument("--port", type=int, default=8000)
+
+    pi = sub.add_parser("ingest", help="add ONE act (uk id or eu celex)")
+    pi.add_argument("--jurisdiction", required=True, choices=["uk", "eu"])
+    pi.add_argument("--id", dest="identifier", required=True,
+                    help="UK legislation id (ukpga/2023/50) or EU CELEX (32024R1689)")
+    pi.add_argument("--title", default=None)
+    pi.add_argument("--concepts", nargs="*", default=None)
+    mode = pi.add_mutually_exclusive_group()
+    mode.add_argument("--plan", action="store_true", help="fetch only (default)")
+    mode.add_argument("--commit", action="store_true", help="load + link into Neo4j")
 
     args = ap.parse_args(argv)
     load_dotenv()
@@ -117,6 +127,16 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(
                 validator.run_suite(driver, validator.NAVIGATION, params), indent=2
             ))
+
+        elif args.cmd == "ingest":
+            seed = ingest.build_seed(args.jurisdiction, args.identifier,
+                                     title=args.title, concepts=args.concepts)
+            if args.commit:
+                ingest.add_seed_to_scope(args.jurisdiction, seed)
+                result = ingest.commit(args.jurisdiction, seed)
+            else:
+                result = ingest.plan(args.jurisdiction, seed)
+            print(json.dumps(result, indent=2))
     finally:
         if driver is not None:
             driver.close()
