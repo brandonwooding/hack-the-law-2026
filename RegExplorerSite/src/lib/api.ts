@@ -66,3 +66,22 @@ export async function saveRegime(id: string, fields: Record<string, unknown>) {
   if (!r.ok) throw new Error(`save ${r.status}`);
   return r.json();
 }
+
+export async function addRegime(prompt: string): Promise<{ summary: string }> {
+  const r = await fetch(`${BASE}/regimes/add`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ prompt }),
+  });
+  if (!r.ok) {
+    let detail = `regimes/add ${r.status}`;
+    try {
+      const body = await r.json();
+      if (body?.detail) detail = body.detail;
+    } catch {
+      /* ignore non-JSON error bodies */
+    }
+    throw new Error(detail);
+  }
+  return (await r.json()) as { summary: string };
+}
