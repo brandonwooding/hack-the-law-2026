@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import os
 from collections.abc import Awaitable, Callable
+from pathlib import Path
 
 from claude_agent_sdk import (
     AssistantMessage,
@@ -25,6 +26,11 @@ from claude_agent_sdk import (
 from .db import load_dotenv
 
 DEFAULT_MODEL = "claude-opus-4-8"
+
+
+def _root() -> Path:
+    return Path(__file__).resolve().parents[2]
+
 
 #: MCP read/safe tools + built-ins that never need a write prompt.
 _ALLOWED_TOOLS = [
@@ -74,6 +80,25 @@ def is_write_command(tool_name: str, tool_input: dict) -> bool:
     return False
 
 
+#: Out-of-flow operations the agent must NEVER run, even autonomously. The only
+#: sanctioned write path is `legalgraph ingest --commit`.
+_DESTRUCTIVE_BASH = (
+    "detach delete", "drop database", "drop constraint", "drop index",
+    "cypher-shell", "rm -rf",
+)
+
+
+def is_destructive_command(tool_name: str, tool_input: dict) -> bool:
+    """True for raw destructive DB/system commands outside the ingest flow."""
+    if tool_name == "Bash":
+        cmd = tool_input.get("command", "").lower()
+        return any(p in cmd for p in _DESTRUCTIVE_BASH)
+    if tool_name == "mcp__neo4j__write_neo4j_cypher":
+        q = (tool_input.get("query") or "").lower()
+        return "detach delete" in q or "drop " in q or " delete " in q
+    return False
+
+
 def _neo4j_mcp_config() -> dict:
     return {
         "type": "stdio",
@@ -98,6 +123,10 @@ async def run_agent(
     load_dotenv()
 
     async def gate(tool_name, tool_input, context):
+        if is_destructive_command(tool_name, tool_input):
+            return PermissionResultDeny(
+                message="Destructive/out-of-flow command blocked",
+                interrupt=True)
         if is_write_command(tool_name, tool_input):
             if confirm is None or await confirm(tool_name, tool_input):
                 return PermissionResultAllow()
@@ -109,6 +138,8 @@ async def run_agent(
         model=model or DEFAULT_MODEL,
         system_prompt=SYSTEM_PROMPT,
         allowed_tools=_ALLOWED_TOOLS,
+        disallowed_tools=["Write"],
+        cwd=str(_root()),
         mcp_servers={"neo4j": _neo4j_mcp_config()},
         can_use_tool=gate,
         permission_mode="default",
@@ -127,6 +158,6 @@ async def run_agent(
                     if isinstance(block, TextBlock):
                         summary_parts.append(block.text)
             elif isinstance(msg, ResultMessage):
-                if getattr(msg, "result", None):
+                if not summary_parts and getattr(msg, "result", None):
                     summary_parts.append(msg.result)
     return "\n".join(p for p in summary_parts if p).strip()
