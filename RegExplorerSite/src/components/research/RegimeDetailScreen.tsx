@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { ExternalLink, RefreshCw, Pencil } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import type { Regime } from "@/lib/regimes";
 import { fetchRegime, refreshRegulatoryGuidance, saveRegime } from "@/lib/api";
 import { DossierReferenceText } from "./DossierReferenceText";
@@ -188,9 +190,15 @@ export function RegimeDetailScreen({ regime, onBack }: RegimeDetailScreenProps) 
                 onChange={(v) => setField("summary", v)}
               />
             ) : (
-              <p className="whitespace-pre-line text-[0.9375rem] leading-relaxed text-ink">
-                {data.summary || <Placeholder />}
-              </p>
+              data.summary ? (
+                <div className="prose-chat text-[0.9375rem] leading-relaxed text-ink">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{data.summary}</ReactMarkdown>
+                </div>
+              ) : (
+                <p className="text-[0.9375rem] leading-relaxed">
+                  <Placeholder />
+                </p>
+              )
             )}
           </section>
 

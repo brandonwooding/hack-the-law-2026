@@ -4,7 +4,7 @@ import { SetupScreen } from "@/components/research/SetupScreen";
 import { WorkspaceScreen } from "@/components/research/WorkspaceScreen";
 import { SidebarLayout } from "@/components/research/SidebarLayout";
 import { seedRegimes, type Regime } from "@/lib/regimes";
-import { fetchRegimes } from "@/lib/api";
+import { fetchRegimes, type RegimeCard } from "@/lib/api";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,25 +63,31 @@ function Index() {
     );
   }
 
-  function handleAddRegime(name: string, description: string) {
-    const id = `custom-${Date.now()}`;
-    setRegimes((rs) => [
-      ...rs,
-      {
-        id,
-        name,
-        shortDescription: description,
-        confirmed: true,
-        summary: "",
-        scope: "",
-        process: "",
-        consequence: "",
-        obligations: [],
-        guidance: "",
-        regulatory_guidance: [],
-        regulatory_guidance_updated_at: null,
-      },
-    ]);
+  function handleAddRegime(card: RegimeCard) {
+    setRegimes((rs) => {
+      if (rs.some((regime) => regime.id === card.id)) {
+        return rs.map((regime) =>
+          regime.id === card.id ? { ...regime, confirmed: true } : regime,
+        );
+      }
+      return [
+        ...rs,
+        {
+          id: card.id,
+          name: card.name,
+          shortDescription: card.short_description ?? "",
+          confirmed: true,
+          summary: "",
+          scope: "",
+          process: "",
+          consequence: "",
+          obligations: [],
+          guidance: "",
+          regulatory_guidance: [],
+          regulatory_guidance_updated_at: null,
+        },
+      ];
+    });
   }
 
   function handleRemoveRegime(id: string) {

@@ -52,13 +52,16 @@ from legalgraph.regimes import (
 def test_list_anchor_regimes_returns_cards_ordered_for_act_and_treaty_anchors():
     driver = FakeDriver({"ORDER BY d.citation": [
         {"id": "uk-ukpga-2003-21", "citation": "Communications Act 2003",
-         "layer": "Act", "url": "http://ca", "regulator": "Ofcom"},
+         "layer": "Act", "url": "http://ca", "regulator": "Ofcom",
+         "jurisdiction": "UK"},
         {"id": "uk-ukpga-2023-50", "citation": "Online Safety Act 2023",
-         "layer": "Act", "url": "http://osa", "regulator": "Ofcom"},
+         "layer": "Act", "url": "http://osa", "regulator": "Ofcom",
+         "jurisdiction": "UK"},
     ]})
     cards = list_anchor_regimes(driver)
     assert [c["id"] for c in cards] == ["uk-ukpga-2003-21", "uk-ukpga-2023-50"]
     assert cards[1]["name"] == "Online Safety Act 2023"
+    assert cards[1]["jurisdiction"] == "UK"
     assert cards[0]["short_description"]  # non-empty descriptor
 
 

@@ -6,6 +6,7 @@ export interface RegimeCard {
   short_description?: string;
   why_surfaced?: "primary" | "related";
   source_url?: string;
+  jurisdiction?: string;
 }
 
 export async function fetchRegimes(
@@ -22,8 +23,8 @@ export async function fetchRegimes(
   return (await r.json()).regimes;
 }
 
-export async function fetchAllRegimes(): Promise<RegimeCard[]> {
-  const r = await fetch(`${BASE}/regimes/all`);
+export async function fetchAllRegimes(signal?: AbortSignal): Promise<RegimeCard[]> {
+  const r = await fetch(`${BASE}/regimes/all`, { signal });
   if (!r.ok) throw new Error(`regimes/all ${r.status}`);
   return (await r.json()).regimes;
 }

@@ -221,7 +221,8 @@ MATCH (d:Document)
 WHERE 'Act' IN labels(d) OR 'Treaty' IN labels(d)
 RETURN d.id AS id, d.citation AS citation,
        [l IN labels(d) WHERE l <> 'Document'][0] AS layer,
-       d.source_url AS url, d.regulator AS regulator
+       d.source_url AS url, d.regulator AS regulator,
+       d.jurisdiction AS jurisdiction
 ORDER BY d.citation
 """
 
@@ -235,6 +236,7 @@ def list_anchor_regimes(driver, database: str | None = None) -> list[dict]:
             "id": r["id"],
             "name": r.get("citation") or r["id"],
             "short_description": _short_description(r),
+            "jurisdiction": r.get("jurisdiction"),
         }
         for r in rows
         if r.get("id")

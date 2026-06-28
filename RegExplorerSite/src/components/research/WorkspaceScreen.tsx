@@ -1,12 +1,18 @@
-import { useState, type ReactNode } from "react";
-import { ExternalLink, RefreshCw } from "lucide-react";
+import { useEffect, useState, type ReactNode } from "react";
+import { ExternalLink, RefreshCw, Search } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { AppHeader } from "./AppHeader";
 import { DossierReferenceText } from "./DossierReferenceText";
 import { JurisdictionTag } from "./JurisdictionTag";
 import type { Regime } from "@/lib/regimes";
-import { fetchRegime, refreshRegulatoryGuidance, sendChat } from "@/lib/api";
+import {
+  fetchAllRegimes,
+  fetchRegime,
+  refreshRegulatoryGuidance,
+  sendChat,
+  type RegimeCard,
+} from "@/lib/api";
 
 interface Message {
   id: number;
@@ -21,7 +27,7 @@ interface WorkspaceScreenProps {
   regimes: Regime[];
   regimeLoadState: "idle" | "loading" | "ready" | "error";
   onToggleRegime: (id: string) => void;
-  onAddRegime: (name: string, description: string) => void;
+  onAddRegime: (regime: RegimeCard) => void;
   onRemoveRegime: (id: string) => void;
   note: string;
   onNoteChange: (value: string) => void;
@@ -170,7 +176,9 @@ function InlineRegimeDossier({
         <div>
           <InlineField label="Summary">
             {regime.summary ? (
-              <p className="whitespace-pre-line">{regime.summary}</p>
+              <div className="prose-chat">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{regime.summary}</ReactMarkdown>
+              </div>
             ) : (
               <Placeholder />
             )}
@@ -302,8 +310,32 @@ export function WorkspaceScreen({
   >({});
 
   const [adding, setAdding] = useState(false);
-  const [newName, setNewName] = useState("");
-  const [newDesc, setNewDesc] = useState("");
+  const [regimeSearch, setRegimeSearch] = useState("");
+  const [allRegimes, setAllRegimes] = useState<RegimeCard[]>([]);
+  const [allRegimesState, setAllRegimesState] = useState<
+    "idle" | "loading" | "ready" | "error"
+  >("idle");
+  const [allRegimesRequest, setAllRegimesRequest] = useState(0);
+
+  useEffect(() => {
+    if (!adding || allRegimesState === "ready") return;
+    let active = true;
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 10000);
+    setAllRegimesState("loading");
+    fetchAllRegimes(controller.signal)
+      .then((cards) => {
+        if (!active) return;
+        setAllRegimes(cards);
+        setAllRegimesState("ready");
+      })
+      .catch(() => active && setAllRegimesState("error"));
+    return () => {
+      active = false;
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [adding, allRegimesRequest]);
 
   async function submitQuery(raw: string) {
     const text = raw.trim();
@@ -332,13 +364,9 @@ export function WorkspaceScreen({
     submitQuery(draft);
   }
 
-  function handleAdd(e: React.FormEvent) {
-    e.preventDefault();
-    const name = newName.trim();
-    if (!name) return;
-    onAddRegime(name, newDesc.trim());
-    setNewName("");
-    setNewDesc("");
+  function handleAddRegime(regime: RegimeCard) {
+    onAddRegime(regime);
+    setRegimeSearch("");
     setAdding(false);
   }
 
@@ -377,6 +405,20 @@ export function WorkspaceScreen({
     if (expandedRegimeId === id) setExpandedRegimeId(null);
     onRemoveRegime(id);
   }
+
+  const selectedRegimeIds = new Set(regimes.map((regime) => regime.id));
+  const normalizedRegimeSearch = regimeSearch.trim().toLowerCase();
+  const availableRegimes = allRegimes
+    .filter((regime) => !selectedRegimeIds.has(regime.id))
+    .filter((regime) => {
+      if (!normalizedRegimeSearch) return true;
+      return [
+        regime.name,
+        regime.short_description ?? "",
+        regime.id,
+        regime.jurisdiction ?? "",
+      ].some((value) => value.toLowerCase().includes(normalizedRegimeSearch));
+    });
 
   return (
     <div className="flex h-screen flex-col bg-paper">
@@ -504,41 +546,86 @@ export function WorkspaceScreen({
           </div>
 
           {adding && (
-            <form onSubmit={handleAdd} className="border-b border-hairline bg-secondary/40 px-6 py-4">
+            <div className="border-b border-hairline bg-secondary/40 px-6 py-4">
               <p className="eyebrow mb-2">Add a regime</p>
-              <input
-                autoFocus
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                placeholder="Regime name, e.g. Digital Markets Act"
-                className="mb-2 w-full rounded-[3px] border border-hairline bg-paper px-3 py-2 font-serif text-sm text-ink outline-none transition-colors placeholder:font-sans placeholder:text-muted-ink focus:border-navy"
-              />
-              <input
-                value={newDesc}
-                onChange={(e) => setNewDesc(e.target.value)}
-                placeholder="One-line description (optional)"
-                className="mb-3 w-full rounded-[3px] border border-hairline bg-paper px-3 py-2 text-sm text-ink outline-none transition-colors placeholder:text-muted-ink focus:border-navy"
-              />
-              <div className="flex justify-end gap-2">
+              <label className="relative mb-3 flex items-center">
+                <Search
+                  className="pointer-events-none absolute left-3 h-4 w-4 text-muted-ink"
+                  aria-hidden="true"
+                />
+                <input
+                  autoFocus
+                  value={regimeSearch}
+                  onChange={(e) => setRegimeSearch(e.target.value)}
+                  placeholder="Search your regimes database"
+                  className="w-full rounded-[3px] border border-hairline bg-paper py-2 pl-9 pr-3 text-sm text-ink outline-none transition-colors placeholder:text-muted-ink focus:border-navy"
+                />
+              </label>
+
+              {allRegimesState === "loading" && (
+                <p className="py-2 text-sm text-muted-ink">Loading regimes...</p>
+              )}
+              {allRegimesState === "error" && (
+                <div className="flex items-center justify-between gap-3 py-2">
+                  <p className="text-sm text-muted-ink">
+                    Unable to load regimes. Check the API is running.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setAllRegimesState("idle")}
+                    className="rounded-[3px] border border-hairline bg-paper px-2.5 py-1.5 text-xs text-navy transition-colors hover:bg-secondary"
+                  >
+                    Retry
+                  </button>
+                </div>
+              )}
+              {allRegimesState === "ready" && availableRegimes.length === 0 && (
+                <p className="py-2 text-sm text-muted-ink">
+                  No database regimes match that search.
+                </p>
+              )}
+              {allRegimesState === "ready" && availableRegimes.length > 0 && (
+                <ul className="max-h-64 overflow-y-auto border-y border-hairline bg-paper">
+                  {availableRegimes.map((regime) => (
+                    <li key={regime.id} className="border-b border-hairline last:border-b-0">
+                      <button
+                        type="button"
+                        onClick={() => handleAddRegime(regime)}
+                        className="flex w-full items-start gap-3 px-3 py-3 text-left transition-colors hover:bg-secondary"
+                      >
+                        <span className="min-w-0 flex-1">
+                          <span className="flex items-center gap-2 font-serif text-sm font-medium text-ink">
+                            <span className="min-w-0">{regime.name}</span>
+                            <JurisdictionTag id={regime.id} />
+                          </span>
+                          {regime.short_description && (
+                            <span className="mt-0.5 block text-xs leading-relaxed text-muted-ink">
+                              {regime.short_description}
+                            </span>
+                          )}
+                        </span>
+                        <span className="mt-0.5 text-[0.6875rem] uppercase tracking-[0.12em] text-navy">
+                          Add
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <div className="mt-3 flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => {
                     setAdding(false);
-                    setNewName("");
-                    setNewDesc("");
+                    setRegimeSearch("");
                   }}
                   className="rounded-[3px] border border-hairline px-3 py-1.5 text-xs text-ink transition-colors hover:bg-paper"
                 >
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="rounded-[3px] bg-navy px-3 py-1.5 text-xs font-medium text-navy-foreground transition-colors hover:bg-[#16304e]"
-                >
-                  Add regime
-                </button>
               </div>
-            </form>
+            </div>
           )}
 
           <div className="flex-1 overflow-y-auto">
