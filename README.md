@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="hackthelawbanner.png" alt="LLM x Law Hackathon — Cambridge Judge Business School, 26–28 June 2026" />
+  <img src="assets/hackthelawbanner.png" alt="LLM x Law Hackathon — Cambridge Judge Business School, 26–28 June 2026" />
 </p>
 
 <h1 align="center">Arbitrage</h1>
@@ -173,7 +173,7 @@ Anchored on the Online Safety Act 2023 and its neighbours, bounded by [`config/s
 | Breakdown | 87 statutory instruments · 49 Hansard debates · 45 cases · 33 guidance documents · 12 Acts · 5 bills · 5 explanatory notes |
 | Regimes with dossiers | Online Safety Act, Communications Act, Data Protection Act, Digital Economy Act, Investigatory Powers Act, GDPR, DSA, DMA, AI Act, e-Commerce Directive, AVMSD |
 
-The graph was hosted on Neo4j Aura over the weekend so the whole team could explore it live in Neo4j Browser — [`demo_queries.cypher`](demo_queries.cypher) has the walkthrough queries.
+The graph was hosted on Neo4j Aura over the weekend so the whole team could explore it live in Neo4j Browser — [`docs/demo_queries.cypher`](docs/demo_queries.cypher) has the walkthrough queries.
 
 ---
 
@@ -187,10 +187,11 @@ The graph was hosted on Neo4j Aura over the weekend so the whole team could expl
 | [`src/legalgraph/retrieval.py`](src/legalgraph/retrieval.py) | Graph RAG + PageIndex, pure Cypher |
 | [`src/legalgraph/regimes.py`](src/legalgraph/regimes.py), [`dossier.py`](src/legalgraph/dossier.py) | Regime surfacing; dossier build and cache |
 | [`src/legalgraph/llm.py`](src/legalgraph/llm.py), [`agent.py`](src/legalgraph/agent.py) | Claude synthesis; the ingestion agent |
-| [`src/legalgraph/api.py`](src/legalgraph/api.py) | FastAPI surface — documented in [API.md](API.md) |
+| [`src/legalgraph/api.py`](src/legalgraph/api.py) | FastAPI surface — documented in [`docs/api.md`](docs/api.md) |
 | [`RegExplorerSite/`](RegExplorerSite/) | The frontend |
 | [`config/scope.yaml`](config/scope.yaml) | What gets ingested |
 | [`tests/`](tests/) | pytest suite over the pipeline, retrieval and API |
+| [`docs/`](docs/) | [API reference](docs/api.md), [data sources](docs/data-sources.md), [demo Cypher](docs/demo_queries.cypher), and the design notes written during the build |
 
 ## Running it
 
