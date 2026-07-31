@@ -131,6 +131,9 @@ def test_answer_returns_reply_with_suggestions_and_uses_opus():
     assert client.messages.parse_kwargs["output_format"] is ChatReply
     # parse populates output_config.format from output_format; don't double-set it
     assert "output_config" not in client.messages.parse_kwargs
+    # adaptive thinking draws from max_tokens; too small a cap truncates the JSON
+    # answer mid-string and messages.parse() then fails to parse it (regression).
+    assert client.messages.parse_kwargs["max_tokens"] >= 8000
 
 
 def test_answer_prompt_introduces_dora_and_asks_for_suggestions():

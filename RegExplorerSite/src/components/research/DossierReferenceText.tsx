@@ -6,6 +6,13 @@ interface ReferenceLink {
   url: string;
 }
 
+interface PartGroupHit {
+  start: number;
+  end: number;
+  prefix: string;
+  refs: Array<{ text: string; url?: string }>;
+}
+
 function addLink(links: Map<string, string>, label: string, url: string) {
   const clean = label.trim();
   if (clean.length < 4 || links.has(clean)) return;
@@ -36,8 +43,16 @@ function referenceLabels(reference: string) {
   return [...labels];
 }
 
-function referenceLinks(regime: Pick<Regime, "obligations">) {
+function referenceLinks(regime: Pick<Regime, "obligations" | "references">) {
   const links = new Map<string, string>();
+
+  for (const reference of regime.references ?? []) {
+    if (!reference.label || !reference.url) continue;
+    addLink(links, reference.label, reference.url);
+    for (const label of referenceLabels(reference.label)) {
+      addLink(links, label, reference.url);
+    }
+  }
 
   for (const obligation of regime.obligations) {
     if (!obligation.reference || !obligation.url) continue;
@@ -78,37 +93,96 @@ function findNextLink(text: string, links: ReferenceLink[], from: number) {
   return best;
 }
 
+function findNextPartGroup(
+  text: string,
+  linkLookup: Map<string, string>,
+  from: number,
+): PartGroupHit | undefined {
+  const pattern = /\b(Parts?)\s+(\d+[A-Za-z]?(?:\s*(?:,|and|or)\s*\d+[A-Za-z]?)+)/g;
+  pattern.lastIndex = from;
+
+  for (const match of text.matchAll(pattern)) {
+    const [full, label, refsText] = match;
+    const start = match.index ?? 0;
+    if (start < from) continue;
+
+    const refs: PartGroupHit["refs"] = [];
+    const refPattern = /\d+[A-Za-z]?|\D+/g;
+    for (const refMatch of refsText.matchAll(refPattern)) {
+      const value = refMatch[0];
+      refs.push({
+        text: value,
+        url: /^\d/.test(value) ? linkLookup.get(`Part ${value}`) : undefined,
+      });
+    }
+
+    if (refs.some((ref) => ref.url)) {
+      return { start, end: start + full.length, prefix: `${label} `, refs };
+    }
+  }
+
+  return undefined;
+}
+
 export function DossierReferenceText({
   text,
   regime,
 }: {
   text: string;
-  regime: Pick<Regime, "obligations">;
+  regime: Pick<Regime, "obligations" | "references">;
 }) {
   const links = referenceLinks(regime);
+  const linkLookup = new Map(links.map((link) => [link.label, link.url]));
   const nodes: ReactNode[] = [];
   let index = 0;
   let key = 0;
 
   while (index < text.length) {
-    const next = findNextLink(text, links, index);
+    const nextPartGroup = findNextPartGroup(text, linkLookup, index);
+    const nextLink = findNextLink(text, links, index);
+    const next =
+      nextPartGroup &&
+      (!nextLink || nextPartGroup.start < nextLink.start)
+        ? nextPartGroup
+        : nextLink;
     if (!next) {
       nodes.push(text.slice(index));
       break;
     }
 
     if (next.start > index) nodes.push(text.slice(index, next.start));
-    nodes.push(
-      <a
-        key={`ref-${key++}`}
-        href={next.link.url}
-        target="_blank"
-        rel="noreferrer"
-        className="text-navy underline decoration-navy/30 underline-offset-2 transition-colors hover:decoration-navy"
-      >
-        {next.link.label}
-      </a>,
-    );
+    if ("refs" in next) {
+      nodes.push(next.prefix);
+      for (const ref of next.refs) {
+        if (!ref.url) {
+          nodes.push(ref.text);
+          continue;
+        }
+        nodes.push(
+          <a
+            key={`ref-${key++}`}
+            href={ref.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-navy underline decoration-navy/30 underline-offset-2 transition-colors hover:decoration-navy"
+          >
+            {ref.text}
+          </a>,
+        );
+      }
+    } else {
+      nodes.push(
+        <a
+          key={`ref-${key++}`}
+          href={next.link.url}
+          target="_blank"
+          rel="noreferrer"
+          className="text-navy underline decoration-navy/30 underline-offset-2 transition-colors hover:decoration-navy"
+        >
+          {next.link.label}
+        </a>,
+      );
+    }
     index = next.end;
   }
 

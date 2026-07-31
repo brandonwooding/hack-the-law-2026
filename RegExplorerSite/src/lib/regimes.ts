@@ -5,6 +5,11 @@ export interface RegulatoryGuidanceEntry {
   official_link: string;
 }
 
+export interface DossierReference {
+  label: string;
+  url: string;
+}
+
 export interface Regime {
   id: string;
   name: string;
@@ -15,6 +20,7 @@ export interface Regime {
   process: string;
   consequence: string;
   obligations: { text: string; reference: string; url?: string }[];
+  references?: DossierReference[];
   guidance: string;
   regulatory_guidance: RegulatoryGuidanceEntry[];
   regulatory_guidance_updated_at: string | null;

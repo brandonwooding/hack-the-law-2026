@@ -436,7 +436,7 @@ export function WorkspaceScreen({
       <div className="grid flex-1 grid-cols-1 overflow-hidden md:grid-cols-[45fr_55fr]">
         {/* Left — Chat */}
         <section className="flex min-h-0 flex-col border-b border-hairline md:border-b-0 md:border-r">
-          <div className="border-b border-hairline px-6 py-4">
+          <div className="flex h-16 flex-col justify-center border-b border-hairline px-6">
             <h2 className="font-serif text-base font-semibold text-ink">Chat</h2>
             <p className="mt-0.5 text-xs text-muted-ink">
               {topic} · {jurisdictionLabel}
@@ -468,7 +468,7 @@ export function WorkspaceScreen({
                               key={si}
                               type="button"
                               onClick={() => submitQuery(s)}
-                              className="rounded-full border border-hairline bg-paper px-3 py-1.5 text-left text-xs text-navy transition-colors hover:border-navy hover:bg-secondary"
+                              className="rounded-full border border-hairline bg-paper px-5 py-2.5 text-left text-sm leading-relaxed text-navy transition-colors hover:border-navy hover:bg-secondary"
                             >
                               {s}
                             </button>
@@ -523,7 +523,7 @@ export function WorkspaceScreen({
 
         {/* Right — Relevant regimes */}
         <section className="flex min-h-0 flex-col">
-          <div className="flex items-center justify-between gap-2 border-b border-hairline px-6 py-4">
+          <div className="flex h-16 items-center justify-between gap-2 border-b border-hairline px-6">
             <div className="flex items-center gap-2">
               <h2 className="font-serif text-base font-semibold text-ink">Relevant regimes</h2>
               <span
@@ -572,7 +572,10 @@ export function WorkspaceScreen({
                   </p>
                   <button
                     type="button"
-                    onClick={() => setAllRegimesState("idle")}
+                    onClick={() => {
+                      setAllRegimesState("idle");
+                      setAllRegimesRequest((request) => request + 1);
+                    }}
                     className="rounded-[3px] border border-hairline bg-paper px-2.5 py-1.5 text-xs text-navy transition-colors hover:bg-secondary"
                   >
                     Retry

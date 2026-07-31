@@ -174,8 +174,11 @@ def answer(query: str, scoped: dict, client=None) -> dict:
     messages.parse (which sets output_config.format from output_format — so we do
     not pass output_config here, mirroring draft_dossier)."""
     client = client or _client()
+    # Adaptive thinking draws from max_tokens, so the cap must cover BOTH the
+    # thinking phase and the JSON answer — too small truncates the structured
+    # output mid-string and messages.parse() then fails ("EOF while parsing").
     resp = client.messages.parse(
-        model=MODEL, max_tokens=2000, thinking=_THINKING,
+        model=MODEL, max_tokens=16000, thinking=_THINKING,
         output_format=ChatReply,
         messages=[{"role": "user", "content": _answer_prompt(query, scoped)}],
     )
